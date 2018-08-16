@@ -15,6 +15,65 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/fragment5centre"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/batter"
+            android:layout_below="@+id/fragment5centre"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:src="@mipmap/batter_0"
+            android:layout_width="200dp"
+            android:layout_height="200dp" />
+
+        <!--
+
+        <ImageView
+            android:id="@+id/acdc1"
+            android:layout_toStartOf="@+id/fragment5centre"
+
+            android:layout_marginTop="270dp"
+            android:layout_marginEnd="100dp"
+            android:src="@mipmap/acdc_0"
+            android:layout_width="180dp"
+            android:layout_height="100dp" />
+
+        <ImageView
+            android:id="@+id/acdc2"
+            android:layout_toEndOf="@+id/fragment5centre"
+
+            android:layout_marginTop="270dp"
+            android:layout_marginStart="100dp"
+            android:src="@mipmap/acdc_0"
+            android:layout_width="180dp"
+            android:layout_height="100dp" />
+
+        <ImageView
+            android:id="@+id/rightAcdcArrow"
+            android:layout_below="@+id/acdc1"
+            android:layout_alignStart="@+id/acdc1"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="50dp"
+            android:src="@mipmap/rightarrow_0"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+
+        <ImageView
+            android:id="@+id/leftAcdcArrow"
+            android:layout_below="@+id/acdc2"
+            android:layout_alignEnd="@+id/acdc2"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="50dp"
+            android:src="@mipmap/leftarrow_0"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+        -->
+
+
     </RelativeLayout>
 
 

@@ -115,127 +115,16 @@ public class fragment1 extends Fragment{
         fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime),0));
         fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime),0));
 
+        initTabLayout();
+        initLineChart();
+
         return view;
-    }
-
-
-    //初始化TabLayout
-    private void initTabLayout() {
-
-        //更新tl
-        for (int i = 0; i < 4; i++) {
-            tl.addTab(tl.newTab().setText(sTitle[i]));
-        }
-
-        //监听tl事件
-        tl.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            //挑选事件
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                clearChart();
-                Log.i(TAG,"onTabSelected"+tab.getText());
-                String selectTabType = (String) tab.getText();
-                switch (selectTabType){
-                    case "输出电压":
-                        changeUIflag = 0;
-                        //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),0));
-                        //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),0));
-                        //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),0));
-                        break;
-                    case "输出电流":
-                        changeUIflag = 1;
-                        //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),0));
-                        //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),0));
-                        //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),0));
-                        break;
-                    case "输入电压":
-                        changeUIflag = 2;
-                        //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),0));
-                        //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),0));
-                        //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),0));
-                        break;
-                    case "其他数据":
-                        changeUIflag = 3;
-                        //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),0));
-                        //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),0));
-                        //fragment1TempRow[2].setText("");
-                        break;
-                }
-            }
-
-            //离开事件
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                //Log.i(TAG, "onTabUnselected" + tab.getText());
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                //Log.i(TAG, "onTabReselected" + tab.getText());
-            }
-        });
-    }
-
-    //初始化LineChart
-    private void initLineChart(){
-
-        names.add("U相（R相、电容电压） ");
-        names.add("V相（S相） ");
-        names.add("W相（T相）");
-
-        colour.add(Color.YELLOW);
-        colour.add(Color.GREEN);
-        colour.add(Color.RED);
-
-        dynamicLineChartManager = new DynamicLineChartManager(fragment1Lc,names,colour);
-        dynamicLineChartManager.setYAxis(500,0,10);
-
-        fragment1Lc.setDragEnabled(false);                                        //拖拽
-        fragment1Lc.setTouchEnabled(false);                                       //触摸
-        fragment1Lc.setScaleEnabled(false);                                       //缩放
-        fragment1Lc.setPinchZoom(false);                                          //多点缩放
-
-        //dynamicLineChartManager.setLowLimitLine(0,"0");
-
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         Log.e(TAG, "碎片1，已完成初始化");
-    }
-
-
-    //----- fragment1广播 -----//
-    //描述：fragment1层接收广播，用于接收BaseCourse底层广播的遥测数据
-    //方法：
-    //     1）创建方法：fragment活动Resume创建，pause销毁
-    public class fragment1Broad extends BroadcastReceiver {
-        public void onReceive(Context context, Intent intent){
-            //接收到广播
-            //Log.e(TAG,"接收到广播");
-            /*
-            int dataChange = intent.getExtras().getInt("dataChange");
-            //Log.e(TAG,""+dataChange);
-            if (changeUIflag == 0){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),dataChange));
-                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),dataChange));
-            }else if (changeUIflag == 1){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),dataChange));
-                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),dataChange));
-            }else if (changeUIflag == 2){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),dataChange));
-                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),dataChange));
-            }else if (changeUIflag == 3){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),dataChange));
-                fragment1TempRow[2].setText("");
-            }
-            */
-        }
     }
 
     @Override
@@ -256,8 +145,8 @@ public class fragment1 extends Fragment{
             Log.e(TAG,"fragment1，已注册广播");
         }
 
-        initTabLayout();
-        initLineChart();
+        //initTabLayout();
+        //initLineChart();
 
         //开始Handler
         fragment1Handler.post(fragment1Runnable);
@@ -305,6 +194,128 @@ public class fragment1 extends Fragment{
        // Log.e(TAG, "碎片1，解除活动绑定");
     }
 
+
+    //----- fragment1广播 -----//
+    //描述：fragment1层接收广播，用于接收BaseCourse底层广播的遥测数据
+    //方法：
+    //     1）创建方法：fragment活动Resume创建，pause销毁
+    public class fragment1Broad extends BroadcastReceiver {
+        public void onReceive(Context context, Intent intent){
+            //接收到广播
+            //Log.e(TAG,"接收到广播");
+            /*
+            int dataChange = intent.getExtras().getInt("dataChange");
+            //Log.e(TAG,""+dataChange);
+            if (changeUIflag == 0){
+                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),dataChange));
+                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),dataChange));
+                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),dataChange));
+            }else if (changeUIflag == 1){
+                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),dataChange));
+                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),dataChange));
+                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),dataChange));
+            }else if (changeUIflag == 2){
+                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),dataChange));
+                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),dataChange));
+                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),dataChange));
+            }else if (changeUIflag == 3){
+                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),dataChange));
+                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),dataChange));
+                fragment1TempRow[2].setText("");
+            }
+            */
+        }
+    }
+
+
+    //初始化TabLayout
+    private void initTabLayout() {
+
+        //更新tl
+        for (int i = 0; i < 4; i++) {
+            tl.addTab(tl.newTab().setText(sTitle[i]));
+        }
+
+
+        //监听tl事件
+        tl.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            //挑选事件
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+                //initLineChart();
+                clearChart();
+
+                //fragment1Lc.clear();
+                //initLineChart();
+
+                String selectTabType = (String) tab.getText();
+                if (selectTabType != null) {
+                    switch (selectTabType) {
+                        case "输出电压":
+                            changeUIflag = 0;
+                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),0));
+                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),0));
+                            //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),0));
+                            break;
+                        case "输出电流":
+                            changeUIflag = 1;
+                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),0));
+                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),0));
+                            //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),0));
+                            break;
+                        case "输入电压":
+                            changeUIflag = 2;
+                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),0));
+                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),0));
+                            //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),0));
+                            break;
+                        case "其他数据":
+                            changeUIflag = 3;
+                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),0));
+                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),0));
+                            //fragment1TempRow[2].setText("");
+                            break;
+                    }
+                }
+            }
+
+            //离开事件
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                //Log.i(TAG, "onTabUnselected" + tab.getText());
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                //Log.i(TAG, "onTabReselected" + tab.getText());
+            }
+        });
+    }
+
+    //初始化LineChart
+    private void initLineChart(){
+
+        names.add("U相（R相、电容电压） ");
+        names.add("V相（S相） ");
+        names.add("W相（T相）");
+
+        colour.add(Color.YELLOW);
+        colour.add(Color.GREEN);
+        colour.add(Color.RED);
+
+        dynamicLineChartManager = new DynamicLineChartManager(fragment1Lc,names,colour);
+        dynamicLineChartManager.setYAxis(500,0,10);
+
+        fragment1Lc.setDragEnabled(false);                                        //拖拽
+        fragment1Lc.setTouchEnabled(false);                                       //触摸
+        fragment1Lc.setScaleEnabled(false);                                       //缩放
+        fragment1Lc.setPinchZoom(false);                                          //多点缩放
+        fragment1Lc.getDescription().setEnabled(false);                           //隐藏描述
+
+        //dynamicLineChartManager.setLowLimitLine(0,"0");
+    }
+
     private void clearChart(){
         for (int i = 0; i < 9; i++) {
             list.add((int)(0));
@@ -324,8 +335,10 @@ public class fragment1 extends Fragment{
             fragment1Handler.postDelayed(this,500);
 
             SharedPreferences fragment1readSp = getActivity().getSharedPreferences("temp", 0);
+
             //当挑选当当前lay时才执行程序控制
             int layType = fragment1readSp.getInt("layType",0);
+            //Log.e(TAG,"Lay:"+ layType + " uiFlag:" + changeUIflag);
 
             if (layType == 1){
                 switch (changeUIflag){

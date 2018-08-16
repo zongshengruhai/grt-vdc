@@ -32,7 +32,7 @@ public class BaseCourse extends FragmentActivity {
     Intent dataChange = new Intent("drc.xxx.yyy.fragment1");
     private MyBaseActivity_Broad baseCourseBroad = null;
     private IntentFilter baseCourseIntentFilter = new IntentFilter("drc.xxx.yyy.baseActivity");
-    int text[] = new int[3];
+    int text[] = new int[5];
 
 
     // ------------- 重写生命周期 -------------//
@@ -119,6 +119,10 @@ public class BaseCourse extends FragmentActivity {
             text[0] = (int)(Math.random()*400);
             text[1] = (int)(Math.random()*400);
             text[2] = (int)(Math.random()*400);
+            text[3] = (int)(Math.random()*400);
+
+            text[4]++;
+            if(text[4]>100) text[4]=0;
             /*
             dataChange.putExtra("dataChange",text);
             sendBroadcast(dataChange);*/
@@ -127,6 +131,8 @@ public class BaseCourse extends FragmentActivity {
             editor.putInt("Uv",text[0]);
             editor.putInt("Vv",text[1]);
             editor.putInt("Wv",text[2]);
+            editor.putInt("Capv",text[3]);
+            editor.putInt("batterCapacity",text[4]);
             editor.commit();
 
         }

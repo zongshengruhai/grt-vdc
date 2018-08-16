@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">科雷特VDC监控软件</string>
+
+    <!-- 以下自定义string资源 -->
+    <string name="my_loge">this is company logo</string>
+    <string name="productType">GRT-VDC-T400L</string>
+
+    <string name="activityOldName">补偿记录</string>
+    
+    <string name="unitV">V</string>
+    <string name="unitA">A</string>
+
+    <string name="U">U相：</string>
+    <string name="V">V相：</string>
+    <string name="W">W相：</string>
+    <string name="otherData">其他数据</string>
+
+    <string name="inVol">输入电压：</string>
+    <string name="outVol">输出电压：</string>
+    <string name="outImax">输出电流：</string>
+
+    <string name="capVol">电容电压：</string>
+    <string name="frequency">频&#12288;&#12288;率：</string>
+    <string name="oldEorrer">历史故障：</string>
+
+    <string name="action_setting">setting</string>
+
+    <string name="lay1">实时数据</string>
+    <string name="lay2">录波记录</string>
+    <string name="lay3">历史告警</string>
+    <string name="lay4">设置</string>
+    <string name="lay5">主界面</string>
+
+    <!-- 带占位符的string资源 -->
+    <!-- fragment1 -->
+    <string name="fragment1Uv">U相：%1$dV</string>
+    <string name="fragment1Vv">V相：%1$dV</string>
+    <string name="fragment1Wv">W相：%1$dV</string>
+    <string name="fragment1Ua">U相：%1$dA</string>
+    <string name="fragment1Va">V相：%1$dA</string>
+    <string name="fragment1Wa">W相：%1$dA</string>
+    <string name="fragment1Rv">R相：%1$dV</string>
+    <string name="fragment1Sv">S相：%1$dV</string>
+    <string name="fragment1Tv">T相：%1$dV</string>
+    <string name="fragment1Capv">电容：%1$dV</string>
+    <string name="fragment1hz">频率：%1$dV</string>
+    <string name="fragment1AlarmTime">故障次数：%1$d 次</string>
+    <string name="fragment1RecordTime">录波记录：%1$d 条</string>
+    <!-- fragment2 -->
+    <string name="fragment2RecordTime">当前为第 %1$d 条暂降补偿记录</string>
+    <string name="fragment2RecordContent">发生于 %1$d.%2$d.%3$d %4$d:%5$d，跌落到 %6$d V，跌落时长 %7$d S%8$s</string>
+    <!-- fragment3 -->
+
+    <!-- fragment4 -->
+    <string name="fragment4btu">校准</string>
+    <string name="fragmnet4LoginBtu">登录</string>
+    <string name="fragment4LoginHint">密码登录</string>
+    <string name="fragmnet4Utv">U相输出电压：</string>
+    <string name="fragmnet4Vtv">V相输出电压：</string>
+    <string name="fragmnet4Wtv">W相输出电压：</string>
+    <string name="fragmnet4Uitv">U相输出电流：</string>
+    <string name="fragmnet4Vitv">V相输出电流：</string>
+    <string name="fragmnet4Witv">W相输出电流：</string>
+    <string name="fragmnet4Rtv">R相输出电压：</string>
+    <string name="fragmnet4Stv">S相输出电压：</string>
+    <string name="fragmnet4Ttv">T相输出电压：</string>
+    <string name="fragment4hint">000</string>
+    <string name="fragment4outVRow">输出电压：</string>
+    <string name="fragment4outARow">输出电流：</string>
+    <string name="fragment4inVRow">输入电压：</string>
+    <string name="fragment4otherRow">其他设置：</string>
+    <string name="fragment4capV">电容电压：</string>
+    <string name="fragment4timeSet">时间：</string>
+
+
+
+</resources>

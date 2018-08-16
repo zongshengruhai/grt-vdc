@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <fragment
+        android:name="com.great.grt_vdc_t4200l.Fragment.fragment5"
+        android:id="@+id/fragment5"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:layout_width="fill_parent"
+        />
+
+    <fragment
+        android:name="com.great.grt_vdc_t4200l.Fragment.fragment1"
+        android:id="@+id/fragment1"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:layout_width="fill_parent"
+        />
+
+    <fragment
+        android:name="com.great.grt_vdc_t4200l.Fragment.fragment2"
+        android:id="@+id/fragment2"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:layout_width="fill_parent"
+        />
+
+    <fragment
+        android:name="com.great.grt_vdc_t4200l.Fragment.fragment3"
+        android:id="@+id/fragment3"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:layout_width="fill_parent"
+        />
+
+    <fragment
+        android:name="com.great.grt_vdc_t4200l.Fragment.fragment4"
+        android:id="@+id/fragment4"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:layout_width="fill_parent"
+        />
+
+    <include layout="@layout/tabfoot"/>
+
+</LinearLayout>

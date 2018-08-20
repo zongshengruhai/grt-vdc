@@ -86,11 +86,11 @@ public class fragment1 extends Fragment{
     //更新UI
     private int changeUIflag = 0;
 
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        Log.e(TAG, "碎片1，已于一个活动进行关联");
-    }
+    //@Override
+    //public void onAttach(Activity activity){
+    //    super.onAttach(activity);
+    //    Log.e(TAG, "碎片1，已于一个活动进行关联");
+    //}
 
     @Override
     public void onCreate(Bundle saveInstanceState){
@@ -103,14 +103,14 @@ public class fragment1 extends Fragment{
         View view = inflater.inflate(R.layout.fragment1,container,false);
 
         //关联控件
-        tl = (TabLayout) view.findViewById(R.id.tl);
-        //lineChart = (LineChart) view.findViewById(R.id.fragment1Chart);
-        fragment1Lc = (LineChart) view.findViewById(R.id.fragment1Chart);
-        fragment1TempRow[0] = (TextView) view.findViewById(R.id.dataA);
-        fragment1TempRow[1] = (TextView) view.findViewById(R.id.dataB);
-        fragment1TempRow[2] = (TextView) view.findViewById(R.id.dataC);
-        fragment1TempRow[3] = (TextView) view.findViewById(R.id.fragment1alarmTV);
-        fragment1TempRow[4] = (TextView) view.findViewById(R.id.fragment1RecorTV);
+        tl = view.findViewById(R.id.tl);
+        //lineChart = view.findViewById(R.id.fragment1Chart);
+        fragment1Lc = view.findViewById(R.id.fragment1Chart);
+        fragment1TempRow[0] = view.findViewById(R.id.dataA);
+        fragment1TempRow[1] = view.findViewById(R.id.dataB);
+        fragment1TempRow[2] = view.findViewById(R.id.dataC);
+        fragment1TempRow[3] = view.findViewById(R.id.fragment1alarmTV);
+        fragment1TempRow[4] = view.findViewById(R.id.fragment1RecorTV);
 
         fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime),0));
         fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime),0));
@@ -318,9 +318,9 @@ public class fragment1 extends Fragment{
 
     private void clearChart(){
         for (int i = 0; i < 9; i++) {
-            list.add((int)(0));
-            list.add((int)(0));
-            list.add((int)(0));
+            list.add(0);
+            list.add(0);
+            list.add(0);
             dynamicLineChartManager.addEntry(list);
             list.clear();
         }
@@ -346,33 +346,33 @@ public class fragment1 extends Fragment{
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),fragment1readSp.getInt("Uv",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),fragment1readSp.getInt("Vv",0)));
                         fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),fragment1readSp.getInt("Wv",0)));
-                        list.add((int)(fragment1readSp.getInt("Uv",0)));
-                        list.add((int)(fragment1readSp.getInt("Vv",0)));
-                        list.add((int)(fragment1readSp.getInt("Wv",0)));
+                        list.add(fragment1readSp.getInt("Uv",0));
+                        list.add(fragment1readSp.getInt("Vv",0));
+                        list.add(fragment1readSp.getInt("Wv",0));
                         break;
                     case 1:
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),fragment1readSp.getInt("Ua",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),fragment1readSp.getInt("Va",0)));
                         fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),fragment1readSp.getInt("Wa",0)));
-                        list.add((int)(fragment1readSp.getInt("Ua",0)));
-                        list.add((int)(fragment1readSp.getInt("Va",0)));
-                        list.add((int)(fragment1readSp.getInt("Wa",0)));
+                        list.add(fragment1readSp.getInt("Ua",0));
+                        list.add(fragment1readSp.getInt("Va",0));
+                        list.add(fragment1readSp.getInt("Wa",0));
                         break;
                     case 2:
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),fragment1readSp.getInt("Rv",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),fragment1readSp.getInt("Sv",0)));
                         fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),fragment1readSp.getInt("Tv",0)));
-                        list.add((int)(fragment1readSp.getInt("Rv",0)));
-                        list.add((int)(fragment1readSp.getInt("Sv",0)));
-                        list.add((int)(fragment1readSp.getInt("Tv",0)));
+                        list.add(fragment1readSp.getInt("Rv",0));
+                        list.add(fragment1readSp.getInt("Sv",0));
+                        list.add(fragment1readSp.getInt("Tv",0));
                         break;
                     case 3:
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),fragment1readSp.getInt("Capv",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),fragment1readSp.getInt("hz",0)));
                         fragment1TempRow[2].setText("");
-                        list.add((int)(fragment1readSp.getInt("Capv",0)));
-                        list.add((int)(0));
-                        list.add((int)(0));
+                        list.add(fragment1readSp.getInt("Capv",0));
+                        list.add(0);
+                        list.add(0);
                         break;
                 }
                 dynamicLineChartManager.addEntry(list);

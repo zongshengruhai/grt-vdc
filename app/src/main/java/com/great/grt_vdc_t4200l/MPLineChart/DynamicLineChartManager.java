@@ -118,6 +118,7 @@ public class DynamicLineChartManager {
             lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
             lineDataSet.setValueTextSize(16f);                                                      //曲线标注文字大小
             lineDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);                                //设置曲线模式 弯曲程度
+            //lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
             lineDataSets.add(lineDataSet);
 
         }
@@ -172,7 +173,8 @@ public class DynamicLineChartManager {
             lineData.addEntry(entry, i);
             lineData.notifyDataChanged();
             lineChart.notifyDataSetChanged();
-            lineChart.setVisibleXRangeMaximum(7);                                                   //X轴最大显示条目数
+            lineChart.setVisibleXRangeMaximum(7);
+            //lineChart.setVisibleXRangeMaximum(150);                                                   //X轴最大显示条目数
             lineChart.moveViewToX(lineData.getEntryCount() - 5);
         }
     }

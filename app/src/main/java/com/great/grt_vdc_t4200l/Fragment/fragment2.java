@@ -36,16 +36,16 @@ public class fragment2 extends Fragment{
     private List<Integer> colour = new ArrayList<>();       //折线颜色
     private List<String> names = new ArrayList<>();          //折线名称
 
-    private int[] tempData[] = new int[9][30];
+    private int[][] tempData = {{0,79,155,223,282,329,361,378,378,361,329,282,223,155,79,0,-79,-155,-223,-282,-329,-361,-378,-378,-361,-329,-282,-223,-155,-79},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30}};
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment2,container,false);
 
-        fragment2LineChar = (LineChart) view.findViewById(R.id.fragment2LineChart);
+        fragment2LineChar = view.findViewById(R.id.fragment2LineChart);
 
-        fragment2TempRow[0] = (TextView) view.findViewById(R.id.fragment2TVtime);
-        fragment2TempRow[1] = (TextView) view.findViewById(R.id.fragment2TVcontent);
+        fragment2TempRow[0] = view.findViewById(R.id.fragment2TVtime);
+        fragment2TempRow[1] = view.findViewById(R.id.fragment2TVcontent);
         fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),0));
         fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),0,0,0,0,0,0,0,""));
 
@@ -55,7 +55,8 @@ public class fragment2 extends Fragment{
     }
 
     private void  initData(){
-        int[][] tempData = {{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30}};
+       //int tempData = {{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30}};
+       //setData();
     }
 
     //初始化LineChart
@@ -91,5 +92,24 @@ public class fragment2 extends Fragment{
         fragment2LineChar.getDescription().setEnabled(false);                           //隐藏描述
 
     }
+
+    private void setData(){
+        for (int ii = 0; ii < 5; ii++) {
+            for (int i = 0; i < 30; i++) {
+                list.add((int) (tempData[0][i]));
+                list.add((int) (tempData[1][i]));
+                list.add((int) (tempData[2][i]));
+                list.add((int) (tempData[3][i]));
+                list.add((int) (tempData[4][i]));
+                list.add((int) (tempData[5][i]));
+                list.add((int) (tempData[6][i]));
+                list.add((int) (tempData[7][i]));
+                list.add((int) (tempData[8][i]));
+                fragment2ChartManager.addEntry(list);
+                list.clear();
+            }
+        }
+    }
+
 }
 

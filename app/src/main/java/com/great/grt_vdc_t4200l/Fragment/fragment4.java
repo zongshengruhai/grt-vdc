@@ -40,12 +40,12 @@ public class fragment4 extends Fragment {
         View view = inflater.inflate(R.layout.fragment4,container,false);
 
         fragment4Rlayout = new RelativeLayout[2];
-        fragment4Rlayout[0] = (RelativeLayout) view.findViewById(R.id.fragment4Lay1);
-        fragment4Rlayout[1] = (RelativeLayout) view.findViewById(R.id.fragment4Lay2);
+        fragment4Rlayout[0] = view.findViewById(R.id.fragment4Lay1);
+        fragment4Rlayout[1] = view.findViewById(R.id.fragment4Lay2);
         hideFragment4Rl();
 
-        fragment4Password = (EditText) view.findViewById(R.id.fragment4PasswordIn);
-        fragment4Login = (Button) view.findViewById(R.id.fragment4LoginBut);
+        fragment4Password = view.findViewById(R.id.fragment4PasswordIn);
+        fragment4Login = view.findViewById(R.id.fragment4LoginBut);
         fragment4Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -13,9 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Bundle;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.components.Legend;
+import com.great.grt_vdc_t4200l.ListView.record;
+import com.great.grt_vdc_t4200l.ListView.recordAdapter;
 import com.great.grt_vdc_t4200l.MPLineChart.DynamicLineChartManager;
 import com.great.grt_vdc_t4200l.R;
 
@@ -43,6 +47,7 @@ import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,14 +55,17 @@ import java.util.List;
 import java.util.Random;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-public class fragment1 extends Fragment{
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+
+public class fragment1 extends Fragment implements AdapterView.OnItemClickListener{
 
     private static final String TAG = "fragment1";
 
@@ -85,6 +93,12 @@ public class fragment1 extends Fragment{
 
     //更新UI
     private int changeUIflag = 0;
+
+    //listView
+    //private List<record> fragment1_Data = null;
+    private Context fragment1_Context;
+    //private recordAdapter fragment1_RecordAdapter = null;
+    private ListView fragment1_ListView;
 
     //@Override
     //public void onAttach(Activity activity){
@@ -115,8 +129,12 @@ public class fragment1 extends Fragment{
         fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime),0));
         fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime),0));
 
+        fragment1_Context = view.getContext();
+        fragment1_ListView = view.findViewById(R.id.fragment1_ListView);
+
         initTabLayout();
         initLineChart();
+        initListView();
 
         return view;
     }
@@ -316,6 +334,7 @@ public class fragment1 extends Fragment{
         //dynamicLineChartManager.setLowLimitLine(0,"0");
     }
 
+    //清除画布
     private void clearChart(){
         for (int i = 0; i < 9; i++) {
             list.add(0);
@@ -323,6 +342,70 @@ public class fragment1 extends Fragment{
             list.add(0);
             dynamicLineChartManager.addEntry(list);
             list.clear();
+        }
+    }
+
+    //ListView点击事件
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.e(TAG,"you pick :"+ position + "项");
+    }
+
+    //初始化ListView
+    private void initListView(){
+
+        //String recordFileName = "/data/data/com.great.grt_vdc_t4200l/record_file/record.xls";
+        String PATH = "//data/data/com.great.grt_vdc_t4200l/record_file/";
+
+        File file = new File(PATH);
+        File[] files = file.listFiles();
+
+        //检查文件是否存在
+        if (files == null){ Log.e(TAG,"error，this path is null");}
+        if ( files != null ){
+            for (int i = 0; i < files.length; i++) {
+                String pathFileName = files[i].getAbsolutePath();
+                if (pathFileName.equals("/data/data/com.great.grt_vdc_t4200l/record_file/record.xls")){
+                    loadListData(pathFileName);
+                    //Log.e(TAG,"#############");
+                }
+            }
+        }
+    }
+
+    //载入ListDat
+    private void loadListData(String fileName){
+        int rows;                                                           //行数量
+        String[] temp = new String[3];
+        List<record> fragment1_Data;
+        recordAdapter fragment1_RecordAdapter;
+        fragment1_Data = new LinkedList<record>();
+
+        if (fileName != null) {
+            try {
+                FileInputStream mfis = new FileInputStream(fileName);
+                Workbook mbook = Workbook.getWorkbook(mfis);
+                int msheer = mbook.getNumberOfSheets();                     //表数量
+                //String[] mSheetName = mbook.getSheetNames();                //表名称
+                Sheet[] mSheetlist = mbook.getSheets();                     //表内容
+
+                for (int i = 0; i < msheer; i++) {
+                    rows = mSheetlist[i].getRows();
+                    for (int j = 0; j < rows; j++) {
+                        Cell[] cellList = mSheetlist[i].getRow(j);
+                        for (Cell cell : cellList) {
+                            temp[cell.getColumn()] = cell.getContents();
+                        }
+                        fragment1_Data.add(new record(temp[0],temp[1],temp[2]));
+                        fragment1_RecordAdapter = new recordAdapter((LinkedList<record>) fragment1_Data,fragment1_Context);
+                        fragment1_ListView.setAdapter(fragment1_RecordAdapter);
+                        fragment1_ListView.setOnItemClickListener(this);
+                    }
+                }
+                mbook.close();
+            } catch (Exception e) {
+                System.out.println("Exception:  " + e);
+            }
         }
     }
 

@@ -54,11 +54,88 @@
         android:layout_height="match_parent"
         android:background="@drawable/txt_rectborder">
 
-        <TextView
-            android:id="@+id/temp"
-            android:layout_width="match_parent"
-            android:layout_height="80dp" />
+        <LinearLayout
+            android:id="@+id/fragment2_search_row"
+            android:layout_width="fill_parent"
+            android:layout_height="80dp">
 
+            <!--<FrameLayout-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="80dp">-->
+            <RelativeLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="80dp">
+                    
+                <EditText
+                    android:id="@+id/fragment2_search_EditText"
+                    android:layout_margin="5dp"
+                    android:textSize="28sp"
+                    android:inputType="text"
+                    android:maxLength="15"
+                    android:singleLine="true"
+                    android:paddingEnd="40dp"
+                    android:hint="@string/fragment2SearchHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/fragment2_search_delete"
+                    android:visibility="gone"
+                    android:src="@mipmap/search_delete"
+                    android:contentDescription="@string/fragment2SearchText"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:paddingEnd="15dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+
+            </RelativeLayout>
+            <!--</FrameLayout>-->
+
+            <TextView
+                android:id="@+id/fragment2_search_inquire"
+                android:layout_gravity="center"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/fragment2SearchText"
+                android:textColor="@color/black"
+                android:textSize="32sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!--<Button-->
+                <!--android:id="@+id/fragment2_search_inquire"-->
+                <!--android:layout_marginEnd="5dp"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:paddingStart="10dp"-->
+                <!--android:paddingEnd="10dp"-->
+                <!--android:text="查询"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_below="@+id/fragment2_search_row"
+            android:orientation="vertical"
+            android:scrollbars="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <ListView
+                android:id="@+id/fragment2_ListView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:dividerHeight="2dp"
+                android:divider="#B8B8B8"/>
+
+        </LinearLayout>
+
+        <!--
         <ScrollView
             android:id="@+id/fragment2Scrol"
             android:layout_below="@+id/temp"
@@ -83,6 +160,7 @@
             </LinearLayout>
 
         </ScrollView>
+        -->
     </RelativeLayout>
 
 

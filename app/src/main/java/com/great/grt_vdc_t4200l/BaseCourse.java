@@ -85,6 +85,8 @@ public class BaseCourse extends FragmentActivity {
         super.onPause();
         //Log.e(TAG,"底层中止");
 
+        showNavigation();
+
         handler.removeCallbacks(task);
 
         //注销广播
@@ -209,6 +211,7 @@ public class BaseCourse extends FragmentActivity {
     //------------- 硬件服务类方法 -------------//
     //隐藏虚拟按键
     public void hideNavigation(){
+
         View v = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION     //隐藏导航栏
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY          //
@@ -217,16 +220,30 @@ public class BaseCourse extends FragmentActivity {
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
         v.setSystemUiVisibility(uiOptions);
-    /*
-        try{
-            String command;
-            command = "LD_LIBRARY_PATH=/vendor/lib:/system/lib service call activity 42 s16 com.android.systemui";
-            Process proc =  Runtime.getRuntime().exec(new String[] { "su", " -c", command });
-            proc.waitFor();
-        }catch (Exception ex){
-            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-        */
+
+        //boolean ishide;
+//        try{
+//            String command;
+//            command = "LD_LIBRARY_PATH=/vendor/lib:/system/lib service call activity 42 s16 com.android.systemui";
+//            Process proc =  Runtime.getRuntime().exec(new String[] { "su", " -c", command });
+//            proc.waitFor();
+//        }catch (Exception ex){
+//            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+//        }
+
+    }
+
+    //显示虚拟按键
+    public void showNavigation(){
+
+//        try {
+//            String command;
+//            command = "LD_LIBRARY_PATH=/vendor/lib:/system/lib am startservice -n com.android.systemui/.SystemUIService";
+//            Process proc = Runtime.getRuntime().exec(new String[] { "su", " -c", command } );
+//            proc.waitFor();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
     }
 
 

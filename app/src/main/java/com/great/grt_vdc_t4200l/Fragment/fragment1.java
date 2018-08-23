@@ -353,7 +353,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
 
     //初始化ListView
     private void initListView(){
-
+        
         //String recordFileName = "/data/data/com.great.grt_vdc_t4200l/record_file/record.xls";
         String PATH = "//data/data/com.great.grt_vdc_t4200l/record_file/";
 
@@ -396,7 +396,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                         for (Cell cell : cellList) {
                             temp[cell.getColumn()] = cell.getContents();
                         }
-                        fragment1_Data.add(new record(temp[0],temp[1],temp[2]));
+                        fragment1_Data.add(new record(temp[0],temp[1],temp[2],""));
                         fragment1_RecordAdapter = new recordAdapter((LinkedList<record>) fragment1_Data,fragment1_Context);
                         fragment1_ListView.setAdapter(fragment1_RecordAdapter);
                         fragment1_ListView.setOnItemClickListener(this);

@@ -5,14 +5,16 @@ public class record {
     private String number;
     private String content;
     private String hint;
+    private String url;
 
     public record(){
     }
 
-    public record(String number,String content,String hint){
+    public record(String number,String content,String hint,String url){
         this.number = number;
         this.content = content;
         this.hint = hint;
+        this.url = url;
     }
 
     public String getNumber(){
@@ -27,6 +29,10 @@ public class record {
         return hint;
     }
 
+    public String getUrl(){
+        return url;
+    }
+
     public void setNumber(String number){
         this.number = number;
     }
@@ -38,6 +44,8 @@ public class record {
     public void setHint(String hint){
         this.hint = hint;
     }
+
+    public void setUrl(String url){this.url = url;}
 
 
 }

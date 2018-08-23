@@ -1,21 +1,37 @@
 package com.great.grt_vdc_t4200l.Fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.database.Cursor;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Bundle;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.great.grt_vdc_t4200l.ListView.record;
+import com.great.grt_vdc_t4200l.ListView.recordAdapter;
 import com.great.grt_vdc_t4200l.MPLineChart.DynamicLineChartManager;
 import com.great.grt_vdc_t4200l.R;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.graphics.Color;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -26,8 +42,12 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.w3c.dom.Text;
 
-public class fragment2 extends Fragment{
+
+public class fragment2 extends Fragment implements AdapterView.OnItemClickListener{
+
+    private static final String TAG = "fragment2";
 
     private TextView[] fragment2TempRow = new TextView[2];
 
@@ -40,8 +60,15 @@ public class fragment2 extends Fragment{
 
     private LinearLayout fragment2Liner;
 
+    //listView
+    private Context fragment2_Context;
+    private ListView fragment2_ListView;
+    private List<record> fragment2_Data  = new LinkedList<record>();
+    private recordAdapter fragment2_RecordAdapter;
 
-    //private int[][] tempData = {{0,79,155,223,282,329,361,378,378,361,329,282,223,155,79,0,-79,-155,-223,-282,-329,-361,-378,-378,-361,-329,-282,-223,-155,-79},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30}};
+    private EditText Search_EditText;
+    private ImageView Search_Delete;
+    private TextView Search_Inquire;
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
@@ -54,70 +81,228 @@ public class fragment2 extends Fragment{
         fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),0));
         fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),0,0,0,0,0,0,0,""));
 
-        fragment2Liner = view.findViewById(R.id.fragment2Llayout);
+        //fragment2Liner = view.findViewById(R.id.fragment2Llayout);
 
-        //initFragment2LineChart();
-        //initData();
+        fragment2_Context = view.getContext();
+        fragment2_ListView = view.findViewById(R.id.fragment2_ListView);
+
+        Search_EditText = view.findViewById(R.id.fragment2_search_EditText);
+        Search_Delete = view.findViewById(R.id.fragment2_search_delete);
+        Search_Inquire = view.findViewById(R.id.fragment2_search_inquire);
+
+        initSearch();
+//        initListView();
+        SearchListData(null);
+        initLineChart();
+
         return view;
     }
 
-    /*
-    private void  initData(){
-       //int tempData = {{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30},{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30}};
-       //setData();
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
     }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+    }
+
+    //重载
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
+
+    //中止
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    //停止
+    @Override
+    public void onStop(){
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+    }
+
+    //初始化搜索部分
+    private void initSearch(){
+
+        //添加输入清零事件
+        Search_Delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Search_EditText.setText("");
+                Search_Delete.setVisibility(View.GONE);
+            }
+        });
+
+        //监听输入事件
+        Search_EditText.addTextChangedListener(new TextWatcher() {
+
+            //文本改变前
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            //文本改变
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (s.length() == 0 ){
+                    Search_Delete.setVisibility(View.GONE);
+                }else {
+                    Search_Delete.setVisibility(View.VISIBLE);
+                    //changeListView();
+                }
+                SearchListData(Search_EditText.getText().toString());
+            }
+
+            //文本改变后
+            @Override
+            public void afterTextChanged(Editable s) { }
+
+        });
+
+        //搜索点击事件
+        Search_Inquire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(Search_EditText.getText().toString().trim())){
+                    Log.e("fragment2","请输入指定日期或编号的事件记录以搜索");
+                }else {
+                    Log.e("fragment2","已点击");
+                }
+            }
+        });
+
+    }
+
 
     //初始化LineChart
-    private void initFragment2LineChart(){
-
-        names.add("U相电压");
-        names.add("V相电压");
-        names.add("W相电压");
-        names.add("U相电流");
-        names.add("V相电流");
-        names.add("W相电流");
-        names.add("R相电压");
-        names.add("S相电压");
-        names.add("T相电压");
-
-        colour.add(Color.YELLOW);
-        colour.add(Color.GREEN);
-        colour.add(Color.RED);
-        colour.add(Color.YELLOW);
-        colour.add(Color.GREEN);
-        colour.add(Color.RED);
-        colour.add(Color.YELLOW);
-        colour.add(Color.GREEN);
-        colour.add(Color.RED);
-
-        fragment2ChartManager = new DynamicLineChartManager(fragment2LineChar,names,colour);
-        fragment2ChartManager.setYAxis(500,-500,100);
-
-        //fragment2LineChar.setDragEnabled(false);                                        //拖拽
-        //fragment2LineChar.setTouchEnabled(false);                                       //触摸
-        //fragment2LineChar.setScaleEnabled(false);                                       //缩放
-        //fragment2LineChar.setPinchZoom(false);                                          //多点缩放
-        fragment2LineChar.getDescription().setEnabled(false);                           //隐藏描述
+    private void initLineChart(){
 
     }
 
-    private void setData(){
-        for (int ii = 0; ii < 5; ii++) {
-            for (int i = 0; i < 30; i++) {
-                list.add((int) (tempData[0][i]));
-                list.add((int) (tempData[1][i]));
-                list.add((int) (tempData[2][i]));
-                list.add((int) (tempData[3][i]));
-                list.add((int) (tempData[4][i]));
-                list.add((int) (tempData[5][i]));
-                list.add((int) (tempData[6][i]));
-                list.add((int) (tempData[7][i]));
-                list.add((int) (tempData[8][i]));
-                fragment2ChartManager.addEntry(list);
-                list.clear();
+    /*
+     *  SearchListData
+     *  根据EditText输入数据更新ListView列表数据
+     */
+    private void SearchListData(String SearchFileName){
+
+        //存放录波记录的绝对路径
+//        String PATH = "//data/data/com.great.grt_vdc_t4200l/fault_record_file/";
+        String PATH = fragment2_Context.getFilesDir().getPath() + "/fault_record_file/";
+        PATH = PATH.replace("/files","");
+
+        //存放填充数据的集合
+        String[] temp = new String[3];
+
+        //历遍路径中的所有文件夹
+        File file = new File(PATH);
+        File[] files = file.listFiles();
+
+        //清空ListView
+//        fragment2_Data.removeAll(fragment2_Data);
+        fragment2_Data.clear();
+        fragment2_RecordAdapter = new recordAdapter((LinkedList<record>) fragment2_Data,fragment2_Context);
+        fragment2_ListView.setAdapter(fragment2_RecordAdapter);
+
+        //路径中没有文件
+        if (files.length <= 0){
+
+//            Log.e(TAG,"当前文件夹内没有记录文件");
+            fragment2_Data.add(new record("","当前暂无录波记录","",""));
+            fragment2_RecordAdapter = new recordAdapter((LinkedList<record>) fragment2_Data,fragment2_Context);
+            fragment2_ListView.setAdapter(fragment2_RecordAdapter);
+            fragment2_ListView.setOnItemClickListener(this);
+
+        //路径中有文件
+        }else{
+
+//            Log.e(TAG,"文件夹内有"+files.length+"条记录文件");
+            int SearchNull = 0;
+
+            //历遍所有文件名
+            for (int i = 0; i < files.length; i++) {
+
+                String str = files[i].getAbsolutePath().replace(PATH,"");
+                String[] regroupFiles;
+
+                //根据"_"斩开数据
+                regroupFiles = (str.replace(".xlsx","")).split("_");
+
+                //没有筛选条件
+                if (SearchFileName == null){
+
+//                    temp[0] = Integer.toString(i);
+//                    temp[1] = files[i].getAbsolutePath();
+                    temp[0] = regroupFiles[0];
+                    temp[1] = regroupFiles[4]+" "+regroupFiles[5];
+
+                //有筛选条件
+                }else {
+
+                    //正则筛选
+                    Pattern SearchPattern = Pattern.compile(SearchFileName);
+                    Matcher SearchMatcher = SearchPattern.matcher(str);
+
+                    //符合条件
+                    if (SearchMatcher.find()){
+
+//                        temp[0] = Integer.toString(i);
+//                        temp[1] = files[i].getAbsolutePath();
+                        temp[0] = regroupFiles[0];
+                        temp[1] = regroupFiles[4]+" "+regroupFiles[5];
+
+                    //不符合条件
+                    }else {
+
+                        SearchNull++;
+                        if (SearchNull < files.length){continue;}
+                        if (SearchNull == files.length){
+                            temp[0] = "";
+                            temp[1] = "没有匹配的录波记录，请重新筛选";
+                        }
+                    }
+                }
+
+                //更新ListView
+                fragment2_Data.add(new record(temp[0],temp[1],"",str));
+                fragment2_RecordAdapter = new recordAdapter((LinkedList<record>) fragment2_Data,fragment2_Context);
+                fragment2_ListView.setAdapter(fragment2_RecordAdapter);
+                fragment2_ListView.setOnItemClickListener(this);
+
             }
         }
-    }*/
+
+    }
+
+    //ListView点击事件
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        TextView pickTextUrl = view.findViewById(R.id.txt_mUrl);
+        String pickFileName = pickTextUrl.getText().toString();
+
+        if (pickFileName.contains(".xlsx")){
+            Log.e(TAG,""+pickFileName);
+        }
+    }
+
+    //更新LinerChar
+
+
 
 }
 

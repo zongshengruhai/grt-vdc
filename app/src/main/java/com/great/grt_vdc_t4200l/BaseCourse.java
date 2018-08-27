@@ -23,20 +23,33 @@ import android.view.WindowManager;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import android_serialport_api.SerialPort;
+
 public class BaseCourse extends FragmentActivity {
 
     private static final String TAG = "BaseCourse";
-
-    //广播声明
+    //广播声明----------------------------------------------------
     //Intent lifeCycleChange = new Intent("drc.xxx.yyy.baseActivity");
     Intent dataChange = new Intent("drc.xxx.yyy.fragment1");
     private MyBaseActivity_Broad baseCourseBroad = null;
     private IntentFilter baseCourseIntentFilter = new IntentFilter("drc.xxx.yyy.baseActivity");
     int text[] = new int[5];
+    //串口声明----------------------------------------------------
+    private SerialPort mSerialPort;                                      //串口
+    private OutputStream mOutput;                                       //发送
+    private InputStream mInput;                                         //接收
+    private byte[] mbuffer = new byte[2];                               //接收缓存区
+    private boolean _isopen = false;                                    //串口开关标志
 
-
-    // ------------- 重写生命周期 -------------//
-    //创建
+    /**
+     * 活动生命周期
+     */
+    //活动创建----------------------------------------------------
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         //Log.e(TAG,"底层创建");
@@ -44,24 +57,20 @@ public class BaseCourse extends FragmentActivity {
         //全屏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
     }
-
-    //开始
+    //活动开始----------------------------------------------------
     @Override
     protected void onStart(){
         super.onStart();
         //Log.e(TAG,"底层开始");
     }
-
-    //重启
+    //活动重启----------------------------------------------------
     @Override
     protected void onRestart(){
         super.onRestart();
         //Log.e(TAG,"底层重启");
     }
-
-    //重载
+    //活动重载----------------------------------------------------
     @Override
     protected void onResume(){
         super.onResume();
@@ -78,8 +87,10 @@ public class BaseCourse extends FragmentActivity {
             Log.e(TAG,"baseCourse，已注册广播");
         }
 
+        loadSOP();
+
     }
-    //中止
+    //活动中止----------------------------------------------------
     @Override
     protected void onPause(){
         super.onPause();
@@ -95,22 +106,22 @@ public class BaseCourse extends FragmentActivity {
             baseCourseBroad = null;
             Log.e(TAG,"baseCourse，已注销广播");
         }
-    }
 
-    //停止
+        pauseSOP();
+    }
+    //活动退出----------------------------------------------------
     @Override
     protected void onStop(){
         super.onStop();
         //Log.e(TAG,"底层停止");
     }
-
-    //退出
+    //活动注销----------------------------------------------------
     @Override
     protected void onDestroy(){
         super.onDestroy();
         //Log.e(TAG,"底层退出");
     }
-
+    //定时主线程----------------------------------------------------
     Handler handler = new Handler();
     Runnable task = new Runnable() {
         @Override
@@ -140,17 +151,10 @@ public class BaseCourse extends FragmentActivity {
         }
     };
 
-    // ------------- 总线广播 ------------- //
-    /*主要实现功能：
-        1）退出app，注销所有继承 BaseCourse 的子程活动
-            方法：
-                1.new 一个  Intent 类型的 intent;
-                2.对intent执行putExtra，增加name:closeALL,value:1;
-                3.SendBroadcast（intent）.
-        2）生命周期改变事件，监控底层activity生命周期，根据不同的事件执行任务
-            方法：
-
-    */
+    /**
+     * 总线广播
+     */
+    //广播处理----------------------------------------------------
     public class MyBaseActivity_Broad extends BroadcastReceiver{
         public void onReceive(Context context, Intent intent){
 
@@ -185,8 +189,7 @@ public class BaseCourse extends FragmentActivity {
 
         }
     }
-
-    //
+    //Toast处理----------------------------------------------------
     private void Toast(int ToastType){
         switch (ToastType){
             case 1:
@@ -207,10 +210,11 @@ public class BaseCourse extends FragmentActivity {
         }
     }
 
-
-    //------------- 硬件服务类方法 -------------//
-    //隐藏虚拟按键
-    public void hideNavigation(){
+    /**
+     * 硬件服务方法
+     */
+    //隐藏虚拟按键----------------------------------------------------
+    private void hideNavigation(){
 
         View v = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION     //隐藏导航栏
@@ -232,9 +236,8 @@ public class BaseCourse extends FragmentActivity {
 //        }
 
     }
-
-    //显示虚拟按键
-    public void showNavigation(){
+    //显示虚拟按键----------------------------------------------------
+    private void showNavigation(){
 
 //        try {
 //            String command;
@@ -245,27 +248,85 @@ public class BaseCourse extends FragmentActivity {
 //            e.printStackTrace();
 //        }
     }
-
-
-    //重启设备
+    //重启设备----------------------------------------------------
     /*
     public void restart(){
         PowerManager myManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         myManager.reboot("重启");
     }*/
 
+    /**
+     * 串口通讯方法
+     */
+    //打开com----------------------------------------------------
+    private void openCom(){
+        //尝试打开串口
+        try {
+            mSerialPort = new SerialPort(new File("/dev/ttyS2"),38400,0);//设置串口、波特率、校验位
+            mOutput = mSerialPort.getOutputStream();
+            mInput = mSerialPort.getInputStream();
+            _isopen = true;
+        }catch (SecurityException|IOException e) {
+            _isopen = false;
+        }
+    }
+    //关闭com----------------------------------------------------
+    private void colseCom(){
+        try {
+            mOutput.close();
+            mInput.close();
+            mSerialPort.close();
+            _isopen = false;
+        }catch (IOException e){
+            _isopen = true;
+        }
+    }
+    //读取线程----------------------------------------------------
+    class ReadRunner implements Runnable{
+        @Override
+        public void run(){
+//            while (_isopen){
+//                try {
+//                    if (mInput != null){
+//
+//                    }
+//                }catch (IOException e){
+//
+//                }
+//            }
+        }
+    }
 
-    //打开串口
-    public void openSerial(){
+    /**
+     *  软件流程方法
+     */
+    //流程检测----------------------------------------------------
+    private void loadSOP(){
+
+        //1、打开串口
+        for (int i = 0; i < 3 ; i++) {
+            if (!_isopen){
+                openCom();
+            }else {
+                break;
+            }
+        }
+        if (!_isopen){ Log.e(TAG,"SOP,串口打开失败");}else{ Log.e(TAG,"SOP,串口打开成功");}
+
+        //2、检测文件
+
+
 
     }
 
-    //关闭串口
-    public void closeSerial(){
+    //流程检测----------------------------------------------------
+    private void pauseSOP(){
+
+        colseCom();
+        if (!_isopen){ Log.e(TAG,"SOP,串口关闭成功");}else{ Log.e(TAG,"SOP,串口关闭失败");}
 
     }
 
-    // ------------- 软件流程类方法 -------------//
 
 
 

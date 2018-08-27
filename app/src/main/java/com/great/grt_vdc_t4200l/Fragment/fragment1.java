@@ -365,10 +365,10 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
         if ( files != null ){
             for (int i = 0; i < files.length; i++) {
                 String pathFileName = files[i].getAbsolutePath();
-                if (pathFileName.equals("/data/data/com.great.grt_vdc_t4200l/record_file/record.xls")){
+//                if (pathFileName.equals("/data/data/com.great.grt_vdc_t4200l/record_file/record.xls")){
                     loadListData(pathFileName);
                     //Log.e(TAG,"#############");
-                }
+//                }
             }
         }
     }
@@ -379,7 +379,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
         String[] temp = new String[3];
         List<record> fragment1_Data;
         recordAdapter fragment1_RecordAdapter;
-        fragment1_Data = new LinkedList<record>();
+        fragment1_Data = new LinkedList<>();
 
         if (fileName != null) {
             try {
@@ -391,7 +391,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
 
                 for (int i = 0; i < msheer; i++) {
                     rows = mSheetlist[i].getRows();
-                    for (int j = 0; j < rows; j++) {
+                    for (int j  = 0; j < rows; j++) {
                         Cell[] cellList = mSheetlist[i].getRow(j);
                         for (Cell cell : cellList) {
                             temp[cell.getColumn()] = cell.getContents();
@@ -404,7 +404,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                 }
                 mbook.close();
             } catch (Exception e) {
-                System.out.println("Exception:  " + e);
+                System.out.println("fragment1,Exception:  " + e);
             }
         }
     }

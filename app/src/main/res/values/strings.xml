@@ -48,11 +48,12 @@
     <string name="fragment1RecordTime">录波记录：%1$d 条</string>
     <!-- fragment2 -->
     <string name="fragment2RecordTime">当前为第 %1$d 条暂降补偿记录</string>
-    <string name="fragment2RecordContent">发生于 %1$d.%2$d.%3$d %4$d:%5$d，跌落到 %6$d V，跌落时长 %7$d S%8$s</string>
+    <string name="fragment2RecordContent">发生于 %1$S，跌落到 %2$d V，跌落时长 %3$d ms %4$s</string>
     <string name="fragment2SearchHint">请输入关键字</string>
     <string name="fragment2SearchText">查询</string>
     <!-- fragment3 -->
-
+    <string name="fragment3ContentText">故障记录</string>
+    <string name="fragment3RealState">实时状态</string>
     <!-- fragment4 -->
     <string name="fragment4btu">校准</string>
     <string name="fragmnet4LoginBtu">登录</string>
@@ -73,7 +74,6 @@
     <string name="fragment4otherRow">其他设置：</string>
     <string name="fragment4capV">电容电压：</string>
     <string name="fragment4timeSet">时间：</string>
-
 
 
 </resources>

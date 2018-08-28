@@ -18,20 +18,26 @@
         android:background="@drawable/txt_rectborder">
 
         <TextView
-            android:text="故障记录"
+            android:text="@string/fragment3ContentText"
             android:textSize="26sp"
             android:textColor="@color/colorBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:scrollbars="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
-        </com.github.mikephil.charting.charts.LineChart>
+            <ListView
+                android:id="@+id/fragment3_ListView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:dividerHeight="2dp"
+                android:divider="#B8B8B8"/>
 
-
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -44,11 +50,14 @@
         android:layout_height="match_parent"
         android:background="@drawable/txt_rectborder">
 
-
+        <TextView
+            android:text="@string/fragment3RealState"
+            android:textSize="26sp"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
-
-
 
 
 </RelativeLayout>

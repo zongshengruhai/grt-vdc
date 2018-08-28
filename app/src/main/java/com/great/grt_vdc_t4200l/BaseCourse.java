@@ -303,7 +303,11 @@ public class BaseCourse extends FragmentActivity {
     //流程检测----------------------------------------------------
     private void loadSOP(){
 
-        //1、打开串口
+        boolean[] checkXls = new boolean[3];
+
+        //1、检测root权限
+
+        //2、打开串口
         for (int i = 0; i < 3 ; i++) {
             if (!_isopen){
                 openCom();
@@ -313,7 +317,12 @@ public class BaseCourse extends FragmentActivity {
         }
         if (!_isopen){ Log.e(TAG,"SOP,串口打开失败");}else{ Log.e(TAG,"SOP,串口打开成功");}
 
-        //2、检测文件
+        //3、检测文件
+
+
+
+
+
 
 
 

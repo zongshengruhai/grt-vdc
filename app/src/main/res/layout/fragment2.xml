@@ -17,6 +17,12 @@
         android:layout_margin="5dp"
         android:background="@drawable/txt_rectborder">
 
+        <!--<ProgressBar-->
+        <!--android:id="@+id/fragment2_loading"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
         <TextView
             android:id="@+id/fragment2TVtime"
             android:text="@string/fragment2RecordTime"
@@ -33,16 +39,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/fragment2LineChart"
-            android:layout_marginTop="10dp"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </com.github.mikephil.charting.charts.LineChart>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/f2_LineChart_1"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
 
+            </com.github.mikephil.charting.charts.LineChart>
 
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/f2_LineChart_2"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
 
+            </com.github.mikephil.charting.charts.LineChart>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/f2_LineChart_3"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+            </com.github.mikephil.charting.charts.LineChart>
+
+        </LinearLayout>
+
+        <!--<com.github.mikephil.charting.charts.LineChart-->
+        <!--android:id="@+id/fragment2LineChart"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--</com.github.mikephil.charting.charts.LineChart>-->
     </LinearLayout>
 
     <RelativeLayout
@@ -60,18 +97,18 @@
             android:layout_height="80dp">
 
             <!--<FrameLayout-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="80dp">-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="80dp">-->
             <RelativeLayout
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="80dp">
-                    
+
                 <EditText
                     android:id="@+id/fragment2_search_EditText"
                     android:layout_margin="5dp"
-                    android:textSize="28sp"
+                    android:textSize="26sp"
                     android:inputType="text"
                     android:maxLength="15"
                     android:singleLine="true"
@@ -101,24 +138,24 @@
                 android:paddingEnd="10dp"
                 android:text="@string/fragment2SearchText"
                 android:textColor="@color/black"
-                android:textSize="32sp"
+                android:textSize="26sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <!--<Button-->
-                <!--android:id="@+id/fragment2_search_inquire"-->
-                <!--android:layout_marginEnd="5dp"-->
-                <!--android:layout_marginTop="5dp"-->
-                <!--android:layout_marginBottom="5dp"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:paddingStart="10dp"-->
-                <!--android:paddingEnd="10dp"-->
-                <!--android:text="查询"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content" />-->
+            <!--android:id="@+id/fragment2_search_inquire"-->
+            <!--android:layout_marginEnd="5dp"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:paddingStart="10dp"-->
+            <!--android:paddingEnd="10dp"-->
+            <!--android:text="查询"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
 
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_below="@+id/fragment2_search_row"
             android:orientation="vertical"

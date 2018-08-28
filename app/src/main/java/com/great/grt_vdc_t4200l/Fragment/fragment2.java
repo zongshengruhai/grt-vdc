@@ -16,10 +16,11 @@ import android.os.Bundle;
 import com.github.mikephil.charting.charts.LineChart;
 import com.great.grt_vdc_t4200l.ListView.record;
 import com.great.grt_vdc_t4200l.ListView.recordAdapter;
-import com.great.grt_vdc_t4200l.MPLineChart.DynamicLineChartManager;
+import com.great.grt_vdc_t4200l.MPLineChart.fragment2LineChartManager;
 import com.great.grt_vdc_t4200l.R;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -44,6 +46,10 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.w3c.dom.Text;
 
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+
 
 public class fragment2 extends Fragment implements AdapterView.OnItemClickListener{
 
@@ -51,35 +57,37 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
     private TextView[] fragment2TempRow = new TextView[2];
 
+    String PATH;
+
     //MPAndroidChart
-    private DynamicLineChartManager fragment2ChartManager;
+    private fragment2LineChartManager fragment2ChartManager;
     private LineChart fragment2LineChar;
     private List<Integer> list = new ArrayList<>();         //数据集合
     private List<Integer> colour = new ArrayList<>();       //折线颜色
     private List<String> names = new ArrayList<>();          //折线名称
 
-    private LinearLayout fragment2Liner;
-
     //listView
     private Context fragment2_Context;
     private ListView fragment2_ListView;
-    private List<record> fragment2_Data  = new LinkedList<record>();
+    private List<record> fragment2_Data  = new LinkedList<>();
     private recordAdapter fragment2_RecordAdapter;
 
     private EditText Search_EditText;
     private ImageView Search_Delete;
     private TextView Search_Inquire;
 
+//    private ProgressBar fragment2_Loading;
+
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment2,container,false);
 
-        fragment2LineChar = view.findViewById(R.id.fragment2LineChart);
+        fragment2LineChar = view.findViewById(R.id.f2_LineChart_1);
 
         fragment2TempRow[0] = view.findViewById(R.id.fragment2TVtime);
         fragment2TempRow[1] = view.findViewById(R.id.fragment2TVcontent);
         fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),0));
-        fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),0,0,0,0,0,0,0,""));
+        fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),"0.0.0_00:00",0,0,""));
 
         //fragment2Liner = view.findViewById(R.id.fragment2Llayout);
 
@@ -89,6 +97,12 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         Search_EditText = view.findViewById(R.id.fragment2_search_EditText);
         Search_Delete = view.findViewById(R.id.fragment2_search_delete);
         Search_Inquire = view.findViewById(R.id.fragment2_search_inquire);
+
+//        fragment2_Loading = view.findViewById(R.id.fragment2_loading);
+
+        //默认路径
+        PATH = fragment2_Context.getFilesDir().getPath() + "/fault_record_file/";
+        PATH = PATH.replace("/files","");
 
         initSearch();
 //        initListView();
@@ -192,6 +206,30 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     //初始化LineChart
     private void initLineChart(){
 
+        names.add("Uv");
+        names.add("Vv");
+        names.add("Wv");
+        names.add("Ua");
+        names.add("Va");
+        names.add("Wa");
+        names.add("Rv");
+        names.add("Sv");
+        names.add("Tv");
+
+        colour.add(Color.YELLOW);
+        colour.add(Color.GREEN);
+        colour.add(Color.RED);
+        colour.add(Color.YELLOW);
+        colour.add(Color.GREEN);
+        colour.add(Color.RED);
+        colour.add(Color.YELLOW);
+        colour.add(Color.GREEN);
+        colour.add(Color.RED);
+
+
+        fragment2ChartManager = new fragment2LineChartManager(fragment2LineChar,names,colour);
+        fragment2ChartManager.setYAxis(500,-500,10);
+
     }
 
     /*
@@ -202,8 +240,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
         //存放录波记录的绝对路径
 //        String PATH = "//data/data/com.great.grt_vdc_t4200l/fault_record_file/";
-        String PATH = fragment2_Context.getFilesDir().getPath() + "/fault_record_file/";
-        PATH = PATH.replace("/files","");
+//        String PATH = fragment2_Context.getFilesDir().getPath() + "/fault_record_file/";
+//        PATH = PATH.replace("/files","");
 
         //存放填充数据的集合
         String[] temp = new String[3];
@@ -227,7 +265,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
             fragment2_ListView.setAdapter(fragment2_RecordAdapter);
             fragment2_ListView.setOnItemClickListener(this);
 
-        //路径中有文件
+            //路径中有文件
         }else{
 
 //            Log.e(TAG,"文件夹内有"+files.length+"条记录文件");
@@ -237,10 +275,11 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
             for (int i = 0; i < files.length; i++) {
 
                 String str = files[i].getAbsolutePath().replace(PATH,"");
+//                Log.e(TAG,files[i].getAbsolutePath());
                 String[] regroupFiles;
 
                 //根据"_"斩开数据
-                regroupFiles = (str.replace(".xlsx","")).split("_");
+                regroupFiles = (str.replace(".xls","")).split("_");
 
                 //没有筛选条件
                 if (SearchFileName == null){
@@ -250,7 +289,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                     temp[0] = regroupFiles[0];
                     temp[1] = regroupFiles[4]+" "+regroupFiles[5];
 
-                //有筛选条件
+                    //有筛选条件
                 }else {
 
                     //正则筛选
@@ -265,7 +304,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                         temp[0] = regroupFiles[0];
                         temp[1] = regroupFiles[4]+" "+regroupFiles[5];
 
-                    //不符合条件
+                        //不符合条件
                     }else {
 
                         SearchNull++;
@@ -295,14 +334,72 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         TextView pickTextUrl = view.findViewById(R.id.txt_mUrl);
         String pickFileName = pickTextUrl.getText().toString();
 
-        if (pickFileName.contains(".xlsx")){
-            Log.e(TAG,""+pickFileName);
+//        fragment2_Loading.setVisibility(View.VISIBLE);
+
+        if (pickFileName.contains(".xls")){
+            fillLineChart(pickFileName);
+//            Log.e(TAG,""+pickFileName);
         }
     }
 
     //更新LinerChar
+    private void fillLineChart(String fileName){
+
+        int rows;                                                           //行数量
+//        String[] temp = new String[9];
+
+        if (fileName == null){
+
+            Log.e(TAG,"没有文件名");
+        }else {
+
+            //填充表头
+            String[] fillContent;
+            fillContent = (fileName.replace(".xls","")).split("_");
+            if (fillContent.length > 0){
+                fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),Integer.parseInt(fillContent[0])));
+                fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),(fillContent[4] + "_" + fillContent[5]),(Integer.parseInt(fillContent[2])),(Integer.parseInt(fillContent[3])),""));
+            }
+
+            fileName = PATH + fileName;
+            Log.e(TAG,"准备加载："+fileName);
+
+            try {
+
+                FileInputStream mfis = new FileInputStream(fileName);
+                Workbook mbook = Workbook.getWorkbook(mfis);
+                int msheer = mbook.getNumberOfSheets();                     //表数量
+                Sheet[] mSheetlist = mbook.getSheets();                     //表内容
+
+                String temp;
+
+                for (int i = 0; i < msheer; i++) {
+                    rows = mSheetlist[i].getRows();
+                    Log.e(TAG,"行数："+rows);
+                    for (int j = 1; j < rows; j++) {
+                        Cell[] cellList = mSheetlist[i].getRow(j);
+                        for (Cell cell : cellList) {
+                            temp = (cell.getContents()).trim();
+                            list.add(Integer.parseInt(temp));
+                        }
+                        fragment2ChartManager.addEntry(list);
+                        list.clear();
+                    }
+                }
+
+                mbook.close();
 
 
+            }catch (Exception e){
+                System.out.println("fragment2,Exception: " + e);
+            }
+
+
+        }
+
+//        fragment2_Loading.setVisibility(View.GONE);
+
+    }
 
 }
 

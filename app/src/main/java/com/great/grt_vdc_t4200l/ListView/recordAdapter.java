@@ -38,15 +38,14 @@ public class recordAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-
         convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_record,parent,false);
 
-        TextView txt_mNumber = (TextView) convertView.findViewById(R.id.txt_mNumbar);
+        TextView txt_mNumbar = (TextView) convertView.findViewById(R.id.txt_mNumbar);
         TextView txt_mContent = (TextView) convertView.findViewById(R.id.txt_mContent);
         TextView txt_mHint = (TextView) convertView.findViewById(R.id.txt_mHint);
         TextView txt_mUrl = (TextView) convertView.findViewById(R.id.txt_mUrl);
 
-        txt_mNumber.setText(mData.get(position).getNumber());
+        txt_mNumbar.setText(mData.get(position).getNumber());
         txt_mContent.setText(mData.get(position).getContent());
         txt_mHint.setText(mData.get(position).getHint());
         txt_mUrl.setText(mData.get(position).getUrl());

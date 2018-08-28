@@ -21,7 +21,7 @@ public class fragment2LineChartManager {
 
     private LineChart lineChart;
     private YAxis leftAxis;
-    private YAxis rightAxis;
+//    private YAxis rightAxis;
     private XAxis xAxis;
     private LineData lineData;
     private LineDataSet lineDataSet;
@@ -33,7 +33,7 @@ public class fragment2LineChartManager {
     public fragment2LineChartManager(LineChart mLineChart, String name, int color) {
         this.lineChart = mLineChart;
         leftAxis = lineChart.getAxisLeft();
-        rightAxis = lineChart.getAxisRight();
+//        rightAxis = lineChart.getAxisRight();
         xAxis = lineChart.getXAxis();
         initLineChart();
         initLineDataSet(name, color);
@@ -43,7 +43,7 @@ public class fragment2LineChartManager {
     public fragment2LineChartManager(LineChart mLineChart, List<String> names, List<Integer> colors) {
         this.lineChart = mLineChart;
         leftAxis = lineChart.getAxisLeft();
-        rightAxis = lineChart.getAxisRight();
+//        rightAxis = lineChart.getAxisRight();
         xAxis = lineChart.getXAxis();
         initLineChart();
         initLineDataSet(names, colors);
@@ -79,7 +79,7 @@ public class fragment2LineChartManager {
 
         //Y轴设置
         leftAxis.setAxisMinimum(0f);                                                                //最小值
-        rightAxis.setAxisMinimum(0f);
+//        rightAxis.setAxisMinimum(0f);
 
     }
 
@@ -116,7 +116,7 @@ public class fragment2LineChartManager {
             lineDataSet.setHighLightColor(colors.get(i));
             lineDataSet.setDrawFilled(false);                                                       //曲线填充
             lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-            lineDataSet.setValueTextSize(16f);                                                      //曲线标注文字大小
+            lineDataSet.setValueTextSize(10f);                                                      //曲线标注文字大小
 //            lineDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);                                //设置曲线模式 弯曲程度
             lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
             lineDataSets.add(lineDataSet);
@@ -188,9 +188,9 @@ public class fragment2LineChartManager {
         leftAxis.setAxisMinimum(min);
         leftAxis.setLabelCount(labelCount, false);
 
-        rightAxis.setAxisMaximum(max);
-        rightAxis.setAxisMinimum(min);
-        rightAxis.setLabelCount(labelCount, false);
+//        rightAxis.setAxisMaximum(max);
+//        rightAxis.setAxisMinimum(min);
+//        rightAxis.setLabelCount(labelCount, false);
         lineChart.invalidate();
     }
 

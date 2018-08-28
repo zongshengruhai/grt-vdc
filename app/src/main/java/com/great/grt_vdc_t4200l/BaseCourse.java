@@ -23,6 +23,8 @@ import android.view.WindowManager;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.utils.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -300,10 +302,10 @@ public class BaseCourse extends FragmentActivity {
     /**
      *  软件流程方法
      */
-    //流程检测----------------------------------------------------
+    //重载流程----------------------------------------------------
     private void loadSOP(){
-
-        boolean[] checkXls = new boolean[3];
+        String fileNaem;
+        boolean _fileExists;
 
         //1、检测root权限
 
@@ -315,28 +317,97 @@ public class BaseCourse extends FragmentActivity {
                 break;
             }
         }
-        if (!_isopen){ Log.e(TAG,"SOP,串口打开失败");}else{ Log.e(TAG,"SOP,串口打开成功");}
-
-        //3、检测文件
-
-
+        if (!_isopen){
+            Log.e(TAG,"SOP,串口打开失败");
+        }else {Log.e(TAG,"SOP,串口打开成功");}
 
 
+        //3.1、检测录波记录文件夹
+        fileNaem = "/record_log/";
+        _fileExists = checkFile(fileNaem);
+        if (!_fileExists){
+            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
+        }else {Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");}
 
+        //3.2、检测故障记录文件
+        fileNaem = "/fault_log/";
+        _fileExists = checkFile(fileNaem);
+        if (!_fileExists){
+            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
+        }else {Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");}
+
+        fileNaem = "/fault_log/fault_record.xls";
+        _fileExists = checkFile(fileNaem);
+        if (!_fileExists){
+            Log.e(TAG,"SOP, "+fileNaem+" 文件不存在");
+        }else {Log.e(TAG,"SOP, "+fileNaem+" 文件存在");}
+
+        //3.3、检测实时采样文件
+        fileNaem = "/sampling_now/";
+        _fileExists = checkFile(fileNaem);
+        if (!_fileExists){
+            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
+        }else {Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");}
 
 
 
     }
-
-    //流程检测----------------------------------------------------
+    //SOP启动错误处理----------------------------------------------------
+    private void errorSOP(int type){
+        switch (type){
+            case 1:
+                Toast.makeText(this,"串口打开失败！",Toast.LENGTH_SHORT).show();
+                break;
+            case 10:
+                Toast.makeText(this,"录波记录文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
+                break;
+            case 11:
+                Toast.makeText(this,"故障记录文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
+                break;
+            case 12:
+                Toast.makeText(this,"实时采样文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
+                break;
+            case 15:
+                Toast.makeText(this,"故障记录文件不存在或创建失败！",Toast.LENGTH_SHORT).show();
+                break;
+        }
+        Toast.makeText(this,"初始化失败，即将重启！",Toast.LENGTH_SHORT).show();
+    }
+    //中止流程----------------------------------------------------
     private void pauseSOP(){
-
         colseCom();
         if (!_isopen){ Log.e(TAG,"SOP,串口关闭成功");}else{ Log.e(TAG,"SOP,串口关闭失败");}
-
     }
 
-
+    //检测文件----------------------------------------------------
+    private boolean checkFile(String fileName){
+        String PATH = this.getFilesDir().getPath()+fileName;
+        try {
+            File file = new File(PATH);
+            if (!file.exists()){
+                if (fileName.contains(".")){
+                    Log.e(TAG,"文件不存在,开始创建");
+                    return createFile(fileName);
+//                    file.createNewFile();
+                }else{
+                    Log.e(TAG,"文件夹不存在,开始创建");
+                    file.mkdir();
+                }
+            }
+        }catch (Exception e){ return false; }
+        return true;
+    }
+    //创建文件----------------------------------------------------
+    private boolean createFile(String fileName){
+        String PATH = this.getFilesDir().getPath()+fileName;
+        try {
+            File file = new File(PATH);
+            if (!file.exists()){
+                file.createNewFile();
+            }
+        }catch (Exception e){ return false; }
+        return true;
+    }
 
 
 }

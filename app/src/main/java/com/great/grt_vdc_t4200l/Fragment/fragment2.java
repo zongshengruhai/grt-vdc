@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Bundle;
@@ -60,8 +61,10 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     String PATH;
 
     //MPAndroidChart
-    private fragment2LineChartManager fragment2ChartManager;
-    private LineChart fragment2LineChar;
+//    private fragment2LineChartManager fragment2ChartManager;
+//    private LineChart fragment2LineChar;
+    private fragment2LineChartManager[] fragment2ChartManager = new fragment2LineChartManager[3];
+    private LineChart[] fragment2LineChart = new LineChart[3];
     private List<Integer> list = new ArrayList<>();         //数据集合
     private List<Integer> colour = new ArrayList<>();       //折线颜色
     private List<String> names = new ArrayList<>();          //折线名称
@@ -82,7 +85,10 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment2,container,false);
 
-        fragment2LineChar = view.findViewById(R.id.f2_LineChart_1);
+//        fragment2LineChar = view.findViewById(R.id.f2_LineChart_1);
+        fragment2LineChart[0] = view.findViewById(R.id.f2_LineChart_1);
+        fragment2LineChart[1] = view.findViewById(R.id.f2_LineChart_2);
+        fragment2LineChart[2] = view.findViewById(R.id.f2_LineChart_3);
 
         fragment2TempRow[0] = view.findViewById(R.id.fragment2TVtime);
         fragment2TempRow[1] = view.findViewById(R.id.fragment2TVcontent);
@@ -206,12 +212,30 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     //初始化LineChart
     private void initLineChart(){
 
-        names.add("Uv");
-        names.add("Vv");
-        names.add("Wv");
-        names.add("Ua");
-        names.add("Va");
-        names.add("Wa");
+//        names.add("Uv");
+//        names.add("Vv");
+//        names.add("Wv");
+//        names.add("Ua");
+//        names.add("Va");
+//        names.add("Wa");
+//        names.add("Rv");
+//        names.add("Sv");
+//        names.add("Tv");
+//
+//        colour.add(Color.YELLOW);
+//        colour.add(Color.GREEN);
+//        colour.add(Color.RED);
+//        colour.add(Color.YELLOW);
+//        colour.add(Color.GREEN);
+//        colour.add(Color.RED);
+//        colour.add(Color.YELLOW);
+//        colour.add(Color.GREEN);
+//        colour.add(Color.RED);
+//
+//
+//        fragment2ChartManager[0] = new fragment2LineChartManager(fragment2LineChart[0],names,colour);
+//        fragment2ChartManager[0].setYAxis(500,-500,10);
+
         names.add("Rv");
         names.add("Sv");
         names.add("Tv");
@@ -219,16 +243,41 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         colour.add(Color.YELLOW);
         colour.add(Color.GREEN);
         colour.add(Color.RED);
-        colour.add(Color.YELLOW);
-        colour.add(Color.GREEN);
-        colour.add(Color.RED);
+
+        fragment2ChartManager[0] = new fragment2LineChartManager(fragment2LineChart[0],names,colour);
+        fragment2ChartManager[0].setYAxis(500,-500,10);
+
+
+        names.clear();
+        colour.clear();
+
+        names.add("Uv");
+        names.add("Vv");
+        names.add("Wv");
+
         colour.add(Color.YELLOW);
         colour.add(Color.GREEN);
         colour.add(Color.RED);
 
+        fragment2ChartManager[1] = new fragment2LineChartManager(fragment2LineChart[1],names,colour);
+        fragment2ChartManager[1].setYAxis(500,-500,10);
 
-        fragment2ChartManager = new fragment2LineChartManager(fragment2LineChar,names,colour);
-        fragment2ChartManager.setYAxis(500,-500,10);
+        names.clear();
+        colour.clear();
+
+        names.add("Ua");
+        names.add("Va");
+        names.add("Wa");
+
+        colour.add(Color.YELLOW);
+        colour.add(Color.GREEN);
+        colour.add(Color.RED);
+
+        fragment2ChartManager[2] = new fragment2LineChartManager(fragment2LineChart[2],names,colour);
+        fragment2ChartManager[2].setYAxis(500,-500,10);
+
+        names.clear();
+        colour.clear();
 
     }
 
@@ -346,6 +395,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     private void fillLineChart(String fileName){
 
         int rows;                                                           //行数量
+        int columns;                                                        //列数量
+
 //        String[] temp = new String[9];
 
         if (fileName == null){
@@ -375,31 +426,45 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
                 for (int i = 0; i < msheer; i++) {
                     rows = mSheetlist[i].getRows();
-                    Log.e(TAG,"行数："+rows);
+                    columns = mSheetlist[i].getColumns();
+
+                    Log.e(TAG,"行数："+ rows + "列数："+columns);
                     for (int j = 1; j < rows; j++) {
-                        Cell[] cellList = mSheetlist[i].getRow(j);
-                        for (Cell cell : cellList) {
-                            temp = (cell.getContents()).trim();
-                            list.add(Integer.parseInt(temp));
+                        int min = 0;
+                        for (int k = 0; k < 3; k++) {
+                            for (int z = min; z < min + 3 ; z++) {
+                                Cell cell = mSheetlist[i].getCell(z,j);
+                                temp =(cell.getContents()).trim();
+                                list.add(Integer.parseInt(temp));
+                            }
+                            min = min + 3;
+                            fragment2ChartManager[k].addEntry(list);
+                            list.clear();
                         }
-                        fragment2ChartManager.addEntry(list);
-                        list.clear();
+
+//                        for (int k = 0; k < 3 ; k++) {
+//                            Cell cell = mSheetlist[i].getCell(k,j);
+//                            temp =(cell.getContents()).trim();
+//                            list.add(Integer.parseInt(temp));
+//                        }
+////                        Cell[] cellList = mSheetlist[i].getRow(j);
+////                        for (Cell cell : cellList) {
+////                            temp = (cell.getContents()).trim();
+////                            Log.e(TAG,Integer.parseInt(temp)+"");
+////                            list.add(Integer.parseInt(temp));
+////                        }
+//                        fragment2ChartManager[0].addEntry(list);
+//                        list.clear();
                     }
                 }
-
                 mbook.close();
-
 
             }catch (Exception e){
                 System.out.println("fragment2,Exception: " + e);
             }
-
-
         }
-
-//        fragment2_Loading.setVisibility(View.GONE);
-
     }
+
 
 }
 

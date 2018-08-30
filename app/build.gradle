@@ -38,7 +38,5 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     //MPAndroidChart依赖
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    //MPAndroidChart demo依赖
-//    implementation 'com.github.'
 }
 

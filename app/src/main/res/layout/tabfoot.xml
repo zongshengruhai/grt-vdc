@@ -20,6 +20,7 @@
             android:id="@+id/fratext5"
             android:text="@string/lay5"
             android:textSize="32sp"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -36,6 +37,7 @@
             android:id="@+id/fratext1"
             android:text="@string/lay1"
             android:textSize="32sp"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -52,6 +54,7 @@
             android:id="@+id/fratext2"
             android:text="@string/lay2"
             android:textSize="32sp"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -68,6 +71,7 @@
             android:id="@+id/fratext3"
             android:text="@string/lay3"
             android:textSize="32sp"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -84,6 +88,7 @@
             android:id="@+id/fratext4"
             android:text="@string/lay4"
             android:textSize="32sp"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

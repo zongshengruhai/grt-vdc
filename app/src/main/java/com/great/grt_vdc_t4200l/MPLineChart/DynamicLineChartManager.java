@@ -1,5 +1,7 @@
 package com.great.grt_vdc_t4200l.MPLineChart;
 
+import android.util.Log;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -126,6 +128,7 @@ public class DynamicLineChartManager {
         lineData = new LineData();
         lineChart.setData(lineData);
         lineChart.invalidate();
+
     }
 
     //动态添加数据（一条折线图）
@@ -174,8 +177,7 @@ public class DynamicLineChartManager {
             lineData.notifyDataChanged();
             lineChart.notifyDataSetChanged();
             lineChart.setVisibleXRangeMaximum(7);
-            //lineChart.setVisibleXRangeMaximum(150);                                                   //X轴最大显示条目数
-            lineChart.moveViewToX(lineData.getEntryCount() - 5);
+//            lineChart.moveViewToX(lineData.getEntryCount() - 5);
         }
     }
 
@@ -229,7 +231,7 @@ public class DynamicLineChartManager {
     }
 
     public void clear(){
-        lineChart.clearValues();
+//        lineChart.clearValues();
     }
 
 }

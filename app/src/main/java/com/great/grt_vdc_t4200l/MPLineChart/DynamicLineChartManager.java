@@ -228,4 +228,8 @@ public class DynamicLineChartManager {
         lineChart.invalidate();
     }
 
+    public void clear(){
+        lineChart.clearValues();
+    }
+
 }

@@ -15,6 +15,9 @@ import android.view.ViewGroup;
 import android.os.Bundle;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.great.grt_vdc_t4200l.ListView.record;
 import com.great.grt_vdc_t4200l.ListView.recordAdapter;
 import com.great.grt_vdc_t4200l.MPLineChart.fragment2LineChartManager;
@@ -35,6 +38,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -208,7 +212,6 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
     }
 
-
     //初始化LineChart
     private void initLineChart(){
 
@@ -231,57 +234,98 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 //        colour.add(Color.YELLOW);
 //        colour.add(Color.GREEN);
 //        colour.add(Color.RED);
-//
-//
+
 //        fragment2ChartManager[0] = new fragment2LineChartManager(fragment2LineChart[0],names,colour);
 //        fragment2ChartManager[0].setYAxis(500,-500,10);
+
+        colour.add(Color.YELLOW);
+        colour.add(Color.GREEN);
+        colour.add(Color.RED);
 
         names.add("Rv");
         names.add("Sv");
         names.add("Tv");
-
-        colour.add(Color.YELLOW);
-        colour.add(Color.GREEN);
-        colour.add(Color.RED);
-
         fragment2ChartManager[0] = new fragment2LineChartManager(fragment2LineChart[0],names,colour);
         fragment2ChartManager[0].setYAxis(500,-500,10);
-
-
+        fragment2ChartManager[0].setDescription("输入电压");
+        fragment2LineChart[0].setOnChartGestureListener(chartListener);
         names.clear();
-        colour.clear();
 
         names.add("Uv");
         names.add("Vv");
         names.add("Wv");
-
-        colour.add(Color.YELLOW);
-        colour.add(Color.GREEN);
-        colour.add(Color.RED);
-
         fragment2ChartManager[1] = new fragment2LineChartManager(fragment2LineChart[1],names,colour);
         fragment2ChartManager[1].setYAxis(500,-500,10);
-
+        fragment2ChartManager[1].setDescription("输出电压");
+        fragment2LineChart[1].setOnChartGestureListener(chartListener);
         names.clear();
-        colour.clear();
 
         names.add("Ua");
         names.add("Va");
         names.add("Wa");
-
-        colour.add(Color.YELLOW);
-        colour.add(Color.GREEN);
-        colour.add(Color.RED);
-
         fragment2ChartManager[2] = new fragment2LineChartManager(fragment2LineChart[2],names,colour);
         fragment2ChartManager[2].setYAxis(500,-500,10);
-
-        names.clear();
-        colour.clear();
+        fragment2ChartManager[2].setDescription("输出电流");
+        fragment2LineChart[2].setOnChartGestureListener(chartListener);
 
     }
 
-    /*
+    /**
+     *  将所有图表设置一样的回调
+     */
+    private OnChartGestureListener chartListener = new OnChartGestureListener() {
+
+        //手势开始
+        @Override
+        public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+            Log.e(TAG,"手势开始");
+        }
+
+        //手势结束
+        @Override
+        public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+            Log.e(TAG,"手势结束");
+        }
+
+        //长按
+        @Override
+        public void onChartLongPressed(MotionEvent me) {
+            Log.e(TAG,"长按");
+        }
+
+        //双击
+        @Override
+        public void onChartDoubleTapped(MotionEvent me) {
+            Log.e(TAG,"双击图表");
+        }
+
+        //单击
+        @Override
+        public void onChartSingleTapped(MotionEvent me) {
+            Log.e(TAG,"单击图表");
+        }
+
+        @Override
+        public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+            Log.e(TAG,"now is onChartFling");
+        }
+
+        //缩放
+        @Override
+        public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+//            Log.e(TAG,"缩放图表, X轴："+scaleX+", Y轴："+scaleY);
+        }
+
+        //拖动
+        @Override
+        public void onChartTranslate(MotionEvent me, float dX, float dY) {
+            Log.e(TAG,"拖动图表, X轴："+dX+", Y轴："+dY+",me:"+me);
+//            fragment2LineChart[0].setTranslationX(dX);
+//            fragment2LineChart[0].setTranslationY(dY);
+        }
+    };
+
+    /**
      *  SearchListData
      *  根据EditText输入数据更新ListView列表数据
      */
@@ -386,8 +430,12 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 //        fragment2_Loading.setVisibility(View.VISIBLE);
 
         if (pickFileName.contains(".xls")){
+//            fragment2ChartManager[0].test();
+//            fragment2ChartManager[0].clear();
+//            fragment2ChartManager[1].clear();
+//            fragment2ChartManager[2].clear();
+//            initLineChart();
             fillLineChart(pickFileName);
-//            Log.e(TAG,""+pickFileName);
         }
     }
 
@@ -396,8 +444,6 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
         int rows;                                                           //行数量
         int columns;                                                        //列数量
-
-//        String[] temp = new String[9];
 
         if (fileName == null){
 
@@ -464,7 +510,6 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
             }
         }
     }
-
 
 }
 

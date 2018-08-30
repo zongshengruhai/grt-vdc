@@ -336,6 +336,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
 
     //清除画布
     private void clearChart(){
+//        dynamicLineChartManager.clear();
         for (int i = 0; i < 9; i++) {
             list.add(0);
             list.add(0);

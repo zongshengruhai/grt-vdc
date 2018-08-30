@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.components.Legend;
+import com.great.grt_vdc_t4200l.ListView.listAdapter;
 import com.great.grt_vdc_t4200l.ListView.record;
 import com.great.grt_vdc_t4200l.ListView.recordAdapter;
 import com.great.grt_vdc_t4200l.MPLineChart.DynamicLineChartManager;
@@ -95,16 +96,13 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     private int changeUIflag = 0;
 
     //listView
-    //private List<record> fragment1_Data = null;
     private Context fragment1_Context;
-    //private recordAdapter fragment1_RecordAdapter = null;
-    private ListView fragment1_ListView;
+    private ListView fragment1_record;
+    private listAdapter<record> fragment1_listAdapter = null;
+    private List<record> fragment1_ListData = null;
 
-    //@Override
-    //public void onAttach(Activity activity){
-    //    super.onAttach(activity);
-    //    Log.e(TAG, "碎片1，已于一个活动进行关联");
-    //}
+
+
 
     @Override
     public void onCreate(Bundle saveInstanceState){
@@ -130,7 +128,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
         fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime),0));
 
         fragment1_Context = view.getContext();
-        fragment1_ListView = view.findViewById(R.id.fragment1_ListView);
+        fragment1_record = view.findViewById(R.id.fragment1_ListView);
 
         initTabLayout();
         initLineChart();
@@ -378,9 +376,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     private void loadListData(String fileName){
         int rows;                                                           //行数量
         String[] temp = new String[3];
-        List<record> fragment1_Data;
-        recordAdapter fragment1_RecordAdapter;
-        fragment1_Data = new LinkedList<>();
 
         if (fileName != null) {
             try {
@@ -397,7 +392,14 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                         for (Cell cell : cellList) {
                             temp[cell.getColumn()] = cell.getContents();
                         }
-                        fragment1_Data.add(new record(temp[0],temp[1],temp[2],""));
+                        fragment1_ListData = new ArrayList<record>();
+                        fragment1_ListData.add(new record(temp[0],temp[1],temp[2],""));
+                        fragment1_listAdapter = new listAdapter<record>() {
+                            @Override
+                            public void bindView(ViewHolder holder, record obj) {
+
+                            }
+                        }
                         fragment1_RecordAdapter = new recordAdapter((LinkedList<record>) fragment1_Data,fragment1_Context);
                         fragment1_ListView.setAdapter(fragment1_RecordAdapter);
                         fragment1_ListView.setOnItemClickListener(this);

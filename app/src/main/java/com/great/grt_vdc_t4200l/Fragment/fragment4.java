@@ -1,5 +1,7 @@
 package com.great.grt_vdc_t4200l.Fragment;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,13 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
+import android.widget.TimePicker;
 
 import com.great.grt_vdc_t4200l.R;
 
-public class fragment4 extends Fragment {
+import java.util.Calendar;
+
+public class fragment4 extends Fragment implements View.OnClickListener{
 
     private static final String TAG = "fragment4";
 
@@ -31,6 +40,9 @@ public class fragment4 extends Fragment {
     //login
     private EditText fragment4Password;
     private Button fragment4Login;
+
+//    private Button pickTime;
+
 
     //setting
 
@@ -46,14 +58,31 @@ public class fragment4 extends Fragment {
 
         fragment4Password = view.findViewById(R.id.fragment4PasswordIn);
         fragment4Login = view.findViewById(R.id.fragment4LoginBut);
-        fragment4Login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginClick();
-            }
-        });
+        fragment4Login.setOnClickListener(this);
+//        fragment4Login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LoginClick();
+//            }
+//        });
+
+//        pickTime = view.findViewById(R.id.pickTime);
+//        pickTime.setOnClickListener(this);
 
         return view;
+    }
+
+    @Override
+    public void onClick(View v){
+        switch(v.getId()){
+//            case R.id.pickTime:
+
+//                break;
+            case R.id.fragment4LoginBut:
+                LoginClick();
+                break;
+        }
+
     }
 
 
@@ -84,11 +113,11 @@ public class fragment4 extends Fragment {
 
     //隐藏设置界面
     private void hideFragment4Rl(){
-        fragment4Rlayout[0].setVisibility(View.VISIBLE);
-        fragment4Rlayout[1].setVisibility(View.GONE);
+//        fragment4Rlayout[0].setVisibility(View.VISIBLE);
+//        fragment4Rlayout[1].setVisibility(View.GONE);
         //tempshow
-        //fragment4Rlayout[1].setVisibility(View.VISIBLE);
-        //fragment4Rlayout[0].setVisibility(View.GONE);
+        fragment4Rlayout[0].setVisibility(View.GONE);
+        fragment4Rlayout[1].setVisibility(View.VISIBLE);
     }
 
     //显示设置界面

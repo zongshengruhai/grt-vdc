@@ -83,7 +83,7 @@ public class MainActivity extends BaseCourse{
 
     Intent fragment4Intent = new Intent("drc.xxx.yyy.fragment4");
     Intent dataChange = new Intent("drc.xxx.yyy.MainActivity");
-
+    //活动创建----------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,31 +99,38 @@ public class MainActivity extends BaseCourse{
         //创建手势检测器
         //detector=new GestureDetector(this);
     }
-
+    //活动开始----------------------------------------------------
+    @Override
+    protected void onStart(){
+        super.onStart();
+    }
+    //活动重启----------------------------------------------------
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+    }
+    //活动重载----------------------------------------------------
     @Override
     public void onResume(){
         super.onResume();
-
-        /*
-        mbroad oBaseActivity_Broad;
-        oBaseActivity_Broad = new mbroad();
-        IntentFilter intentFilter = new IntentFilter("drc.xxx.yyy.MainActivity");
-        registerReceiver(oBaseActivity_Broad,intentFilter);*/
-
         handler.post(task);
     }
-
-    /*
-    public class mbroad extends BroadcastReceiver {
-        public void onReceive(Context context, Intent intent){
-            //接收到广播
-            Log.e(TAG,"接收到广播");
-
-            int dataChange = intent.getExtras().getInt("dataChange");
-            Log.e(TAG,""+dataChange);
-
-        }
-    }*/
+    //活动中止----------------------------------------------------
+    @Override
+    protected void onPause(){
+        super.onPause();
+        handler.removeCallbacks(task);
+    }
+    //活动停止----------------------------------------------------
+    @Override
+    protected void onStop(){
+        super.onStop();
+    }
+    //活动销毁----------------------------------------------------
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+    }
 
     Handler handler = new Handler();
     Runnable task = new Runnable() {
@@ -143,8 +150,9 @@ public class MainActivity extends BaseCourse{
         //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
-    /**初始化fragment*/
+    /**
+     * 初始化fragment
+     * */
     public void setfragment()
     {
         fragments=new Fragment[5];
@@ -154,10 +162,10 @@ public class MainActivity extends BaseCourse{
         fragments[3]=getSupportFragmentManager().findFragmentById(R.id.fragment3);
         fragments[4]=getSupportFragmentManager().findFragmentById(R.id.fragment4);
         getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[0]).commit();
-
     }
-
-    /**初始化linerlayout*/
+    /**
+     * 初始化linerlayout
+     * */
     public void setlinearLayouts()
     {
         linearLayouts=new LinearLayout[5];
@@ -166,9 +174,10 @@ public class MainActivity extends BaseCourse{
         linearLayouts[2]=(LinearLayout)findViewById(R.id.lay2);
         linearLayouts[3]=(LinearLayout)findViewById(R.id.lay3);
         linearLayouts[4]=(LinearLayout)findViewById(R.id.lay4);
-        //linearLayouts[0].setBackgroundResource(R.drawable.lay_select_bg);
     }
-    /**初始化textview*/
+    /**
+     * 初始化textview
+     * */
     public void settextview()
     {
         textViews=new TextView[5];
@@ -179,45 +188,47 @@ public class MainActivity extends BaseCourse{
         textViews[4]=(TextView)findViewById(R.id.fratext4);
         resetlaybg();
         textViews[0].setTextColor(getResources().getColor(R.color.lightseagreen));
+        linearLayouts[0].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
     }
-
-    /**点击底部linerlayout实现切换fragment的效果*/
+    /**
+     * 点击底部linerlayout实现切换fragment的效果
+     * */
     public void LayoutOnclick(View v)
     {
         resetlaybg();//每次点击都重置linearLayouts的背景、textViews字体颜色
         switch (v.getId()) {
             case R.id.lay5:
-                //Log.e(TAG,"lay1 selected");
                 getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[0]).commit();
-                //linearLayouts[0].setBackgroundResource(R.drawable.lay_select_bg);
+//                linearLayouts[0].setBackgroundResource(R.drawable.lay_select_bg);
+                linearLayouts[0].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
                 textViews[0].setTextColor(getResources().getColor(R.color.lightseagreen));
                 MARK=0;
                 break;
             case R.id.lay1:
-                //Log.e(TAG,"lay2 selected");
                 getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[1]).commit();
-                //linearLayouts[1].setBackgroundResource(R.drawable.lay_select_bg);
+//                linearLayouts[1].setBackgroundResource(R.drawable.lay_select_bg);
+                linearLayouts[1].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
                 textViews[1].setTextColor(getResources().getColor(R.color.lightseagreen));
                 MARK=1;
                 break;
             case R.id.lay2:
-                //Log.e(TAG,"lay3 selected");
                 getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[2]).commit();
-                //linearLayouts[2].setBackgroundResource(R.drawable.lay_select_bg);
+//                linearLayouts[2].setBackgroundResource(R.drawable.lay_select_bg);
+                linearLayouts[2].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
                 textViews[2].setTextColor(getResources().getColor(R.color.lightseagreen));
                 MARK=2;
                 break;
             case R.id.lay3:
-                //Log.e(TAG,"lay3 selected");
                 getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[3]).commit();
-                //linearLayouts[3].setBackgroundResource(R.drawable.lay_select_bg);
+//                linearLayouts[3].setBackgroundResource(R.drawable.lay_select_bg);
+                linearLayouts[3].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
                 textViews[3].setTextColor(getResources().getColor(R.color.lightseagreen));
                 MARK=3;
                 break;
             case R.id.lay4:
-                //Log.e(TAG,"lay3 selected");
                 getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[4]).commit();
-                //linearLayouts[3].setBackgroundResource(R.drawable.lay_select_bg);
+//                linearLayouts[4].setBackgroundResource(R.drawable.lay_select_bg);
+                linearLayouts[4].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
                 textViews[4].setTextColor(getResources().getColor(R.color.lightseagreen));
                 MARK=4;
                 break;
@@ -226,24 +237,23 @@ public class MainActivity extends BaseCourse{
         }
         //写数据
         readLayType();
-        /*
-        fragment4Intent.putExtra("layChane",MARK);
-        sendBroadcast(fragment4Intent);*/
     }
-
+    /**
+     * 写入当前lay的选择
+     * */
     private void readLayType(){
         SharedPreferences.Editor Maineditor = getSharedPreferences("temp",MODE_WORLD_READABLE).edit();
         Maineditor.putInt("layType",MARK);
         Maineditor.commit();
     }
 
-
     /**重置linearLayouts、textViews*/
     public void resetlaybg()
     {
         for(int i=0;i<5;i++)
         {
-            //linearLayouts[i].setBackgroundResource(R.drawable.tabfootbg);
+            linearLayouts[i].setBackgroundColor(getResources().getColor(R.color.lay_select_lose));
+//            linearLayouts[i].setBackgroundResource(R.drawable.lay_select_lose);
             textViews[i].setTextColor(getResources().getColor(R.color.black));
         }
 
@@ -373,334 +383,4 @@ public class MainActivity extends BaseCourse{
         return false;
     }*/
 
-    /*
-    private static final String TAG = "MainActivity";
-
-
-    //TabLayout
-    private static final String[] sTitle = new String[]{"输出电压","输出电流","输入电压","其他数据"};
-    private TabLayout tl;
-    private ViewPager vp;
-
-    //Toolbar
-    private Toolbar mToolbar;
-
-    private int newPager;
-    String tabSelectType = "";
-    private TextView Adata;
-    private TextView Bdata;
-    private TextView Cdata;
-
-    //跳转
-    private Button oldDataButton;
-
-    //MPAndroidChart
-    LineChart mNewDatalineChart;
-    private List<Integer> list = new ArrayList<>();         //数据集合
-    private List<Integer> colour = new ArrayList<>();       //折线颜色
-    private List<String> names = new ArrayList<>();          //折线名称
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        relate();
-
-        initTabLayout();
-        initToolbar();
-        initLineChart();
-
-        //handler.post(task);
-    }
-
-    //关联activity控件
-    private void relate(){
-
-        tl = (TabLayout) findViewById(R.id.tl);
-        //vp = (ViewPager) findViewById(R.id.vp);
-
-        Adata = (TextView) findViewById(R.id.dataA);
-        Bdata = (TextView) findViewById(R.id.dataB);
-        Cdata = (TextView) findViewById(R.id.dataC);
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        mNewDatalineChart = (LineChart) findViewById(R.id.newDataChart);
-
-        oldDataButton = (Button) findViewById(R.id.oldDataButton);
-        oldDataButton.setOnClickListener(listener);
-    }
-
-    //响应按钮事件
-    private View.OnClickListener listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Button view = (Button) v;
-            switch (view.getId()){
-                case R.id.oldDataButton:
-                    Intent intent = new Intent(MainActivity.this,ActivityOldData.class);
-                    //overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                    startActivity(intent);
-                    //handler.removeCallbacks(task);
-                    //finish();
-                    break;
-            }
-        }
-    };
-
-    //初始化TabLayout
-    private void initTabLayout(){
-
-        //更新tl
-        for (int i = 0; i < 4 ; i++) {
-            tl.addTab(tl.newTab().setText(sTitle[i]));
-        }
-
-        //监听tl事件
-        tl.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
-            //挑选事件
-            @Override
-            public void onTabSelected(TabLayout.Tab tab){
-                //Log.i(TAG,"onTabSelected"+tab.getText());
-                tabSelectType = (String) tab.getText();
-            }
-            //离开事件
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab){
-                Log.i(TAG,"onTabUnselected"+tab.getText());
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab){
-                Log.i(TAG,"onTabReselected"+tab.getText());
-            }
-        });
-
-        /*
-        //TabLayout关联ViewPager
-        tl.setupWithViewPager(vp);
-        //添加内容
-        List<Fragment> mFragment = new ArrayList<>();
-        //mFragment.add(InputVoltage.newInstance());
-        mFragment.add(OutputVoltage.newInstance());
-        mFragment.add(OutputCurrent.newInstance());
-        mFragment.add(InputVoltage.newInstance());
-        mFragment.add(OtherData.newInstance());
-
-
-        //添加适配器
-        MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(),mFragment, Arrays.asList(sTitle));
-        vp.setAdapter(adapter);
-        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            //挑选事件
-            @Override
-            public void onPageSelected(int position) {
-                //Log.i(TAG,"select page:"+position);
-                newPager = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        handler.post(task);
-
-        //
-    }
-
-    //初始化initToolbar
-    private void initToolbar(){
-
-        //setSupportActionBar(mToolbar);
-        //mToolbar.setOnMenuItemClickListener(onMenuItemClick);
-
-    }
-
-    /*
-    //导入Toolbar
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //MenuInflater inflater = getMenuInflater();
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    //Toolbar点击事件
-    private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-
-            String msg = "";
-            switch(item.getItemId()){
-                case R.id.action_settings:
-                    msg += "Click settinge";
-                    break;
-            }
-            if (!msg.equals("")){
-                Log.e(TAG,msg+"");
-            }
-            return true;
-        }
-    };//
-
-    //初始化LineChart
-    private void initLineChart(){
-
-        names.add("U相");
-        names.add("V相");
-        names.add("W相");
-
-        colour.add(Color.CYAN);
-        colour.add(Color.GREEN);
-        colour.add(Color.BLUE);
-
-        //边界
-        mNewDatalineChart.setDrawBorders(true);
-        //触摸
-        mNewDatalineChart.setTouchEnabled(false);
-        //缩放
-        mNewDatalineChart.setScaleEnabled(false);
-        //拖拽
-        mNewDatalineChart.setDragEnabled(false);
-
-        LineData mNewLineData = new LineData();
-        mNewLineData.setValueTextColor(ColorTemplate.getHoloBlue());
-        mNewDatalineChart.setData(mNewLineData);
-        mNewDatalineChart.setVisibleXRangeMaximum(10);
-        mNewDatalineChart.moveViewToX(mNewLineData.getXValCount()-10);
-        mNewDatalineChart.animateX(2500);
-
-        //x轴
-        XAxis xAxis= mNewDatalineChart.getXAxis();
-        xAxis.setTextColor(Color.BLACK);
-        // 如果设置为true，则在绘制时会避免“剪掉”在x轴上的图表或屏幕边缘的第一个和最后一个坐标轴标签项。
-        xAxis.setAvoidFirstLastClipping(true);
-        // 几个x坐标轴之间才绘制？
-//        xAxis.setSpaceBetweenLabels(5);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setEnabled(true);
-
-        // 图表左边的y坐标轴线
-        YAxis leftAxis= mNewDatalineChart.getAxisLeft();
-        leftAxis.setTextColor(Color.BLACK);
-
-        //最大值
-        leftAxis.setAxisMinValue(100f);
-
-        //最小值
-        leftAxis.setAxisMinValue(0f);
-
-        // 不一定要从0开始
-        leftAxis.setStartAtZero(false);
-
-        //绘制网格线
-        leftAxis.setDrawGridLines(true);
-        //右侧y轴
-        YAxis rightAxis=mNewDatalineChart.getAxisRight();
-        //不显示右侧y轴
-        rightAxis.setEnabled(false);
-
-    }
-
-    //定时事件
-    private Handler handler = new Handler();
-    private Runnable task = new Runnable() {
-        @Override
-        public void run() {
-
-            //对Activity的弱引用，防止内存泄漏
-
-
-
-            handler.postDelayed(this,500);
-            newPager++;
-            if (newPager > 400){
-                newPager = 0;
-            }
-            switch (tabSelectType){
-                case "输出电压":
-                    //Log.e(TAG,"1");
-                    Adata.setText("U相："+ newPager +"V");
-                    Bdata.setText("V相："+ newPager +"V");
-                    Cdata.setText("W相："+ newPager +"V");
-                    break;
-                case "输出电流":
-                    //Log.e(TAG,"2");
-                    Adata.setText("U相："+ newPager +"A");
-                    Bdata.setText("V相："+ newPager +"A");
-                    Cdata.setText("W相："+ newPager +"A");
-                    break;
-                case "输入电压":
-                    //Log.e(TAG,"3");
-                    Adata.setText("R相："+ newPager +"V");
-                    Bdata.setText("S相："+ newPager +"V");
-                    Cdata.setText("T相："+ newPager +"V");
-                    break;
-                case "其他数据":
-                    //Log.e(TAG,"4");
-                    Adata.setText("电容电压："+newPager+"V");
-                    Bdata.setText("");
-                    Cdata.setText("频率："+newPager+"HZ");
-                    break;
-                case "":
-                    //Log.e(TAG,"5");
-                    Adata.setText("U相："+ newPager +"V");
-                    Bdata.setText("V相："+ newPager +"V");
-                    Cdata.setText("W相："+ newPager +"V");
-                    break;
-            }
-        }
-    };
-
-    //开始
-    @Override
-    protected void onStart(){
-        super.onStart();
-        Log.e(TAG,"主界面开始");
-    }
-
-    //重启
-    @Override
-    protected void onRestart(){
-        super.onRestart();
-        Log.e(TAG,"主界面重启");
-    }
-
-    //重载
-    @Override
-    protected void onResume(){
-        super.onResume();
-        Log.e(TAG,"主界面重载");
-    }
-    //中止
-    @Override
-    protected void onPause(){
-        super.onPause();
-        Log.e(TAG,"主界面中止");
-    }
-
-    //停止
-    @Override
-    protected void onStop(){
-        super.onStop();
-        Log.e(TAG,"主界面停止");
-    }
-
-    //退出
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        Log.e(TAG,"主界面退出");
-    }
-
-*/
 }

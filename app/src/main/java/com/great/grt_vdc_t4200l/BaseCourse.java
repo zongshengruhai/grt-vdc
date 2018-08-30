@@ -218,14 +218,14 @@ public class BaseCourse extends FragmentActivity {
     //隐藏虚拟按键----------------------------------------------------
     private void hideNavigation(){
 
-        View v = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION     //隐藏导航栏
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY          //
-                | View.SYSTEM_UI_FLAG_FULLSCREEN               //全屏
-                | View.SYSTEM_UI_FLAG_IMMERSIVE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-        v.setSystemUiVisibility(uiOptions);
+//        View v = getWindow().getDecorView();
+//        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION     //隐藏导航栏
+//                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY          //
+//                | View.SYSTEM_UI_FLAG_FULLSCREEN               //全屏
+//                | View.SYSTEM_UI_FLAG_IMMERSIVE
+//                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+//        v.setSystemUiVisibility(uiOptions);
 
         //boolean ishide;
 //        try{
@@ -236,6 +236,28 @@ public class BaseCourse extends FragmentActivity {
 //        }catch (Exception ex){
 //            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
 //        }
+
+        Window window;
+        window = getWindow();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE|View.SYSTEM_UI_FLAG_FULLSCREEN;
+        window.setAttributes(params);
+
+
+        int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                | View.SYSTEM_UI_FLAG_FULLSCREEN; // hide status bar
+
+        if (android.os.Build.VERSION.SDK_INT >= 19) {
+            uiFlags |= 0x00001000;    //SYSTEM_UI_FLAG_IMMERSIVE_STICKY: hide navigation bars - compatibility: building API level is lower thatn 19, use magic number directly for higher API target level
+        } else {
+            uiFlags |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
+        }
+
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getWindow().getDecorView().setSystemUiVisibility(uiFlags);
 
     }
     //显示虚拟按键----------------------------------------------------

@@ -40,9 +40,6 @@ public class fragment3 extends Fragment{
         fragment3_Context = view.getContext();
         fragment3_ListView = view.findViewById(R.id.fragment3_ListView);
 
-        PATH = fragment3_Context.getFilesDir().getPath() + "/record_file/event_record.xls";
-        PATH = PATH.replace("/files","");
-
         findEventTime();
 
         return view;
@@ -88,12 +85,16 @@ public class fragment3 extends Fragment{
     }
 
     //更新告警数据
-    private void findEventTime(){
+    private void findEventTime() {
 
         int rows;
+        String PATH = fragment3_Context.getFilesDir().getPath() + "/fault_log/fault_record.xls";
+
         String[] temp = new String[4];
 
-        if (PATH != null){
+        File file = new File(PATH);
+
+        if (file.exists()) {
             try {
 
                 FileInputStream mfis = new FileInputStream(PATH);
@@ -103,14 +104,14 @@ public class fragment3 extends Fragment{
 
                 for (int i = 0; i < msheer; i++) {
                     rows = mSheetlist[i].getRows();
-                    Log.e(TAG,"行数："+rows);
+                    Log.e(TAG, "行数：" + rows);
                     for (int j = 0; j < rows; j++) {
                         Cell[] cellList = mSheetlist[i].getRow(j);
                         for (Cell cell : cellList) {
                             temp[cell.getColumn()] = cell.getContents();
                         }
-                        fragment3_Data.add(new fragment3Item(temp[0],temp[2],temp[3],temp[1]));
-                        fragment3_RecordAdapter = new fragment3ItemAdapter((LinkedList<fragment3Item>) fragment3_Data,fragment3_Context);
+                        fragment3_Data.add(new fragment3Item(temp[0], temp[2], temp[3], temp[1]));
+                        fragment3_RecordAdapter = new fragment3ItemAdapter((LinkedList<fragment3Item>) fragment3_Data, fragment3_Context);
                         fragment3_ListView.setAdapter(fragment3_RecordAdapter);
 //                       fragment3_ListView.setOnItemClickListener(this);
                     }
@@ -119,14 +120,10 @@ public class fragment3 extends Fragment{
                 mbook.close();
 
 
-
-
-
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("fragment3,Exception: " + e);
             }
         }
-
     }
 
 }

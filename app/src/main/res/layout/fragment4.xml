@@ -515,8 +515,25 @@
 
             </TableRow>
 
+            <TableRow>
+                <Button
+                    android:id="@+id/openMiuse"
+                    android:text="打开声音"
+                    android:textSize="28sp"
+                    android:background="@drawable/button_style"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"/>
 
-
+                <Button
+                    android:id="@+id/closeMiuse"
+                    android:text="关闭声音"
+                    android:textSize="28sp"
+                    android:background="@drawable/button_style"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"/>
+            </TableRow>
 
         </TableLayout>
 

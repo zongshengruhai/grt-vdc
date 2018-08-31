@@ -62,8 +62,6 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
     private TextView[] fragment2TempRow = new TextView[2];
 
-    String PATH;
-
     //MPAndroidChart
 //    private fragment2LineChartManager fragment2ChartManager;
 //    private LineChart fragment2LineChar;
@@ -110,9 +108,6 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
 //        fragment2_Loading = view.findViewById(R.id.fragment2_loading);
 
-        //默认路径
-        PATH = fragment2_Context.getFilesDir().getPath() + "/fault_record_file/";
-        PATH = PATH.replace("/files","");
 
         initSearch();
 //        initListView();
@@ -160,7 +155,9 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         super.onDestroy();
     }
 
-    //初始化搜索部分
+    /**
+     * 初始化搜索框
+     */
     private void initSearch(){
 
         //添加输入清零事件
@@ -187,7 +184,6 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                     Search_Delete.setVisibility(View.GONE);
                 }else {
                     Search_Delete.setVisibility(View.VISIBLE);
-                    //changeListView();
                 }
                 SearchListData(Search_EditText.getText().toString());
             }
@@ -212,7 +208,9 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
     }
 
-    //初始化LineChart
+    /**
+     * 初始化图表
+     */
     private void initLineChart(){
 
 //        names.add("Uv");
@@ -331,110 +329,92 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
      */
     private void SearchListData(String SearchFileName){
 
-        //存放录波记录的绝对路径
-//        String PATH = "//data/data/com.great.grt_vdc_t4200l/fault_record_file/";
-//        String PATH = fragment2_Context.getFilesDir().getPath() + "/fault_record_file/";
-//        PATH = PATH.replace("/files","");
+        //录波记录存放路径
+        String PATH = fragment2_Context.getFilesDir().getPath() + "/record_log/";
 
         //存放填充数据的集合
         String[] temp = new String[3];
 
+        String str = "";
+
         //历遍路径中的所有文件夹
         File file = new File(PATH);
-        File[] files = file.listFiles();
+        if (file.exists()){
 
-        //清空ListView
-//        fragment2_Data.removeAll(fragment2_Data);
-        fragment2_Data.clear();
-        fragment2_RecordAdapter = new recordAdapter((LinkedList<record>) fragment2_Data,fragment2_Context);
-        fragment2_ListView.setAdapter(fragment2_RecordAdapter);
+            File[] files = file.listFiles();
 
-        //路径中没有文件
-        if (files.length <= 0){
-
-//            Log.e(TAG,"当前文件夹内没有记录文件");
-            fragment2_Data.add(new record("","当前暂无录波记录","",""));
+            //清空ListView
+            fragment2_Data.clear();
             fragment2_RecordAdapter = new recordAdapter((LinkedList<record>) fragment2_Data,fragment2_Context);
             fragment2_ListView.setAdapter(fragment2_RecordAdapter);
-            fragment2_ListView.setOnItemClickListener(this);
 
-            //路径中有文件
-        }else{
+            //路径中没有文件
+            if (files.length <= 0){
 
-//            Log.e(TAG,"文件夹内有"+files.length+"条记录文件");
-            int SearchNull = 0;
-
-            //历遍所有文件名
-            for (int i = 0; i < files.length; i++) {
-
-                String str = files[i].getAbsolutePath().replace(PATH,"");
-//                Log.e(TAG,files[i].getAbsolutePath());
-                String[] regroupFiles;
-
-                //根据"_"斩开数据
-                regroupFiles = (str.replace(".xls","")).split("_");
-
-                //没有筛选条件
-                if (SearchFileName == null){
-
-//                    temp[0] = Integer.toString(i);
-//                    temp[1] = files[i].getAbsolutePath();
-                    temp[0] = regroupFiles[0];
-                    temp[1] = regroupFiles[4]+" "+regroupFiles[5];
-
-                    //有筛选条件
-                }else {
-
-                    //正则筛选
-                    Pattern SearchPattern = Pattern.compile(SearchFileName);
-                    Matcher SearchMatcher = SearchPattern.matcher(str);
-
-                    //符合条件
-                    if (SearchMatcher.find()){
-
-//                        temp[0] = Integer.toString(i);
-//                        temp[1] = files[i].getAbsolutePath();
-                        temp[0] = regroupFiles[0];
-                        temp[1] = regroupFiles[4]+" "+regroupFiles[5];
-
-                        //不符合条件
-                    }else {
-
-                        SearchNull++;
-                        if (SearchNull < files.length){continue;}
-                        if (SearchNull == files.length){
-                            temp[0] = "";
-                            temp[1] = "没有匹配的录波记录，请重新筛选";
-                        }
-                    }
-                }
-
-                //更新ListView
-                fragment2_Data.add(new record(temp[0],temp[1],"",str));
+                fragment2_Data.add(new record("","当前暂无录波记录","",""));
                 fragment2_RecordAdapter = new recordAdapter((LinkedList<record>) fragment2_Data,fragment2_Context);
                 fragment2_ListView.setAdapter(fragment2_RecordAdapter);
                 fragment2_ListView.setOnItemClickListener(this);
 
+            }else {
+
+                int SearchNull = 0;
+
+                //历遍所有文件名
+                for (int i = 0; i < files.length; i++) {
+
+                    str = files[i].getAbsolutePath().replace(PATH, "");
+
+                    String[] regroupFiles;
+
+                    //根据"_"斩开数据
+                    regroupFiles = (str.replace(".xls", "")).split("_");
+
+                    //筛选条目
+                    if (SearchFileName == null) {
+
+                        temp[0] = regroupFiles[0];
+                        temp[1] = regroupFiles[4] + " " + regroupFiles[5];
+
+                    } else {
+
+                        //正则筛选
+                        Pattern SearchPattern = Pattern.compile(SearchFileName);
+                        Matcher SearchMatcher = SearchPattern.matcher(str);
+
+                        if (SearchMatcher.find()) {
+                            temp[0] = regroupFiles[0];
+                            temp[1] = regroupFiles[4] + " " + regroupFiles[5];
+                        } else {
+                            SearchNull++;
+                            if (SearchNull < files.length) {
+                                continue;
+                            }
+                            if (SearchNull == files.length) {
+                                temp[0] = "";
+                                temp[1] = "没有匹配的录波记录，请重新筛选";
+                            }
+                        }
+                    }
+
+                    //更新ListView
+                    fragment2_Data.add(new record(temp[0], temp[1], "", str));
+                    fragment2_RecordAdapter = new recordAdapter((LinkedList<record>) fragment2_Data, fragment2_Context);
+                    fragment2_ListView.setAdapter(fragment2_RecordAdapter);
+                    fragment2_ListView.setOnItemClickListener(this);
+
+                }
             }
         }
-
     }
 
     //ListView点击事件
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
         TextView pickTextUrl = view.findViewById(R.id.txt_mUrl);
         String pickFileName = pickTextUrl.getText().toString();
 
-//        fragment2_Loading.setVisibility(View.VISIBLE);
-
         if (pickFileName.contains(".xls")){
-//            fragment2ChartManager[0].test();
-//            fragment2ChartManager[0].clear();
-//            fragment2ChartManager[1].clear();
-//            fragment2ChartManager[2].clear();
-//            initLineChart();
             fillLineChart(pickFileName);
         }
     }
@@ -442,14 +422,14 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     //更新LinerChar
     private void fillLineChart(String fileName){
 
+        String PATH = fragment2_Context.getFilesDir().getPath() + "/record_log/";
+
         int rows;                                                           //行数量
         int columns;                                                        //列数量
 
         if (fileName == null){
-
             Log.e(TAG,"没有文件名");
         }else {
-
             //填充表头
             String[] fillContent;
             fillContent = (fileName.replace(".xls","")).split("_");

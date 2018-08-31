@@ -47,6 +47,8 @@ public class BaseCourse extends FragmentActivity {
     private InputStream mInput;                                         //接收
     private byte[] mbuffer = new byte[2];                               //接收缓存区
     private boolean _isopen = false;                                    //串口开关标志
+    //硬件声明----------------------------------------------------
+//    private Watchdog watchdog = Watchdog.
 
     /**
      * 活动生命周期
@@ -54,11 +56,14 @@ public class BaseCourse extends FragmentActivity {
     //活动创建----------------------------------------------------
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        //Log.e(TAG,"底层创建");
 
         //全屏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //看门狗
+
+
     }
     //活动开始----------------------------------------------------
     @Override
@@ -106,7 +111,7 @@ public class BaseCourse extends FragmentActivity {
         if (baseCourseBroad != null){
             unregisterReceiver(baseCourseBroad);
             baseCourseBroad = null;
-            Log.e(TAG,"baseCourse，已注销广播");
+//            Log.e(TAG,"baseCourse，已注销广播");
         }
 
         pauseSOP();
@@ -273,11 +278,16 @@ public class BaseCourse extends FragmentActivity {
 //        }
     }
     //重启设备----------------------------------------------------
-    /*
     public void restart(){
-        PowerManager myManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        myManager.reboot("重启");
-    }*/
+        Toast.makeText(this,"即将重启！",Toast.LENGTH_SHORT).show();
+        try {
+            Log.v(TAG, "root Runtime->reboot");
+            Process proc =Runtime.getRuntime().exec(new String[]{"su","-c","reboot "});
+            proc.waitFor();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
 
     /**
      * 串口通讯方法
@@ -340,36 +350,46 @@ public class BaseCourse extends FragmentActivity {
             }
         }
         if (!_isopen){
-            Log.e(TAG,"SOP,串口打开失败");
-        }else {Log.e(TAG,"SOP,串口打开成功");}
+//            Log.e(TAG,"SOP,串口打开失败");
+        }else {
+//            Log.e(TAG,"SOP,串口打开成功");
+        }
 
 
         //3.1、检测录波记录文件夹
         fileNaem = "/record_log/";
         _fileExists = checkFile(fileNaem);
         if (!_fileExists){
-            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
-        }else {Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");}
+//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
+        }else {
+//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");
+        }
 
         //3.2、检测故障记录文件
         fileNaem = "/fault_log/";
         _fileExists = checkFile(fileNaem);
         if (!_fileExists){
-            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
-        }else {Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");}
+//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
+        }else {
+//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");
+        }
 
         fileNaem = "/fault_log/fault_record.xls";
         _fileExists = checkFile(fileNaem);
         if (!_fileExists){
-            Log.e(TAG,"SOP, "+fileNaem+" 文件不存在");
-        }else {Log.e(TAG,"SOP, "+fileNaem+" 文件存在");}
+//            Log.e(TAG,"SOP, "+fileNaem+" 文件不存在");
+        }else {
+//            Log.e(TAG,"SOP, "+fileNaem+" 文件存在");
+        }
 
         //3.3、检测实时采样文件
         fileNaem = "/sampling_now/";
         _fileExists = checkFile(fileNaem);
         if (!_fileExists){
-            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
-        }else {Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");}
+//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
+        }else {
+//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");
+        }
 
 
 
@@ -400,7 +420,6 @@ public class BaseCourse extends FragmentActivity {
         colseCom();
         if (!_isopen){ Log.e(TAG,"SOP,串口关闭成功");}else{ Log.e(TAG,"SOP,串口关闭失败");}
     }
-
     //检测文件----------------------------------------------------
     private boolean checkFile(String fileName){
         String PATH = this.getFilesDir().getPath()+fileName;

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.content.IntentFilter;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,15 +42,17 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     private EditText fragment4Password;
     private Button fragment4Login;
 
-//    private Button pickTime;
-
-
-    //setting
-
+    //button
+    private Button[] but = new Button[2];
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment4,container,false);
+
+        but[0] = view.findViewById(R.id.openMiuse);
+        but[0].setOnClickListener(this);
+        but[1] = view.findViewById(R.id.closeMiuse);
+        but[1].setOnClickListener(this);
 
         fragment4Rlayout = new RelativeLayout[2];
         fragment4Rlayout[0] = view.findViewById(R.id.fragment4Lay1);
@@ -81,10 +84,23 @@ public class fragment4 extends Fragment implements View.OnClickListener{
             case R.id.fragment4LoginBut:
                 LoginClick();
                 break;
+            case R.id.openMiuse:
+                test1();
+                break;
+            case R.id.closeMiuse:
+                test2();
+                break;
         }
 
     }
 
+    private void test1(){
+
+    }
+
+    private void test2(){
+
+    }
 
     //登录事件
     private void LoginClick(){

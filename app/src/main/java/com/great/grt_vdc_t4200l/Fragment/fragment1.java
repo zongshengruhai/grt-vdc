@@ -76,11 +76,8 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     private TextView[] fragment1TempRow = new TextView[5];
 
     //MPAndroidChart
-    //private LineChart lineChart;
+
     private LineChart fragment1Lc;
-    //private YAxis leftAxis;
-    //private YAxis rightAxis;
-    //private XAxis xAxis;
     private DynamicLineChartManager dynamicLineChartManager;
     private List<Integer> list = new ArrayList<>(); //数据集合
     private List<String> names = new ArrayList<>(); //折线名字集合
@@ -92,19 +89,12 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     private IntentFilter fragment1IntentFilter = new IntentFilter("drc.xxx.yyy.fragment1");
 
     //更新UI
-    private int changeUIflag = 0;
+    private String selectTabType="输出电压";
 
     //listView
-    //private List<record> fragment1_Data = null;
     private Context fragment1_Context;
-    //private recordAdapter fragment1_RecordAdapter = null;
     private ListView fragment1_ListView;
 
-    //@Override
-    //public void onAttach(Activity activity){
-    //    super.onAttach(activity);
-    //    Log.e(TAG, "碎片1，已于一个活动进行关联");
-    //}
 
     @Override
     public void onCreate(Bundle saveInstanceState){
@@ -142,13 +132,13 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        Log.e(TAG, "碎片1，已完成初始化");
+//        Log.e(TAG, "碎片1，已完成初始化");
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        Log.e(TAG, "碎片1，启动");
+//        Log.e(TAG, "碎片1，启动");
     }
 
     //重载
@@ -160,11 +150,8 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
         if (fragment1ActivityBroad == null){
             fragment1ActivityBroad = new fragment1Broad();
             getActivity().registerReceiver(fragment1ActivityBroad,fragment1IntentFilter);
-            Log.e(TAG,"fragment1，已注册广播");
+//            Log.e(TAG,"fragment1，已注册广播");
         }
-
-        //initTabLayout();
-        //initLineChart();
 
         //开始Handler
         fragment1Handler.post(fragment1Runnable);
@@ -264,38 +251,8 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                 //initLineChart();
                 clearChart();
 
-                //fragment1Lc.clear();
-                //initLineChart();
+                selectTabType = (String) tab.getText();
 
-                String selectTabType = (String) tab.getText();
-                if (selectTabType != null) {
-                    switch (selectTabType) {
-                        case "输出电压":
-                            changeUIflag = 0;
-                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),0));
-                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),0));
-                            //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),0));
-                            break;
-                        case "输出电流":
-                            changeUIflag = 1;
-                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),0));
-                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),0));
-                            //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),0));
-                            break;
-                        case "输入电压":
-                            changeUIflag = 2;
-                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),0));
-                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),0));
-                            //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),0));
-                            break;
-                        case "其他数据":
-                            changeUIflag = 3;
-                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),0));
-                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),0));
-                            //fragment1TempRow[2].setText("");
-                            break;
-                    }
-                }
             }
 
             //离开事件
@@ -355,43 +312,55 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     //初始化ListView
     private void initListView(){
 
-        //String recordFileName = "/data/data/com.great.grt_vdc_t4200l/record_file/record.xls";
-        String PATH = "//data/data/com.great.grt_vdc_t4200l/record_file/";
+        String PATH = fragment1_Context.getFilesDir().getPath() + "/fault_log/";
+        String pathFileName = fragment1_Context.getFilesDir().getPath() + "/fault_log/fault_record.xls";
 
         File file = new File(PATH);
-        File[] files = file.listFiles();
-
-        //检查文件是否存在
-        if (files == null){ Log.e(TAG,"error，this path is null");}
-        if ( files != null ){
-            for (int i = 0; i < files.length; i++) {
-                String pathFileName = files[i].getAbsolutePath();
-//                if (pathFileName.equals("/data/data/com.great.grt_vdc_t4200l/record_file/record.xls")){
-                loadListData(pathFileName);
-                //Log.e(TAG,"#############");
-//                }
+        if (file.exists()){
+            Log.e(TAG, "initListView: 文件夹存在" );
+            File[] files = file.listFiles();
+            if (files != null){
+                for (int i = 0; i < files.length; i++) {
+                    pathFileName = files[i].getAbsolutePath();
+//                    Log.e(TAG, "initListView: "+pathFileName);
+                    if (pathFileName.equals(fragment1_Context.getFilesDir().getPath() + "/fault_log/fault_record.xls")){
+                        loadListData(pathFileName,true);
+                    }
+                }
+            }else {
+                Log.e(TAG, "initListView: 文件不存在");
+                loadListData(pathFileName,false);
             }
+        }else {
+            loadListData(pathFileName,false);
+            Log.e(TAG, "initListView: 文件夹不存在" );
         }
     }
 
     //载入ListDat
-    private void loadListData(String fileName){
+    private void loadListData(String fileName,boolean type){
+
         int rows;                                                           //行数量
         String[] temp = new String[3];
         List<record> fragment1_Data;
         recordAdapter fragment1_RecordAdapter;
         fragment1_Data = new LinkedList<>();
 
-        if (fileName != null) {
+        fragment1_Data.clear();
+        fragment1_RecordAdapter = new recordAdapter((LinkedList<record>) fragment1_Data,fragment1_Context);
+        fragment1_ListView.setAdapter(fragment1_RecordAdapter);
+
+        if (fileName != null && type){
+//            Log.e(TAG,"判断过了");
             try {
                 FileInputStream mfis = new FileInputStream(fileName);
                 Workbook mbook = Workbook.getWorkbook(mfis);
                 int msheer = mbook.getNumberOfSheets();                     //表数量
-                //String[] mSheetName = mbook.getSheetNames();                //表名称
                 Sheet[] mSheetlist = mbook.getSheets();                     //表内容
 
                 for (int i = 0; i < msheer; i++) {
                     rows = mSheetlist[i].getRows();
+                    Log.e(TAG,rows+" *************");
                     for (int j  = 0; j < rows; j++) {
                         Cell[] cellList = mSheetlist[i].getRow(j);
                         for (Cell cell : cellList) {
@@ -406,7 +375,18 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                 mbook.close();
             } catch (Exception e) {
                 System.out.println("fragment1,Exception:  " + e);
+
+                fragment1_Data.add(new record("","最近没有故障记录","",""));
+                fragment1_RecordAdapter = new recordAdapter((LinkedList<record>) fragment1_Data,fragment1_Context);
+                fragment1_ListView.setAdapter(fragment1_RecordAdapter);
+                fragment1_ListView.setOnItemClickListener(this);
             }
+        } else {
+
+            fragment1_Data.add(new record("","最近没有故障记录","",""));
+            fragment1_RecordAdapter = new recordAdapter((LinkedList<record>) fragment1_Data,fragment1_Context);
+            fragment1_ListView.setAdapter(fragment1_RecordAdapter);
+            fragment1_ListView.setOnItemClickListener(this);
         }
     }
 
@@ -425,8 +405,8 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             //Log.e(TAG,"Lay:"+ layType + " uiFlag:" + changeUIflag);
 
             if (layType == 1){
-                switch (changeUIflag){
-                    case 0:
+                switch (selectTabType){
+                    case "输出电压":
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),fragment1readSp.getInt("Uv",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),fragment1readSp.getInt("Vv",0)));
                         fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),fragment1readSp.getInt("Wv",0)));
@@ -434,7 +414,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                         list.add(fragment1readSp.getInt("Vv",0));
                         list.add(fragment1readSp.getInt("Wv",0));
                         break;
-                    case 1:
+                    case "输出电流":
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),fragment1readSp.getInt("Ua",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),fragment1readSp.getInt("Va",0)));
                         fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),fragment1readSp.getInt("Wa",0)));
@@ -442,7 +422,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                         list.add(fragment1readSp.getInt("Va",0));
                         list.add(fragment1readSp.getInt("Wa",0));
                         break;
-                    case 2:
+                    case "输入电压":
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),fragment1readSp.getInt("Rv",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),fragment1readSp.getInt("Sv",0)));
                         fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),fragment1readSp.getInt("Tv",0)));
@@ -450,7 +430,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                         list.add(fragment1readSp.getInt("Sv",0));
                         list.add(fragment1readSp.getInt("Tv",0));
                         break;
-                    case 3:
+                    case "其他数据":
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),fragment1readSp.getInt("Capv",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),fragment1readSp.getInt("hz",0)));
                         fragment1TempRow[2].setText("");
@@ -459,6 +439,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                         list.add(0);
                         break;
                 }
+
                 dynamicLineChartManager.addEntry(list);
                 list.clear();
 

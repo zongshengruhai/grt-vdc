@@ -76,40 +76,25 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     private TextView[] fragment1TempRow = new TextView[5];
 
     //MPAndroidChart
-    //private LineChart lineChart;
     private LineChart fragment1Lc;
-    //private YAxis leftAxis;
-    //private YAxis rightAxis;
-    //private XAxis xAxis;
     private DynamicLineChartManager dynamicLineChartManager;
     private List<Integer> list = new ArrayList<>(); //数据集合
     private List<String> names = new ArrayList<>(); //折线名字集合
     private List<Integer> colour = new ArrayList<>();//折线颜色集合
+    private String selectTabType = "输出电压";
 
     //广播声明
     //Intent dataChange = new Intent("drc.xxx.yyy.fragment1");
     private fragment1Broad fragment1ActivityBroad = null;
     private IntentFilter fragment1IntentFilter = new IntentFilter("drc.xxx.yyy.fragment1");
 
-    //更新UI
-    private int changeUIflag = 0;
-
     //listView
-    //private List<record> fragment1_Data = null;
     private Context fragment1_Context;
-    //private recordAdapter fragment1_RecordAdapter = null;
     private ListView fragment1_ListView;
-
-    //@Override
-    //public void onAttach(Activity activity){
-    //    super.onAttach(activity);
-    //    Log.e(TAG, "碎片1，已于一个活动进行关联");
-    //}
 
     @Override
     public void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
-        Log.e(TAG, "碎片1，创建");
     }
 
     @Override
@@ -142,13 +127,11 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        Log.e(TAG, "碎片1，已完成初始化");
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        Log.e(TAG, "碎片1，启动");
     }
 
     //重载
@@ -219,32 +202,9 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     //     1）创建方法：fragment活动Resume创建，pause销毁
     public class fragment1Broad extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent){
-            //接收到广播
-            //Log.e(TAG,"接收到广播");
-            /*
-            int dataChange = intent.getExtras().getInt("dataChange");
-            //Log.e(TAG,""+dataChange);
-            if (changeUIflag == 0){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),dataChange));
-                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),dataChange));
-            }else if (changeUIflag == 1){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),dataChange));
-                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),dataChange));
-            }else if (changeUIflag == 2){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),dataChange));
-                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),dataChange));
-            }else if (changeUIflag == 3){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),dataChange));
-                fragment1TempRow[2].setText("");
-            }
-            */
+
         }
     }
-
 
     //初始化TabLayout
     private void initTabLayout() {
@@ -254,48 +214,29 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             tl.addTab(tl.newTab().setText(sTitle[i]));
         }
 
-
         //监听tl事件
         tl.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             //挑选事件
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
-                //initLineChart();
                 clearChart();
-
-                //fragment1Lc.clear();
-                //initLineChart();
-
-                String selectTabType = (String) tab.getText();
-                if (selectTabType != null) {
-                    switch (selectTabType) {
-                        case "输出电压":
-                            changeUIflag = 0;
-                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),0));
-                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),0));
-                            //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),0));
-                            break;
-                        case "输出电流":
-                            changeUIflag = 1;
-                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),0));
-                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),0));
-                            //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),0));
-                            break;
-                        case "输入电压":
-                            changeUIflag = 2;
-                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),0));
-                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),0));
-                            //fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),0));
-                            break;
-                        case "其他数据":
-                            changeUIflag = 3;
-                            //fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),0));
-                            //fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),0));
-                            //fragment1TempRow[2].setText("");
-                            break;
-                    }
-                }
+               selectTabType = (String) tab.getText();
+//                if (selectTabType != null) {
+//                    switch (selectTabType) {
+//                        case "输出电压":
+//                            changeUIflag = 0;
+//                            break;
+//                        case "输出电流":
+//                            changeUIflag = 1;
+//                            break;
+//                        case "输入电压":
+//                            changeUIflag = 2;
+//                            break;
+//                        case "其他数据":
+//                            changeUIflag = 3;
+//                            break;
+//                    }
+//                }
             }
 
             //离开事件
@@ -329,14 +270,11 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
         fragment1Lc.setTouchEnabled(false);                                       //触摸
         fragment1Lc.setScaleEnabled(false);                                       //缩放
         fragment1Lc.setPinchZoom(false);                                          //多点缩放
-        fragment1Lc.getDescription().setEnabled(false);                           //隐藏描述
-
-        //dynamicLineChartManager.setLowLimitLine(0,"0");
     }
 
     //清除画布
     private void clearChart(){
-        dynamicLineChartManager.clear();
+//        dynamicLineChartManager.clear();
 //        initLineChart();
 //        for (int i = 0; i < 9; i++) {
 //            list.add(0);
@@ -388,7 +326,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                 FileInputStream mfis = new FileInputStream(fileName);
                 Workbook mbook = Workbook.getWorkbook(mfis);
                 int msheer = mbook.getNumberOfSheets();                     //表数量
-                //String[] mSheetName = mbook.getSheetNames();                //表名称
                 Sheet[] mSheetlist = mbook.getSheets();                     //表内容
 
                 for (int i = 0; i < msheer; i++) {
@@ -423,11 +360,10 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
 
             //当挑选当当前lay时才执行程序控制
             int layType = fragment1readSp.getInt("layType",0);
-            //Log.e(TAG,"Lay:"+ layType + " uiFlag:" + changeUIflag);
-
             if (layType == 1){
-                switch (changeUIflag){
-                    case 0:
+                switch (selectTabType){
+                    case "输出电压":
+                        dynamicLineChartManager.setDescription("输出电压");
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),fragment1readSp.getInt("Uv",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),fragment1readSp.getInt("Vv",0)));
                         fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),fragment1readSp.getInt("Wv",0)));
@@ -435,7 +371,8 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                         list.add(fragment1readSp.getInt("Vv",0));
                         list.add(fragment1readSp.getInt("Wv",0));
                         break;
-                    case 1:
+                    case "输出电流":
+                        dynamicLineChartManager.setDescription("输出电流");
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),fragment1readSp.getInt("Ua",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),fragment1readSp.getInt("Va",0)));
                         fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),fragment1readSp.getInt("Wa",0)));
@@ -443,7 +380,8 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                         list.add(fragment1readSp.getInt("Va",0));
                         list.add(fragment1readSp.getInt("Wa",0));
                         break;
-                    case 2:
+                    case "输入电压":
+                        dynamicLineChartManager.setDescription("输入电压");
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),fragment1readSp.getInt("Rv",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),fragment1readSp.getInt("Sv",0)));
                         fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),fragment1readSp.getInt("Tv",0)));
@@ -451,7 +389,8 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                         list.add(fragment1readSp.getInt("Sv",0));
                         list.add(fragment1readSp.getInt("Tv",0));
                         break;
-                    case 3:
+                    case "其他数据":
+                        dynamicLineChartManager.setDescription("其他数据");
                         fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),fragment1readSp.getInt("Capv",0)));
                         fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),fragment1readSp.getInt("hz",0)));
                         fragment1TempRow[2].setText("");
@@ -462,7 +401,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                 }
                 dynamicLineChartManager.addEntry(list);
                 list.clear();
-
                 fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime),fragment1readSp.getInt("AlarmTime",0)));
                 fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime),fragment1readSp.getInt("RecordTime",0)));
 

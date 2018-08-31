@@ -85,10 +85,10 @@ public class fragment2LineChartManager {
 
         //缩放拖动设置
         lineChart.setDragEnabled(true);                                                             //拖动
-        lineChart.setPinchZoom(false);
+        lineChart.setPinchZoom(true);
         lineChart.setDoubleTapToZoomEnabled(false);                                                 //双击缩放
         lineChart.setScaleXEnabled(true);                                                           //X轴缩放
-        lineChart.setScaleYEnabled(false);                                                          //Y轴缩放
+//        lineChart.setScaleYEnabled(false);                                                          //Y轴缩放
 
         //图例设置
         Legend legend = lineChart.getLegend();

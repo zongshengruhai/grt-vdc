@@ -1,7 +1,5 @@
 package com.great.grt_vdc_t4200l.MPLineChart;
 
-import android.util.Log;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -21,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class fragment2LineChartManager {
-
-    private String TAG="fragment2LineChartManager";
 
     private LineChart lineChart;
     private YAxis leftAxis;
@@ -149,7 +145,6 @@ public class fragment2LineChartManager {
     //动态添加数据（多条折线图）
     public void addEntry(List<Integer> numbers) {
 
-//        Log.e(TAG, lineDataSets.get(0).getEntryCount() + "");
         if (lineDataSets.get(0).getEntryCount() == 0) {
             lineData = new LineData(lineDataSets);
             lineChart.setData(lineData);
@@ -165,11 +160,10 @@ public class fragment2LineChartManager {
             lineData.addEntry(entry, i);
             lineData.notifyDataChanged();
             lineChart.notifyDataSetChanged();
-            lineChart.setVisibleXRangeMaximum(150);
+//            lineChart.setVisibleXRangeMaximum(7);
+            lineChart.setVisibleXRangeMaximum(150);                                                   //X轴最大显示条目数
             lineChart.moveViewToX(lineData.getEntryCount() - 5);
         }
-
-        lineChart.moveViewToX(0);
     }
 
     //设置Y轴值

@@ -77,12 +77,12 @@ public class MainActivity extends BaseCourse{
     public int MARK=0;
 
     //滑动距离
-//    final int DISTANT=50;
+    final int DISTANT=50;
 
     private static final String TAG = "main";
 
+    Intent fragment4Intent = new Intent("drc.xxx.yyy.fragment4");
     Intent dataChange = new Intent("drc.xxx.yyy.MainActivity");
-
     //活动创建----------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +138,7 @@ public class MainActivity extends BaseCourse{
         public void run() {
             handler.postDelayed(this,1000);
             int text = (int) (Math.random() * 100);
+            //Log.e(TAG,""+text);
             dataChange.putExtra("dataChange",text);
             sendBroadcast(dataChange);
         }
@@ -168,11 +169,11 @@ public class MainActivity extends BaseCourse{
     public void setlinearLayouts()
     {
         linearLayouts=new LinearLayout[5];
-        linearLayouts[0]=findViewById(R.id.lay5);
-        linearLayouts[1]=findViewById(R.id.lay1);
-        linearLayouts[2]=findViewById(R.id.lay2);
-        linearLayouts[3]=findViewById(R.id.lay3);
-        linearLayouts[4]=findViewById(R.id.lay4);
+        linearLayouts[0]=(LinearLayout)findViewById(R.id.lay5);
+        linearLayouts[1]=(LinearLayout)findViewById(R.id.lay1);
+        linearLayouts[2]=(LinearLayout)findViewById(R.id.lay2);
+        linearLayouts[3]=(LinearLayout)findViewById(R.id.lay3);
+        linearLayouts[4]=(LinearLayout)findViewById(R.id.lay4);
     }
     /**
      * 初始化textview
@@ -180,13 +181,13 @@ public class MainActivity extends BaseCourse{
     public void settextview()
     {
         textViews=new TextView[5];
-        textViews[0]=findViewById(R.id.fratext5);
-        textViews[1]=findViewById(R.id.fratext1);
-        textViews[2]=findViewById(R.id.fratext2);
-        textViews[3]=findViewById(R.id.fratext3);
-        textViews[4]=findViewById(R.id.fratext4);
+        textViews[0]=(TextView)findViewById(R.id.fratext5);
+        textViews[1]=(TextView)findViewById(R.id.fratext1);
+        textViews[2]=(TextView)findViewById(R.id.fratext2);
+        textViews[3]=(TextView)findViewById(R.id.fratext3);
+        textViews[4]=(TextView)findViewById(R.id.fratext4);
         resetlaybg();
-//        textViews[0].setTextColor(getResources().getColor(R.color.lightseagreen));
+        textViews[0].setTextColor(getResources().getColor(R.color.lightseagreen));
         linearLayouts[0].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
     }
     /**
@@ -200,35 +201,35 @@ public class MainActivity extends BaseCourse{
                 getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[0]).commit();
 //                linearLayouts[0].setBackgroundResource(R.drawable.lay_select_bg);
                 linearLayouts[0].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
-//                textViews[0].setTextColor(getResources().getColor(R.color.lightseagreen));
+                textViews[0].setTextColor(getResources().getColor(R.color.lightseagreen));
                 MARK=0;
                 break;
             case R.id.lay1:
                 getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[1]).commit();
 //                linearLayouts[1].setBackgroundResource(R.drawable.lay_select_bg);
                 linearLayouts[1].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
-//                textViews[1].setTextColor(getResources().getColor(R.color.lightseagreen));
+                textViews[1].setTextColor(getResources().getColor(R.color.lightseagreen));
                 MARK=1;
                 break;
             case R.id.lay2:
                 getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[2]).commit();
 //                linearLayouts[2].setBackgroundResource(R.drawable.lay_select_bg);
                 linearLayouts[2].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
-//                textViews[2].setTextColor(getResources().getColor(R.color.lightseagreen));
+                textViews[2].setTextColor(getResources().getColor(R.color.lightseagreen));
                 MARK=2;
                 break;
             case R.id.lay3:
                 getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[3]).commit();
 //                linearLayouts[3].setBackgroundResource(R.drawable.lay_select_bg);
                 linearLayouts[3].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
-//                textViews[3].setTextColor(getResources().getColor(R.color.lightseagreen));
+                textViews[3].setTextColor(getResources().getColor(R.color.lightseagreen));
                 MARK=3;
                 break;
             case R.id.lay4:
                 getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[4]).commit();
 //                linearLayouts[4].setBackgroundResource(R.drawable.lay_select_bg);
                 linearLayouts[4].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
-//                textViews[4].setTextColor(getResources().getColor(R.color.lightseagreen));
+                textViews[4].setTextColor(getResources().getColor(R.color.lightseagreen));
                 MARK=4;
                 break;
             default:
@@ -253,7 +254,7 @@ public class MainActivity extends BaseCourse{
         {
             linearLayouts[i].setBackgroundColor(getResources().getColor(R.color.lay_select_lose));
 //            linearLayouts[i].setBackgroundResource(R.drawable.lay_select_lose);
-//            textViews[i].setTextColor(getResources().getColor(R.color.black));
+            textViews[i].setTextColor(getResources().getColor(R.color.black));
         }
 
     }

@@ -320,10 +320,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         @Override
         public void onChartTranslate(MotionEvent me, float dX, float dY) {
             Log.e(TAG,"拖动图表, X轴："+dX+", Y轴："+dY+",me:"+me);
-//            Log.e(TAG, "x[0]="+me.getX()+"y[0]="+me.getY());
 //            fragment2LineChart[0].setTranslationX(dX);
-//            fragment2LineChart[0].moveViewToX(me.getX());
-//            fragment2LineChart[0].moveViewTo(me.getX(),me.getY(),YAxis.AxisDependency.LEFT);
+//            fragment2LineChart[0].setTranslationY(dY);
         }
     };
 
@@ -485,7 +483,6 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                                 temp =(cell.getContents()).trim();
                                 list.add(Integer.parseInt(temp));
                             }
-//                            Log.e(TAG,list.toString()+"");
                             min = min + 3;
                             fragment2ChartManager[k].addEntry(list);
                             list.clear();

@@ -1,7 +1,5 @@
 package com.great.grt_vdc_t4200l.MPLineChart;
 
-import android.util.Log;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -35,7 +33,7 @@ public class DynamicLineChartManager {
     public DynamicLineChartManager(LineChart mLineChart, String name, int color) {
         this.lineChart = mLineChart;
         leftAxis = lineChart.getAxisLeft();
-        lineChart.getAxisRight().setEnabled(false);
+        rightAxis = lineChart.getAxisRight();
         xAxis = lineChart.getXAxis();
         initLineChart();
         initLineDataSet(name, color);
@@ -45,7 +43,7 @@ public class DynamicLineChartManager {
     public DynamicLineChartManager(LineChart mLineChart, List<String> names, List<Integer> colors) {
         this.lineChart = mLineChart;
         leftAxis = lineChart.getAxisLeft();
-        lineChart.getAxisRight().setEnabled(false);
+        rightAxis = lineChart.getAxisRight();
         xAxis = lineChart.getXAxis();
         initLineChart();
         initLineDataSet(names, colors);
@@ -81,6 +79,8 @@ public class DynamicLineChartManager {
 
         //Y轴设置
         leftAxis.setAxisMinimum(0f);                                                                //最小值
+        rightAxis.setAxisMinimum(0f);
+
     }
 
     //初始化折线(一条线)
@@ -126,7 +126,6 @@ public class DynamicLineChartManager {
         lineData = new LineData();
         lineChart.setData(lineData);
         lineChart.invalidate();
-
     }
 
     //动态添加数据（一条折线图）
@@ -175,6 +174,7 @@ public class DynamicLineChartManager {
             lineData.notifyDataChanged();
             lineChart.notifyDataSetChanged();
             lineChart.setVisibleXRangeMaximum(7);
+            //lineChart.setVisibleXRangeMaximum(150);                                                   //X轴最大显示条目数
             lineChart.moveViewToX(lineData.getEntryCount() - 5);
         }
     }
@@ -223,14 +223,13 @@ public class DynamicLineChartManager {
     // 设置描述信息
     public void setDescription(String str) {
         Description description = new Description();
-        description.setTextSize(16);
         description.setText(str);
         lineChart.setDescription(description);
         lineChart.invalidate();
     }
 
     public void clear(){
-//        lineChart.clearValues();
+        lineChart.clearValues();
     }
 
 }

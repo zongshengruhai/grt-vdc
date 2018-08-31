@@ -151,7 +151,7 @@ public class fragment2LineChartManager {
 
 //        Log.e(TAG, lineDataSets.get(0).getEntryCount() + "");
         if (lineDataSets.get(0).getEntryCount() == 0) {
-                lineData = new LineData(lineDataSets);
+            lineData = new LineData(lineDataSets);
             lineChart.setData(lineData);
         }
 

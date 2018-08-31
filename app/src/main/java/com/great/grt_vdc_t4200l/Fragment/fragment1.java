@@ -220,7 +220,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 clearChart();
-               selectTabType = (String) tab.getText();
+                selectTabType = (String) tab.getText();
 //                if (selectTabType != null) {
 //                    switch (selectTabType) {
 //                        case "输出电压":

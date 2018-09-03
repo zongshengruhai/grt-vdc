@@ -26,11 +26,15 @@ import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.utils.FileUtils;
+import com.great.grt_vdc_t4200l.SerialPortHelp.SerialPortHelper;
+import com.great.grt_vdc_t4200l.SerialPortHelp.bean.ComBean;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import android_serialport_api.SerialPort;
 
@@ -62,6 +66,7 @@ public class BaseCourse extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         //串口
+        downCom = new SerialControl();
 
 
         //全屏
@@ -328,6 +333,40 @@ public class BaseCourse extends FragmentActivity {
             _isopen = false;
         }catch (IOException e){
             _isopen = true;
+        }
+    }
+    //继承串口工具----------------------------------------------------
+    private class SerialControl extends SerialPortHelper{
+        public SerialControl(){}
+
+        @Override
+        protected void onData
+    }
+    private class DispQueueThred extends Thread{
+        private Queue<ComBean> QueueList = new LinkedList<ComBean>();
+        @Override
+        public void run(){
+            super.run();
+            while (!isInterrupted()){
+                final ComBean ComData;
+                while ((ComData = QueueList.poll())!=null){
+                    runOnUiThread(new Runnable(){
+                        public void run(){
+//                            Disp
+                        }
+                    });
+                    try {
+                        Thread.sleep(100);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+            }
+        }
+
+        public synchronized void AddQueue(ComBean ComData){
+            QueueList.add(ComData);
         }
     }
     //读取线程----------------------------------------------------

@@ -236,7 +236,7 @@ public class SerialPortHelper {
         }
     }
 
-//    protected abstract void onDataReceived(ComBean comRecData);
+    protected abstract void onDataReceived(ComBean comRecData);
 
 
 

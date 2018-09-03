@@ -38,6 +38,8 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     private IntentFilter fragment4IntentFilter = new IntentFilter("drc.xxx.yyy.fragment4");
     Intent fragment4Intent = new Intent("drc.xxx.yyy.baseActivity");
 
+    private Context fragment4_Context;
+
     //login
     private EditText fragment4Password;
     private Button fragment4Login;
@@ -48,6 +50,8 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment4,container,false);
+
+        fragment4_Context = view.getContext();
 
         but[0] = view.findViewById(R.id.openMiuse);
         but[0].setOnClickListener(this);
@@ -79,7 +83,6 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     public void onClick(View v){
         switch(v.getId()){
 //            case R.id.pickTime:
-
 //                break;
             case R.id.fragment4LoginBut:
                 LoginClick();

@@ -11,9 +11,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.SQLException;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -42,13 +44,15 @@ public class BaseCourse extends FragmentActivity {
     private IntentFilter baseCourseIntentFilter = new IntentFilter("drc.xxx.yyy.baseActivity");
     int text[] = new int[5];
     //串口声明----------------------------------------------------
-    private SerialPort mSerialPort;                                      //串口
+    private SerialPort downCom;                                      //串口
     private OutputStream mOutput;                                       //发送
     private InputStream mInput;                                         //接收
     private byte[] mbuffer = new byte[2];                               //接收缓存区
     private boolean _isopen = false;                                    //串口开关标志
     //硬件声明----------------------------------------------------
-//    private Watchdog watchdog = Watchdog.
+
+    //其他声明----------------------------------------------------
+    private boolean globalError = false;                                  //全局错误
 
     /**
      * 活动生命周期
@@ -57,12 +61,12 @@ public class BaseCourse extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+        //串口
+
+
         //全屏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        //看门狗
-
 
     }
     //活动开始----------------------------------------------------
@@ -95,7 +99,6 @@ public class BaseCourse extends FragmentActivity {
         }
 
         loadSOP();
-
     }
     //活动中止----------------------------------------------------
     @Override
@@ -278,7 +281,7 @@ public class BaseCourse extends FragmentActivity {
 //        }
     }
     //重启设备----------------------------------------------------
-    public void restart(){
+    private void restart(){
         Toast.makeText(this,"即将重启！",Toast.LENGTH_SHORT).show();
         try {
             Log.v(TAG, "root Runtime->reboot");
@@ -288,28 +291,40 @@ public class BaseCourse extends FragmentActivity {
             ex.printStackTrace();
         }
     }
+    //提示音----------------------------------------------------
+    private void Beep(){
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator != null){
+            if (globalError){
+                vibrator.vibrate(new long[]{500,500},0);
+            }else {
+                vibrator.cancel();
+            }
+        }
+    }
 
     /**
      * 串口通讯方法
      */
     //打开com----------------------------------------------------
     private void openCom(){
+        /*
         //尝试打开串口
         try {
-            mSerialPort = new SerialPort(new File("/dev/ttyS2"),38400,0);//设置串口、波特率、校验位
-            mOutput = mSerialPort.getOutputStream();
-            mInput = mSerialPort.getInputStream();
+//            mSerialPort = new SerialPort(new File("/dev/ttyS2"),38400,0);//设置串口、波特率、校验位
+//            mOutput = mSerialPort.getOutputStream();
+//            mInput = mSerialPort.getInputStream();
             _isopen = true;
         }catch (SecurityException|IOException e) {
             _isopen = false;
-        }
+        }*/
     }
     //关闭com----------------------------------------------------
     private void colseCom(){
         try {
             mOutput.close();
             mInput.close();
-            mSerialPort.close();
+//            mSerialPort.close();
             _isopen = false;
         }catch (IOException e){
             _isopen = true;

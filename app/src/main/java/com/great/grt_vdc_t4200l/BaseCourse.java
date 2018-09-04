@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.InvalidParameterException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -44,19 +45,20 @@ public class BaseCourse extends FragmentActivity {
     //广播声明----------------------------------------------------
     //Intent lifeCycleChange = new Intent("drc.xxx.yyy.baseActivity");
     Intent dataChange = new Intent("drc.xxx.yyy.fragment1");
-    private MyBaseActivity_Broad baseCourseBroad = null;
-    private IntentFilter baseCourseIntentFilter = new IntentFilter("drc.xxx.yyy.baseActivity");
+    MyBaseActivity_Broad baseCourseBroad = null;
+    IntentFilter baseCourseIntentFilter = new IntentFilter("drc.xxx.yyy.baseActivity");
     int text[] = new int[5];
     //串口声明----------------------------------------------------
-    private SerialPort downCom;                                      //串口
-    private OutputStream mOutput;                                       //发送
-    private InputStream mInput;                                         //接收
-    private byte[] mbuffer = new byte[2];                               //接收缓存区
-    private boolean _isopen = false;                                    //串口开关标志
+    SerialControl downCom;                                      //串口
+//    private OutputStream mOutput;                                       //发送
+//    private InputStream mInput;                                         //接收
+//    private byte[] mbuffer = new byte[2];                               //接收缓存区
+//    boolean _isOpen = false;                                    //串口开关标志
+//    DispQueueThred DispQueue;
     //硬件声明----------------------------------------------------
 
     //其他声明----------------------------------------------------
-    private boolean globalError = false;                                  //全局错误
+    boolean globalError = false;                                  //全局错误
 
     /**
      * 活动生命周期
@@ -90,10 +92,8 @@ public class BaseCourse extends FragmentActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        //Log.e(TAG,"底层重载");
 
         hideNavigation();
-
         handler.post(task);
 
         //注册广播
@@ -102,17 +102,14 @@ public class BaseCourse extends FragmentActivity {
             registerReceiver(baseCourseBroad,baseCourseIntentFilter);
             Log.e(TAG,"baseCourse，已注册广播");
         }
-
         loadSOP();
     }
     //活动中止----------------------------------------------------
     @Override
     protected void onPause(){
         super.onPause();
-        //Log.e(TAG,"底层中止");
 
         showNavigation();
-
         handler.removeCallbacks(task);
 
         //注销广播
@@ -142,27 +139,30 @@ public class BaseCourse extends FragmentActivity {
         @Override
         public void run() {
             handler.postDelayed(this,500);
+            if (downCom.getIsOpen()){
+                //int text[] = new int[3];
+                text[0] = (int)(Math.random()*400);
+                text[1] = (int)(Math.random()*400);
+                text[2] = (int)(Math.random()*400);
+                text[3] = (int)(Math.random()*400);
 
-            //int text[] = new int[3];
-            text[0] = (int)(Math.random()*400);
-            text[1] = (int)(Math.random()*400);
-            text[2] = (int)(Math.random()*400);
-            text[3] = (int)(Math.random()*400);
+                text[4]++;
+                if(text[4]>100) text[4]=0;
+//                dataChange.putExtra("dataChange",text);
+//                sendBroadcast(dataChange);
 
-            text[4]++;
-            if(text[4]>100) text[4]=0;
-            /*
-            dataChange.putExtra("dataChange",text);
-            sendBroadcast(dataChange);*/
+                sendPortData(downCom,"01 02 03 04 05 06 07");
 
-            SharedPreferences.Editor editor = getSharedPreferences("temp",MODE_PRIVATE).edit();
-            editor.putInt("Uv",text[0]);
-            editor.putInt("Vv",text[1]);
-            editor.putInt("Wv",text[2]);
-            editor.putInt("Capv",text[3]);
-            editor.putInt("batterCapacity",text[4]);
-            editor.commit();
 
+                SharedPreferences.Editor editor = getSharedPreferences("temp",MODE_PRIVATE).edit();
+                editor.putInt("Uv",text[0]);
+                editor.putInt("Vv",text[1]);
+                editor.putInt("Wv",text[2]);
+                editor.putInt("Capv",text[3]);
+                editor.putInt("batterCapacity",text[4]);
+                editor.commit();
+
+            }
         }
     };
 
@@ -312,7 +312,7 @@ public class BaseCourse extends FragmentActivity {
      * 串口通讯方法
      */
     //打开com----------------------------------------------------
-    private void openCom(){
+    private void openCom(SerialPortHelper ComPort){
         /*
         //尝试打开串口
         try {
@@ -323,25 +323,43 @@ public class BaseCourse extends FragmentActivity {
         }catch (SecurityException|IOException e) {
             _isopen = false;
         }*/
+        try {
+            ComPort.open();
+        }catch (SecurityException e){
+            Toast.makeText(this,"打开串口失败，没有权限",Toast.LENGTH_SHORT).show();
+        }catch (IOException e){
+            Toast.makeText(this,"打开串口失败，未知错误",Toast.LENGTH_SHORT).show();
+        }catch (InvalidParameterException e){
+            Toast.makeText(this,"打开串口失败，参数错误",Toast.LENGTH_SHORT).show();
+        }
     }
     //关闭com----------------------------------------------------
-    private void colseCom(){
-        try {
-            mOutput.close();
-            mInput.close();
-//            mSerialPort.close();
-            _isopen = false;
-        }catch (IOException e){
-            _isopen = true;
+    private void colseCom(SerialPortHelper ComPort){
+//        try {
+//            mOutput.close();
+////            mInput.close();
+////            mSerialPort.close();
+//            _isopen = false;
+//        }catch (IOException e){
+//            _isopen = true;
+//        }
+        if (ComPort != null){
+            ComPort.stopSend();
+            ComPort.close();
+        }
+    }
+    //发送数据----------------------------------------------------
+    private void sendPortData(SerialPortHelper ComPort,String sOut){
+        if (ComPort != null && ComPort.getIsOpen()){
+            ComPort.sendTxt(sOut);
         }
     }
     //继承串口工具----------------------------------------------------
     private class SerialControl extends SerialPortHelper{
-        public SerialControl(){}
-
-        @Override
-        protected void onData
+        public SerialControl(){
+        }
     }
+    /*
     private class DispQueueThred extends Thread{
         private Queue<ComBean> QueueList = new LinkedList<ComBean>();
         @Override
@@ -352,7 +370,7 @@ public class BaseCourse extends FragmentActivity {
                 while ((ComData = QueueList.poll())!=null){
                     runOnUiThread(new Runnable(){
                         public void run(){
-//                            Disp
+                            Log.e(TAG, "run: ");
                         }
                     });
                     try {
@@ -364,26 +382,10 @@ public class BaseCourse extends FragmentActivity {
                 }
             }
         }
-
         public synchronized void AddQueue(ComBean ComData){
             QueueList.add(ComData);
         }
-    }
-    //读取线程----------------------------------------------------
-    class ReadRunner implements Runnable{
-        @Override
-        public void run(){
-//            while (_isopen){
-//                try {
-//                    if (mInput != null){
-//
-//                    }
-//                }catch (IOException e){
-//
-//                }
-//            }
-        }
-    }
+    }*/
 
     /**
      *  软件流程方法
@@ -397,16 +399,7 @@ public class BaseCourse extends FragmentActivity {
 
         //2、打开串口
         for (int i = 0; i < 3 ; i++) {
-            if (!_isopen){
-                openCom();
-            }else {
-                break;
-            }
-        }
-        if (!_isopen){
-//            Log.e(TAG,"SOP,串口打开失败");
-        }else {
-//            Log.e(TAG,"SOP,串口打开成功");
+            if (!downCom.getIsOpen()){ openCom(downCom); }else { break; }
         }
 
 
@@ -471,8 +464,8 @@ public class BaseCourse extends FragmentActivity {
     }
     //中止流程----------------------------------------------------
     private void pauseSOP(){
-        colseCom();
-        if (!_isopen){ Log.e(TAG,"SOP,串口关闭成功");}else{ Log.e(TAG,"SOP,串口关闭失败");}
+        colseCom(downCom);
+        if (!downCom.getIsOpen()){ Log.e(TAG,"SOP,串口关闭成功");}else{ Log.e(TAG,"SOP,串口关闭失败");}
     }
     //检测文件----------------------------------------------------
     private boolean checkFile(String fileName){

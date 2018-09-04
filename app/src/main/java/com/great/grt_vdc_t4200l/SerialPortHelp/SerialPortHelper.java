@@ -1,5 +1,7 @@
 package com.great.grt_vdc_t4200l.SerialPortHelp;
 
+import android.util.Log;
+
 import com.great.grt_vdc_t4200l.SerialPortHelp.bean.ComBean;
 
 import java.io.File;
@@ -7,9 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import java.io.IOException;
 import java.security.InvalidParameterException;
-
 import android_serialport_api.SerialPort;
 
 public class SerialPortHelper {
@@ -22,12 +22,16 @@ public class SerialPortHelper {
     private SendThread mSendThread;
 
     private String sPortName = "/dev/ttyS2";
-    private int iBaudRate = 9600;
+    private int iBaudRate = 38400;
 
     private boolean _isOpen = false;
     private int iDelay = 300;
 
     private byte[] _bLoopData = new byte[]{};
+
+    //数据地址----------------------------------------------------
+    private int[] iData = new int[14];
+    private boolean[] _isData = new boolean[8];
 
     //指定串口、指定波特率的实例化----------------------------------------------------
     public SerialPortHelper(String sPortName , int iBaudRate){
@@ -36,11 +40,11 @@ public class SerialPortHelper {
     }
     //默认值实例化----------------------------------------------------
     public SerialPortHelper(){
-        this("/dev/ttyS2",9600);
+        this("/dev/ttyS2",38400);
     }
     //指定串口的实例化----------------------------------------------------
     public SerialPortHelper(String sPortName){
-        this(sPortName,9600);
+        this(sPortName,38400);
     }
     //指定串口、指定波特率的实例化----------------------------------------------------
     public SerialPortHelper(String sPortName,String sBaudRate){
@@ -109,8 +113,11 @@ public class SerialPortHelper {
                     if (mInputStream == null) return;
                     byte[] buffer = new byte[512];
                     int size = mInputStream.read(buffer);
+                    iData[0] = size;
+                    Log.e("串口消息",size+"");
                     if (size > 0 ){
                         ComBean comRecData = new ComBean(sPortName,buffer,size);
+                        readData(size,buffer);
 //                        onDataReceived(comRecData);
                     }
                     try {
@@ -236,7 +243,57 @@ public class SerialPortHelper {
         }
     }
 
-    protected abstract void onDataReceived(ComBean comRecData);
+//    protected abstract void onDataReceived(ComBean comRecData);
+
+    public int[] getiData(){
+        return iData;
+    }
+
+    //接收类型处理----------------------------------------------------
+    private void readData(int size,byte[] buffer){
+        byte[] bRec;
+        String temp = MyFunc.ByteArrToHex(buffer);
+        if (_isOpen && size > 0 && size< 500 && buffer[0] == 0x7E && buffer[size-1] == 0x0D){
+
+            bRec = new byte[size];
+            System.arraycopy(buffer,0,bRec,0,size);
+
+            byte bCrc = addCrc(bRec);
+            if (bCrc == bRec[size - 2]){
+                switch (bRec[1]){
+                    case 0x03:
+                        if (size == 48 && MyFunc.ByteArrToInt(bRec,2) == 0 && MyFunc.ByteArrToInt(bRec,4) == 0x0013){
+                            int k = 6;
+                            for (int i = 0; i < 13 ; i++) {
+                                iData[i] = MyFunc.ByteArrToInt(bRec,k);
+                                k += 2;
+                            }
+                            _isData = MyFunc.ByteToBoolArr(bRec[42]);
+                        }else { Log.e("串口信息","0x03回送帧出错，数据内容："+temp);}
+                        break;
+                    case 0x10:
+
+                        break;
+                }
+            }else {
+                Log.e("串口信息","数据校验错误，数据内容："+temp);
+            }
+        }else {
+            Log.e("串口信息","数据帧错误，数据内容："+temp);
+        }
+    }
+    //累加CRC----------------------------------------------------
+    private byte addCrc(byte[] bytes){
+        byte bCrc = 0;
+        if (bytes.length > 0){
+            bCrc = bytes[1];
+            for (int i = 2; i < bytes.length - 3 ; i++) {
+                bCrc = (byte) (bCrc + bytes[i]);
+//                bCrc += bytes[i];
+            }
+        }
+        return bCrc;
+    }
 
 
 

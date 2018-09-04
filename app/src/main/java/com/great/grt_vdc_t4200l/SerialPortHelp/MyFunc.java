@@ -26,25 +26,25 @@ public class MyFunc {
         return String.format("%02x", inByte).toUpperCase();
     }
     //-------------------------------------------------------
-    static public String ByteArrToHex(byte[] inBytArr)//字节数组转转hex字符串
+    static public String ByteArrToHex(byte[] inByteArr)//字节数组转转hex字符串
     {
         StringBuilder strBuilder=new StringBuilder();
-        int j=inBytArr.length;
+        int j=inByteArr.length;
         for (int i = 0; i < j; i++)
         {
-            strBuilder.append(Byte2Hex(inBytArr[i]));
+            strBuilder.append(Byte2Hex(inByteArr[i]));
             strBuilder.append(" ");
         }
         return strBuilder.toString();
     }
     //-------------------------------------------------------
-    static public String ByteArrToHex(byte[] inBytArr,int offset,int byteCount)//字节数组转转hex字符串，可选长度
+    static public String ByteArrToHex(byte[] inByteArr,int offset,int byteCount)//字节数组转转hex字符串，可选长度
     {
         StringBuilder strBuilder=new StringBuilder();
         int j=byteCount;
         for (int i = offset; i < j; i++)
         {
-            strBuilder.append(Byte2Hex(inBytArr[i]));
+            strBuilder.append(Byte2Hex(inByteArr[i]));
         }
         return strBuilder.toString();
     }
@@ -67,6 +67,26 @@ public class MyFunc {
         {
             result[j]=HexToByte(inHex.substring(i,i+2));
             j++;
+        }
+        return result;
+    }
+    //-------------------------------------------------------
+    //转2个byte转int
+    static public int ByteArrToInt(byte[] inByteArr,int add){
+        int result = 0;
+        if (inByteArr.length > add){
+            result += (inByteArr[add] & 0xff) << 8;
+            result += (inByteArr[add+1] & 0xff);
+        }
+        return result;
+    }
+    //-------------------------------------------------------
+    //字节转8位boolen数值
+    static public boolean[] ByteToBoolArr(byte inByte){
+        boolean[] result = new boolean[8];
+        for (int i = 7; i >= 0 ; i--) {
+            result[i] = (inByte & 0x01) == 1;
+            inByte = (byte)(inByte >> 1 );
         }
         return result;
     }

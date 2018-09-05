@@ -29,6 +29,7 @@ import com.github.mikephil.charting.utils.FileUtils;
 import com.great.grt_vdc_t4200l.SerialPortHelp.SerialPortHelper;
 import com.great.grt_vdc_t4200l.SerialPortHelp.bean.ComBean;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,15 +51,16 @@ public class BaseCourse extends FragmentActivity {
     int text[] = new int[5];
     //串口声明----------------------------------------------------
     SerialControl downCom;                                      //串口
-//    private OutputStream mOutput;                                       //发送
-//    private InputStream mInput;                                         //接收
-//    private byte[] mbuffer = new byte[2];                               //接收缓存区
-//    boolean _isOpen = false;                                    //串口开关标志
-//    DispQueueThred DispQueue;
+    //数据声明----------------------------------------------------
+    private int[] iTelemetry = new int[14];                     //遥测
+    private boolean[] _isTelecommand = new boolean[8];          //遥信
+    private boolean[] _isTelecontrol = new boolean[2];          //遥控
+    private String sSystemTime;                                 //时间
     //硬件声明----------------------------------------------------
 
     //其他声明----------------------------------------------------
-    boolean globalError = false;                                  //全局错误
+    boolean globalError = false;                                //全局错误
+    private Context mContext;
 
     /**
      * 活动生命周期
@@ -67,9 +69,11 @@ public class BaseCourse extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+        mContext = getBaseContext();
+
         //串口
         downCom = new SerialControl();
-
+        downCom.setmContext(mContext);
 
         //全屏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -140,27 +144,62 @@ public class BaseCourse extends FragmentActivity {
         public void run() {
             handler.postDelayed(this,500);
             if (downCom.getIsOpen()){
-                //int text[] = new int[3];
-                text[0] = (int)(Math.random()*400);
-                text[1] = (int)(Math.random()*400);
-                text[2] = (int)(Math.random()*400);
-                text[3] = (int)(Math.random()*400);
-
-                text[4]++;
-                if(text[4]>100) text[4]=0;
-//                dataChange.putExtra("dataChange",text);
-//                sendBroadcast(dataChange);
-
+//                //int text[] = new int[3];
+//                text[0] = (int)(Math.random()*400);
+//                text[1] = (int)(Math.random()*400);
+//                text[2] = (int)(Math.random()*400);
+//                text[3] = (int)(Math.random()*400);
+//
+//                text[4]++;
+//                if(text[4]>100) text[4]=0;
+////                dataChange.putExtra("dataChange",text);
+////                sendBroadcast(dataChange);
+//
+//                SharedPreferences.Editor editor = getSharedPreferences("temp",MODE_PRIVATE).edit();
+//                editor.putInt("Uv",text[0]);
+//                editor.putInt("Vv",text[1]);
+//                editor.putInt("Wv",text[2]);
+//                editor.putInt("Capv",text[3]);
+//                editor.putInt("batterCapacity",text[4]);
+//                editor.commit()
+//
+//                iTelemetry = downCom.getiTelemetry();
+//                _isTelecommand = downCom.getisTelecommand();
+//                _isTelecontrol = downCom.getisTelecontrol();
+//                sSystemTime = downCom.getSystemTime();
+//
+//                SharedPreferences.Editor editor = getSharedPreferences("realTimeData",MODE_PRIVATE).edit();
+//                // 遥测
+//                editor.putInt("i_Rv",iTelemetry[0]);                             //R相电压
+//                editor.putInt("i_Sv",iTelemetry[1]);                             //S相电压
+//                editor.putInt("i_Tv",iTelemetry[2]);                             //T相电压
+//                editor.putInt("i_Uv",iTelemetry[3]);                             //U相电压
+//                editor.putInt("i_Vv",iTelemetry[4]);                             //V相电压
+//                editor.putInt("i_Wv",iTelemetry[5]);                             //W相电压
+//                editor.putInt("i_Ua",iTelemetry[6]);                             //U相电流
+//                editor.putInt("i_Va",iTelemetry[7]);                             //V相电流
+//                editor.putInt("i_Wa",iTelemetry[8]);                             //W相电流
+//                editor.putInt("i_Hz",iTelemetry[9]);                             //频率
+//                editor.putInt("i_SagTime",iTelemetry[10]);                       //录波次数
+//                editor.putInt("i_Capv",iTelemetry[11]);                          //电容电压
+//                editor.putInt("i_CapAh",(((iTelemetry[11]-232)/142)));           //电容容量
+//                editor.putInt("i_NewSagSite",iTelemetry[12]);                    //当前录波位置
+//                editor.putInt("i_SagSum",iTelemetry[13]);                        //录波总数
+//                //系统事件
+//                editor.putString("s_SystemTime",sSystemTime);                    //下位机系统时间
+//                //遥信
+//                editor.putBoolean("is_RechargeFlag",_isTelecommand[0]);          //充电状态
+//                editor.putBoolean("is_CompensateFlag",_isTelecommand[1]);        //补偿状态
+//                editor.putBoolean("is_InAlarm",_isTelecommand[3]);               //输入异常
+//                editor.putBoolean("is_OutOC",_isTelecommand[4]);                 //输出过流
+//                editor.putBoolean("is_OutRl",_isTelecommand[5]);                 //输出短路
+//                editor.putBoolean("is_AhLose",_isTelecommand[6]);                //容量失效
+//                editor.putBoolean("is_ComError",_isTelecommand[7]);              //通讯异常
+//                //遥控
+//                editor.putBoolean("is_SystemMode",_isTelecontrol[0]);            //系统模式
+//                editor.putBoolean("is_CompensateEnabled",_isTelecontrol[1]);     //补偿使能
+//                editor.commit();
                 sendPortData(downCom,"01 02 03 04 05 06 07");
-
-
-                SharedPreferences.Editor editor = getSharedPreferences("temp",MODE_PRIVATE).edit();
-                editor.putInt("Uv",text[0]);
-                editor.putInt("Vv",text[1]);
-                editor.putInt("Wv",text[2]);
-                editor.putInt("Capv",text[3]);
-                editor.putInt("batterCapacity",text[4]);
-                editor.commit();
 
             }
         }
@@ -307,6 +346,26 @@ public class BaseCourse extends FragmentActivity {
             }
         }
     }
+    //设置系统时间----------------------------------------------------
+    private void setSystemTime(String sTime){
+        if (sTime.length() == 15){
+            try {
+                Process process = Runtime.getRuntime().exec("su");
+                DataOutputStream os = new DataOutputStream(process.getOutputStream());
+                os.writeBytes("setprop persist.sys.timezone GMT\n");
+                os.writeBytes("/system/bin/date -s" + sTime + "\n");
+                os.writeBytes("clock -w\n");
+                os.writeBytes("exit\n");
+                os.flush();
+            }catch (IOException e){
+                Log.e(TAG, "setSystemTime: loser" );
+                e.printStackTrace();
+            }
+        }else {
+            Log.e(TAG, "setSystemTime: loser ,length is error" );
+        }
+
+    }
 
     /**
      * 串口通讯方法
@@ -359,33 +418,6 @@ public class BaseCourse extends FragmentActivity {
         public SerialControl(){
         }
     }
-    /*
-    private class DispQueueThred extends Thread{
-        private Queue<ComBean> QueueList = new LinkedList<ComBean>();
-        @Override
-        public void run(){
-            super.run();
-            while (!isInterrupted()){
-                final ComBean ComData;
-                while ((ComData = QueueList.poll())!=null){
-                    runOnUiThread(new Runnable(){
-                        public void run(){
-                            Log.e(TAG, "run: ");
-                        }
-                    });
-                    try {
-                        Thread.sleep(100);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    break;
-                }
-            }
-        }
-        public synchronized void AddQueue(ComBean ComData){
-            QueueList.add(ComData);
-        }
-    }*/
 
     /**
      *  软件流程方法

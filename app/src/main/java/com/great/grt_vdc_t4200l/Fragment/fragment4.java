@@ -1,5 +1,6 @@
 package com.great.grt_vdc_t4200l.Fragment;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
@@ -25,6 +26,8 @@ import android.widget.TimePicker;
 
 import com.great.grt_vdc_t4200l.R;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 
 public class fragment4 extends Fragment implements View.OnClickListener{
@@ -98,11 +101,8 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     }
 
     private void test1(){
-
     }
-
     private void test2(){
-
     }
 
     //登录事件

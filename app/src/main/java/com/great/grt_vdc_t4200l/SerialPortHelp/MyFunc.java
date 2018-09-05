@@ -72,11 +72,11 @@ public class MyFunc {
     }
     //-------------------------------------------------------
     //转2个byte转int
-    static public int ByteArrToInt(byte[] inByteArr,int add){
+    static public int ByteArrToInt(byte[] inByteArr,int site){
         int result = 0;
-        if (inByteArr.length > add){
-            result += (inByteArr[add] & 0xff) << 8;
-            result += (inByteArr[add+1] & 0xff);
+        if (inByteArr.length > site){
+            result += (inByteArr[site] & 0xff) << 8;
+            result += (inByteArr[site+1] & 0xff);
         }
         return result;
     }
@@ -89,5 +89,45 @@ public class MyFunc {
             inByte = (byte)(inByte >> 1 );
         }
         return result;
+    }
+    //-------------------------------------------------------
+    //字节指定位置转boolen
+    static public boolean ByteToBool(byte inByte,int site){
+        boolean result;
+        result = (byte)((inByte >> site) & 0x01) == 1;
+        return result;
+    }
+    //-------------------------------------------------------
+    //BCD数组转String
+    static public String BCDArrtoString(byte[] inByte){
+//        StringBuffer result = new StringBuffer(inByte.length * 2);
+//        for (int i = 0; i < inByte.length ; i++) {
+//            result.append((byte)(inByte[i] & 0xf0) >>> 4);
+//            result.append((byte)(inByte[i] & 0xf0));
+//        }
+//        return result.toString().substring(0,1).equalsIgnoreCase("0")?result.toString().substring(1):result.toString();
+        String result = "20180905.080000";
+        String year,month,day,hour,min,sec;
+        year = "20"+inByte[0];
+        if (inByte[1] >= 10){ month = ""+inByte[1];}else {month = "0" + inByte[1];}
+        if (inByte[2] >= 10){ day = ""+inByte[2];}else {day = "0" + inByte[2];}
+        if (inByte[3] >= 10){ hour = ""+inByte[3];}else {hour = "0" + inByte[3];}
+        if (inByte[4] >= 10){ min = ""+inByte[4];}else {min = "0" + inByte[4];}
+        if (inByte[5] >= 10){ sec = ""+inByte[5];}else {sec = "0" + inByte[5];}
+        result = year + month + day + "." + hour + min +sec;
+        return result;
+    }
+    //-------------------------------------------------------
+    //累加CRC
+    static public byte addCrc(byte[] bytes){
+        byte bCrc = 0;
+        if (bytes.length > 0){
+            bCrc = bytes[1];
+            for (int i = 2; i < bytes.length - 3 ; i++) {
+                bCrc = (byte) (bCrc + bytes[i]);
+//                bCrc += bytes[i];
+            }
+        }
+        return bCrc;
     }
 }

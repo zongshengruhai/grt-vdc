@@ -120,6 +120,7 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     }
 
     private void test1(){
+        String list = "1,2,3,4";
 //        String file =  fragment4_Context.getFilesDir().getPath()+"123.xls";
 //        WritableWorkbook test;
 //        try {
@@ -139,6 +140,20 @@ public class fragment4 extends Fragment implements View.OnClickListener{
 //        }catch (WriteException e){
 //            e.printStackTrace();
 //        }
+        String file =  fragment4_Context.getFilesDir().getPath()+"1234.txt";
+        try{
+            File mfile = new File(file);
+            if (!mfile.exists()){
+                File dir = new File(mfile.getParent());
+                dir.mkdir();
+                mfile.createNewFile();
+            }
+            FileOutputStream os = new FileOutputStream(mfile);
+            os.write(list.getBytes());
+            os.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     private void test2(){
 

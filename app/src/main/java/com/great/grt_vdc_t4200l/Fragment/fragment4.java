@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,10 +26,24 @@ import android.widget.Switch;
 import android.widget.TimePicker;
 
 import com.great.grt_vdc_t4200l.R;
+import com.great.grt_vdc_t4200l.SystemFunc;
 
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.JxlWriteException;
 
 public class fragment4 extends Fragment implements View.OnClickListener{
 
@@ -49,6 +64,10 @@ public class fragment4 extends Fragment implements View.OnClickListener{
 
     //button
     private Button[] but = new Button[2];
+
+    //test
+    private boolean flga1 = false;
+    private boolean flag2 = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
@@ -101,10 +120,38 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     }
 
     private void test1(){
+//        String file =  fragment4_Context.getFilesDir().getPath()+"123.xls";
+//        WritableWorkbook test;
+//        try {
+//            OutputStream os = new FileOutputStream(file);
+//            test = Workbook.createWorkbook(os);
+//            WritableSheet mSheet = test.createSheet("test",0);
+//            String[] list = {"1","2","3"};
+//            Label label;
+//            for (int i = 0; i < list.length ; i++) {
+//                label = new Label(i,0,list[0]);
+//                mSheet.addCell(label);
+//            }
+//        }catch (FileNotFoundException e){
+//            e.printStackTrace();
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }catch (WriteException e){
+//            e.printStackTrace();
+//        }
     }
     private void test2(){
+
     }
 
+    Handler mHandler = new Handler();
+    Runnable mRunable = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.postDelayed(this,500);
+
+        }
+    };
     //登录事件
     private void LoginClick(){
 
@@ -173,7 +220,7 @@ public class fragment4 extends Fragment implements View.OnClickListener{
             fragment4ActivityBroad = new fragment4Broad();
             getActivity().registerReceiver(fragment4ActivityBroad,fragment4IntentFilter);
         }
-
+        mHandler.post(mRunable);
     }
 
     @Override
@@ -184,7 +231,7 @@ public class fragment4 extends Fragment implements View.OnClickListener{
             getActivity().unregisterReceiver(fragment4ActivityBroad);
             fragment4ActivityBroad = null;
         }
-
+        mHandler.removeCallbacks(mRunable);
     }
 
 }

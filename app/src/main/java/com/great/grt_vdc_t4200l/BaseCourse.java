@@ -26,6 +26,7 @@ import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.utils.FileUtils;
+import com.great.grt_vdc_t4200l.SerialPortHelp.MyFunc;
 import com.great.grt_vdc_t4200l.SerialPortHelp.SerialPortHelper;
 import com.great.grt_vdc_t4200l.SerialPortHelp.bean.ComBean;
 
@@ -51,11 +52,14 @@ public class BaseCourse extends FragmentActivity {
     int text[] = new int[5];
     //串口声明----------------------------------------------------
     SerialControl downCom;                                      //串口
+    private String sOutData = "7E0000000000000D";
+    private byte[] bOutData = new byte[]{(byte)0x7E,0x00,0x00,0x00,0x00,0x00,0x00,(byte)0x0D};
     //数据声明----------------------------------------------------
     private int[] iTelemetry = new int[14];                     //遥测
     private boolean[] _isTelecommand = new boolean[8];          //遥信
     private boolean[] _isTelecontrol = new boolean[2];          //遥控
     private String sSystemTime;                                 //时间
+    private int iCommError = 0;
     //硬件声明----------------------------------------------------
 
     //其他声明----------------------------------------------------
@@ -144,6 +148,17 @@ public class BaseCourse extends FragmentActivity {
         public void run() {
             handler.postDelayed(this,500);
             if (downCom.getIsOpen()){
+
+                //通讯错误振铃：5次定时未接受到数据、接收数据错误、校验错误、帧错误等
+                boolean _isCommFlag = downCom.getisCommFlag();
+                if (!_isCommFlag){ if (iCommError < 10){iCommError ++;} }else { iCommError = 0;}
+//                if (iCommError > 5){SystemFunc.Beep(mContext,true);}else {SystemFunc.Beep(mContext,false);}
+
+                bOutData[1] = (byte)0x03;
+                bOutData[5] = (byte)0x13;
+                bOutData[6] = MyFunc.addCrc(bOutData);
+                sendPortData(downCom,"bArr");
+
 //                //int text[] = new int[3];
 //                text[0] = (int)(Math.random()*400);
 //                text[1] = (int)(Math.random()*400);
@@ -199,7 +214,10 @@ public class BaseCourse extends FragmentActivity {
 //                editor.putBoolean("is_SystemMode",_isTelecontrol[0]);            //系统模式
 //                editor.putBoolean("is_CompensateEnabled",_isTelecontrol[1]);     //补偿使能
 //                editor.commit();
-                sendPortData(downCom,"01 02 03 04 05 06 07");
+//                sendPortData(downCom,"01020304050607");
+
+
+
 
             }
         }
@@ -324,48 +342,48 @@ public class BaseCourse extends FragmentActivity {
 //            e.printStackTrace();
 //        }
     }
-    //重启设备----------------------------------------------------
-    private void restart(){
-        Toast.makeText(this,"即将重启！",Toast.LENGTH_SHORT).show();
-        try {
-            Log.v(TAG, "root Runtime->reboot");
-            Process proc =Runtime.getRuntime().exec(new String[]{"su","-c","reboot "});
-            proc.waitFor();
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
-    }
-    //提示音----------------------------------------------------
-    private void Beep(){
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (vibrator != null){
-            if (globalError){
-                vibrator.vibrate(new long[]{500,500},0);
-            }else {
-                vibrator.cancel();
-            }
-        }
-    }
-    //设置系统时间----------------------------------------------------
-    private void setSystemTime(String sTime){
-        if (sTime.length() == 15){
-            try {
-                Process process = Runtime.getRuntime().exec("su");
-                DataOutputStream os = new DataOutputStream(process.getOutputStream());
-                os.writeBytes("setprop persist.sys.timezone GMT\n");
-                os.writeBytes("/system/bin/date -s" + sTime + "\n");
-                os.writeBytes("clock -w\n");
-                os.writeBytes("exit\n");
-                os.flush();
-            }catch (IOException e){
-                Log.e(TAG, "setSystemTime: loser" );
-                e.printStackTrace();
-            }
-        }else {
-            Log.e(TAG, "setSystemTime: loser ,length is error" );
-        }
-
-    }
+//    //重启设备----------------------------------------------------
+//    private void restart(){
+//        Toast.makeText(this,"即将重启！",Toast.LENGTH_SHORT).show();
+//        try {
+//            Log.v(TAG, "root Runtime->reboot");
+//            Process proc =Runtime.getRuntime().exec(new String[]{"su","-c","reboot "});
+//            proc.waitFor();
+//        }catch (Exception ex){
+//            ex.printStackTrace();
+//        }
+//    }
+//    //提示音----------------------------------------------------
+//    private void Beep(){
+//        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//        if (vibrator != null){
+//            if (globalError){
+//                vibrator.vibrate(new long[]{500,500},0);
+//            }else {
+//                vibrator.cancel();
+//            }
+//        }
+//    }
+//    //设置系统时间----------------------------------------------------
+//    private void setSystemTime(String sTime){
+//        if (sTime.length() == 15){
+//            try {
+//                Process process = Runtime.getRuntime().exec("su");
+//                DataOutputStream os = new DataOutputStream(process.getOutputStream());
+//                os.writeBytes("setprop persist.sys.timezone GMT\n");
+//                os.writeBytes("/system/bin/date -s" + sTime + "\n");
+//                os.writeBytes("clock -w\n");
+//                os.writeBytes("exit\n");
+//                os.flush();
+//            }catch (IOException e){
+//                Log.e(TAG, "setSystemTime: loser" );
+//                e.printStackTrace();
+//            }
+//        }else {
+//            Log.e(TAG, "setSystemTime: loser ,length is error" );
+//        }
+//
+//    }
 
     /**
      * 串口通讯方法
@@ -408,9 +426,19 @@ public class BaseCourse extends FragmentActivity {
         }
     }
     //发送数据----------------------------------------------------
-    private void sendPortData(SerialPortHelper ComPort,String sOut){
+    private void sendPortData(SerialPortHelper ComPort,String type){
         if (ComPort != null && ComPort.getIsOpen()){
-            ComPort.sendTxt(sOut);
+            switch (type){
+                case "Hex":
+                    ComPort.sendHex(sOutData);
+                    break;
+                case "Txt":
+                    ComPort.sendTxt(sOutData);
+                    break;
+                case "bArr":
+                    ComPort.send(bOutData);
+                    break;
+            }
         }
     }
     //继承串口工具----------------------------------------------------
@@ -453,24 +481,13 @@ public class BaseCourse extends FragmentActivity {
 //            Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");
         }
 
-        fileNaem = "/fault_log/fault_record.xls";
-        _fileExists = checkFile(fileNaem);
-        if (!_fileExists){
-//            Log.e(TAG,"SOP, "+fileNaem+" 文件不存在");
-        }else {
-//            Log.e(TAG,"SOP, "+fileNaem+" 文件存在");
-        }
-
-        //3.3、检测实时采样文件
-        fileNaem = "/sampling_now/";
-        _fileExists = checkFile(fileNaem);
-        if (!_fileExists){
-//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
-        }else {
-//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");
-        }
-
-
+//        fileNaem = "/fault_log/fault_record.xls";
+//        _fileExists = checkFile(fileNaem);
+//        if (!_fileExists){
+////            Log.e(TAG,"SOP, "+fileNaem+" 文件不存在");
+//        }else {
+////            Log.e(TAG,"SOP, "+fileNaem+" 文件存在");
+//        }
 
     }
     //SOP启动错误处理----------------------------------------------------

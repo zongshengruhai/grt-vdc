@@ -88,7 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/oldAlarm"
                 android:orientation="vertical"
                 android:layout_marginEnd="5dp"
@@ -96,41 +96,31 @@
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/txt_rectborder"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
-
-                <!--
-                <Button
-                    android:id="@+id/alarmButton"
-                    android:text="故障记录"
-                    android:textSize="24sp"
-                    android:background="@drawable/button_style"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                android:layout_height="110dp">
 
                 <TextView
-                    android:text="当前故障：99999次"
-                    android:textSize="24sp"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@id/alarmTime"
+                    android:id="@+id/fragment1alarmTV"
+                    android:text="@string/fragment1AlarmTime"
+                    android:textSize="28sp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
                     android:textColor="@color/colorBlack"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                    -->
+                    android:layout_height="match_parent" />
 
                 <TextView
                     android:id="@+id/fragment1RecorTV"
                     android:text="@string/fragment1RecordTime"
                     android:textSize="28sp"
                     android:textColor="@color/colorBlack"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/oldData"
@@ -153,19 +143,27 @@
                     android:layout_height="wrap_content" />
                 -->
 
+                <!--<TextView-->
+                    <!--android:id="@+id/fragment1alarmTV"-->
+                    <!--android:text="@string/fragment1AlarmTime"-->
+                    <!--android:textSize="28sp"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_margin="5dp"-->
+                    <!--android:textColor="@color/colorBlack"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
                 <TextView
-                    android:id="@+id/fragment1alarmTV"
-                    android:text="@string/fragment1AlarmTime"
+                    android:id="@+id/realAlarm"
+                    android:text="@string/fragment1RealAlarm"
                     android:textSize="28sp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_margin="5dp"
                     android:textColor="@color/colorBlack"
-                    android:layout_width="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <LinearLayout
-                    android:layout_below="@+id/fragment1alarmTV"
+                    android:layout_below="@+id/realAlarm"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:orientation="vertical"

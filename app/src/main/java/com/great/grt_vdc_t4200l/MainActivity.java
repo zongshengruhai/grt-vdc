@@ -242,9 +242,9 @@ public class MainActivity extends BaseCourse{
      * 写入当前lay的选择
      * */
     private void readLayType(){
-        SharedPreferences.Editor Maineditor = getSharedPreferences("temp",MODE_WORLD_READABLE).edit();
-        Maineditor.putInt("layType",MARK);
-        Maineditor.commit();
+        SharedPreferences.Editor wStateData = getSharedPreferences("StateData",MODE_PRIVATE).edit();
+        wStateData.putInt("layPage",MARK);
+        wStateData.commit();
     }
 
     /**重置linearLayouts、textViews*/

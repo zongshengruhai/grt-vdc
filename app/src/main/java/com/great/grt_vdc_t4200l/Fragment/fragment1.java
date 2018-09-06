@@ -76,7 +76,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     private TextView[] fragment1TempRow = new TextView[5];
 
     //MPAndroidChart
-
     private LineChart fragment1Lc;
     private DynamicLineChartManager dynamicLineChartManager;
     private List<Integer> list = new ArrayList<>(); //数据集合
@@ -99,7 +98,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     @Override
     public void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
-        Log.e(TAG, "碎片1，创建");
     }
 
     @Override
@@ -157,7 +155,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
         fragment1Handler.post(fragment1Runnable);
 
     }
-
     //中止
     @Override
     public void onPause(){
@@ -174,36 +171,32 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
         fragment1Handler.removeCallbacks(fragment1Runnable);
 
     }
-
     @Override
     public void onStop(){
         super.onStop();
         //Log.e(TAG, "碎片1，停止");
     }
-
     @Override
     public void onDestroyView(){
         super.onDestroyView();
         //Log.e(TAG, "碎片1，销毁视图");
     }
-
     @Override
     public void onDestroy(){
         super.onDestroy();
         //Log.e(TAG, "碎片1，销毁");
     }
-
     @Override
     public void onDetach(){
         super.onDetach();
         // Log.e(TAG, "碎片1，解除活动绑定");
     }
 
-
-    //----- fragment1广播 -----//
-    //描述：fragment1层接收广播，用于接收BaseCourse底层广播的遥测数据
-    //方法：
-    //     1）创建方法：fragment活动Resume创建，pause销毁
+    /**fragment1广播
+     * 描述：fragment1层接收广播，用于接收BaseCourse底层广播的遥测数据
+     * 方法：
+     *      1）创建方法：fragment活动Resume创建，pause销毁
+     **/
     public class fragment1Broad extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent){
             //接收到广播
@@ -231,7 +224,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             */
         }
     }
-
 
     //初始化TabLayout
     private void initTabLayout() {
@@ -267,7 +259,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             }
         });
     }
-
     //初始化LineChart
     private void initLineChart(){
 
@@ -290,7 +281,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
 
         //dynamicLineChartManager.setLowLimitLine(0,"0");
     }
-
     //清除画布
     private void clearChart(){
 //        dynamicLineChartManager.clear();
@@ -308,7 +298,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.e(TAG,"you pick :"+ position + "项");
     }
-
     //初始化ListView
     private void initListView(){
 
@@ -336,10 +325,8 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             Log.e(TAG, "initListView: 文件夹不存在" );
         }
     }
-
     //载入ListDat
     private void loadListData(String fileName,boolean type){
-
         int rows;                                                           //行数量
         String[] temp = new String[3];
         List<record> fragment1_Data;
@@ -351,7 +338,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
         fragment1_ListView.setAdapter(fragment1_RecordAdapter);
 
         if (fileName != null && type){
-//            Log.e(TAG,"判断过了");
             try {
                 FileInputStream mfis = new FileInputStream(fileName);
                 Workbook mbook = Workbook.getWorkbook(mfis);
@@ -398,54 +384,55 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             //定时时间
             fragment1Handler.postDelayed(this,500);
 
-            SharedPreferences fragment1readSp = getActivity().getSharedPreferences("temp", 0);
+            SharedPreferences rRealData = getActivity().getSharedPreferences("RealData", 0);
 
-            //当挑选当当前lay时才执行程序控制
-            int layType = fragment1readSp.getInt("layType",0);
-            //Log.e(TAG,"Lay:"+ layType + " uiFlag:" + changeUIflag);
+            SharedPreferences rStateData = getActivity().getSharedPreferences("StateData", 0);
+            boolean _isCommFlag = rStateData.getBoolean("is_CommFlag",false);
+            int layPage = rStateData.getInt("layPage",0);
 
-            if (layType == 1){
-                switch (selectTabType){
-                    case "输出电压":
-                        fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),fragment1readSp.getInt("Uv",0)));
-                        fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),fragment1readSp.getInt("Vv",0)));
-                        fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),fragment1readSp.getInt("Wv",0)));
-                        list.add(fragment1readSp.getInt("Uv",0));
-                        list.add(fragment1readSp.getInt("Vv",0));
-                        list.add(fragment1readSp.getInt("Wv",0));
-                        break;
-                    case "输出电流":
-                        fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),fragment1readSp.getInt("Ua",0)));
-                        fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),fragment1readSp.getInt("Va",0)));
-                        fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),fragment1readSp.getInt("Wa",0)));
-                        list.add(fragment1readSp.getInt("Ua",0));
-                        list.add(fragment1readSp.getInt("Va",0));
-                        list.add(fragment1readSp.getInt("Wa",0));
-                        break;
-                    case "输入电压":
-                        fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),fragment1readSp.getInt("Rv",0)));
-                        fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),fragment1readSp.getInt("Sv",0)));
-                        fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),fragment1readSp.getInt("Tv",0)));
-                        list.add(fragment1readSp.getInt("Rv",0));
-                        list.add(fragment1readSp.getInt("Sv",0));
-                        list.add(fragment1readSp.getInt("Tv",0));
-                        break;
-                    case "其他数据":
-                        fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),fragment1readSp.getInt("Capv",0)));
-                        fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),fragment1readSp.getInt("hz",0)));
-                        fragment1TempRow[2].setText("");
-                        list.add(fragment1readSp.getInt("Capv",0));
-                        list.add(0);
-                        list.add(0);
-                        break;
+            if (layPage == 1){
+                if (_isCommFlag) {
+                    switch (selectTabType) {
+                        case "输出电压":
+                            fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv), rRealData.getInt("i_Uv", 0)));
+                            fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv), rRealData.getInt("i_Vv", 0)));
+                            fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv), rRealData.getInt("i_Wv", 0)));
+                            list.add(rRealData.getInt("i_Uv", 0));
+                            list.add(rRealData.getInt("i_Vv", 0));
+                            list.add(rRealData.getInt("i_Wv", 0));
+                            break;
+                        case "输出电流":
+                            fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua), rRealData.getInt("i_Ua", 0)));
+                            fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va), rRealData.getInt("i_Va", 0)));
+                            fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa), rRealData.getInt("i_Wa", 0)));
+                            list.add(rRealData.getInt("i_Ua", 0));
+                            list.add(rRealData.getInt("i_Va", 0));
+                            list.add(rRealData.getInt("i_Wa", 0));
+                            break;
+                        case "输入电压":
+                            fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv), rRealData.getInt("i_Rv", 0)));
+                            fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv), rRealData.getInt("i_Sv", 0)));
+                            fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv), rRealData.getInt("i_Tv", 0)));
+                            list.add(rRealData.getInt("i_Rv", 0));
+                            list.add(rRealData.getInt("i_Sv", 0));
+                            list.add(rRealData.getInt("i_Tv", 0));
+                            break;
+                        case "其他数据":
+                            fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv), rRealData.getInt("i_Capv", 0)));
+                            fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz), rRealData.getInt("i_Hz", 0)));
+                            fragment1TempRow[2].setText("");
+                            list.add(rRealData.getInt("i_Capv", 0));
+                            list.add(0);
+                            list.add(0);
+                            break;
+                    }
+
+                    dynamicLineChartManager.addEntry(list);
+                    list.clear();
+
+                    fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime), rRealData.getInt("AlarmTime", 0)));
+                    fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime), rRealData.getInt("i_SagSum", 0)));
                 }
-
-                dynamicLineChartManager.addEntry(list);
-                list.clear();
-
-                fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime),fragment1readSp.getInt("AlarmTime",0)));
-                fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime),fragment1readSp.getInt("RecordTime",0)));
-
             }
         }
     };

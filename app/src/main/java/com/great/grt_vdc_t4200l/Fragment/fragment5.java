@@ -86,9 +86,10 @@ public class fragment5 extends Fragment {
         public void run() {
             fragment5Handler.postDelayed(this,500);
 
-            SharedPreferences fragment5readSp = getActivity().getSharedPreferences("temp", 0);
-            int layType = fragment5readSp.getInt("layType",0);
-            if (layType == 0) {
+            SharedPreferences fragment5readSp = getActivity().getSharedPreferences("realTimeData", 0);
+            int layPage = fragment5readSp.getInt("layPage",0);
+
+            if (layPage == 0) {
 
                 //电池
                 int batterCapacity = fragment5readSp.getInt("batterCapacity", 0);

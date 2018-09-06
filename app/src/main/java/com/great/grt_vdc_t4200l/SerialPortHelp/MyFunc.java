@@ -1,5 +1,7 @@
 package com.great.grt_vdc_t4200l.SerialPortHelp;
 
+import android.util.Log;
+
 /**
  *数据类型转换工具
  */
@@ -123,7 +125,7 @@ public class MyFunc {
         byte bCrc = 0;
         if (bytes.length > 0){
             bCrc = bytes[1];
-            for (int i = 2; i < bytes.length - 3 ; i++) {
+            for (int i = 2; i < bytes.length - 2 ; i++) {
                 bCrc = (byte) (bCrc + bytes[i]);
 //                bCrc += bytes[i];
             }

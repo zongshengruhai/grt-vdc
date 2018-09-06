@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.great.grt_vdc_t4200l.SystemFunc;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class Response  {
@@ -77,6 +79,8 @@ public class Response  {
                             editor.putBoolean("is_CompensateEnabled",_isTelecontrol[1]);     //补偿使能
                             editor.commit();
 
+                            alarmHand();
+
                         }else { Log.e("串口信息","0x03回送帧出错，数据内容："+temp);}
                         break;
                     case 0x10:
@@ -90,4 +94,9 @@ public class Response  {
             Log.e("串口信息","数据帧错误，数据内容："+temp);
         }
     }
+
+    private void alarmHand(){
+
+    }
+
 }

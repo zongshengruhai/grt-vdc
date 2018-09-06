@@ -46,6 +46,7 @@
     <string name="fragment1hz">频率：%1$dV</string>
     <string name="fragment1AlarmTime">故障次数：%1$d 次</string>
     <string name="fragment1RecordTime">录波记录：%1$d 条</string>
+    <string name="fragment1RealAlarm">实时告警</string>
     <!-- fragment2 -->
     <string name="fragment2RecordTime">当前为第 %1$d 条暂降补偿记录</string>
     <string name="fragment2RecordContent">发生于 %1$S，跌落到 %2$d V，跌落时长 %3$d ms %4$s</string>

@@ -5,17 +5,30 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.List;
 
 /**
- * 系统公共方法
+ * 系统级公共方法
+ * @author zongshengruhai
+ * @version 1.0
  */
 public class SystemFunc {
 
-    static private String TAG = "System method";
+    static private String TAG = "SystemMethod";
     static private boolean _isBeep = false;             //防止并发
+    static private int[] test = new int[]{1,2,3,4,5,6,7,8,9,7,5,249,64,631,634,1,313,54,43,13,184,16,341,653,6,16,16,16,46,16,46,13,16,416,2,6,46,16,16,5,5,2,9,6,32,4,79,1,1,6,6,4,1,9,8,1,48748,46616,451,15645,441,15616,16841,61416,16,416,161,151};
 
     /**
      * getNewTime 获取当前系统时间
@@ -83,6 +96,117 @@ public class SystemFunc {
         }
     }
 
+    /**
+     * 检测文件是否存在
+     * @param path 检测文件路径
+     * @return true 文件存在，false 文件不存在
+     */
+    static public boolean checkFileExist(String path){
+        if (path != null){
+            try {
+                File files = new File(path);
+                return files.exists();
+            }catch (Exception e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 创建文件
+     * @param path 创建文件路径(支持文件夹、txt文件)
+     * @return true 创建成功，false 创建失败
+     */
+    static public boolean createFile(String path){
+        if (path != null ){
+            if (!checkFileExist(path)){
+                try {
+                    File files = new File(path);
+                    if (path.contains(".txt")){
+                        files.createNewFile();
+                        return checkFileExist(path);
+                    }else {
+                        files.mkdir();
+                        return checkFileExist(path);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * 删除文件
+     * @param path 删除文件路径
+     * @return true 删除成功、或文件本身不存在，false 删除失败 文件还是存在
+     */
+    static public boolean deleteFile(String path){
+        if (checkFileExist(path)){
+            File file = new File(path);
+            if (file.isFile()){
+                file.delete();
+            }else if (file.isDirectory()){
+                File files[] = file.listFiles();
+                for(int i = 0; i < files.length ; i++) {
+                    files[i].delete();
+                }
+                file.delete();
+            }
+            return !checkFileExist(path);
+        }
+        return true;
+    }
+
+    /**
+     * 写入txt
+     * @param path 写入路径
+     * @return true 写入成功，false 写入失败
+     */
+    static public boolean writeTxt(String path){
+        if (path != null && path.contains(".txt")){
+            if (checkFileExist(path)){
+                try {
+                    PrintWriter mPw = new PrintWriter(new BufferedWriter(new FileWriter(path)));
+                    mPw.print(1);
+                    for (int i:test) {
+                        mPw.print(i);
+                        mPw.print(",");
+                    }
+                    mPw.close();
+                    return true;
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+    static public void readTxt(String path, int row){
+        if (path !=null && path.contains(".txt")){
+            if (checkFileExist(path)){
+                try {
+                    InputStream mIn = new FileInputStream(path);
+
+//                    InputStreamReader rIn = new InputStreamReader(mIn);
+                    BufferedReader rBn = new BufferedReader(new InputStreamReader(mIn));
+
+                    mIn.close();
+                }catch (FileNotFoundException e){
+                    e.printStackTrace();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 
 }

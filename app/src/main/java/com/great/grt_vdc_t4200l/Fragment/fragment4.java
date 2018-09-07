@@ -120,7 +120,6 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     }
 
     private void test1(){
-        String list = "1,2,3,4";
 //        String file =  fragment4_Context.getFilesDir().getPath()+"123.xls";
 //        WritableWorkbook test;
 //        try {
@@ -140,23 +139,19 @@ public class fragment4 extends Fragment implements View.OnClickListener{
 //        }catch (WriteException e){
 //            e.printStackTrace();
 //        }
-        String file =  fragment4_Context.getFilesDir().getPath()+"1234.txt";
-        try{
-            File mfile = new File(file);
-            if (!mfile.exists()){
-                File dir = new File(mfile.getParent());
-                dir.mkdir();
-                mfile.createNewFile();
+        String path = fragment4_Context.getFilesDir().getPath()+"/test.txt";
+        if (!SystemFunc.checkFileExist(path)){
+            Log.e(TAG, "test1: 没有文件" );
+            if (SystemFunc.createFile(path)){
+                Log.e(TAG, "test1: 创建文件" );
+                boolean a = SystemFunc.writeTxt(path);
+                Log.e(TAG, "test1: 写入文件 "+a );
             }
-            FileOutputStream os = new FileOutputStream(mfile);
-            os.write(list.getBytes());
-            os.close();
-        }catch (Exception e){
-            e.printStackTrace();
         }
     }
     private void test2(){
-
+        String path = fragment4_Context.getFilesDir().getPath()+"/test.txt";
+        SystemFunc.readTxt(path,0);
     }
 
     Handler mHandler = new Handler();

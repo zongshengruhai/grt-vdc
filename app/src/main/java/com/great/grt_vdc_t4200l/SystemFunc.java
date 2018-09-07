@@ -1,23 +1,28 @@
 package com.great.grt_vdc_t4200l;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.security.Key;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统级公共方法
@@ -189,6 +194,11 @@ public class SystemFunc {
         return false;
     }
 
+    /**
+     * 读取Txt文件
+     * @param path 文件路径
+     * @param row 文件行数
+     */
     static public void readTxt(String path, int row){
         if (path !=null && path.contains(".txt")){
             if (checkFileExist(path)){
@@ -197,7 +207,15 @@ public class SystemFunc {
 
 //                    InputStreamReader rIn = new InputStreamReader(mIn);
                     BufferedReader rBn = new BufferedReader(new InputStreamReader(mIn));
-
+                    byte[] temp = new byte[300];
+                    StringBuffer t = new StringBuffer("");
+                    int len = 0;
+                    while ((len  = mIn.read(temp))>0 ){
+                        Log.e(TAG, "readTxt: length =" + temp.length );
+                        for (int i = 0; i < temp.length ; i++) {
+//                            Log.e(TAG, "readTxt: content = "+temp[i] );
+                        }
+                    }
                     mIn.close();
                 }catch (FileNotFoundException e){
                     e.printStackTrace();
@@ -207,6 +225,15 @@ public class SystemFunc {
             }
         }
     }
+
+//    static public boolean
+
+//    static public void writeSharedPreferences(Context mContext, String spName, Object obj){
+//        SharedPreferences sp = mContext.getSharedPreferences(spName,0);
+//        SharedPreferences.Editor editor = sp.edit();
+//
+//
+//    }
 
 
 }

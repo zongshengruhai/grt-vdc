@@ -3,7 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorBlack">#000000</color>
 
     <!--<color name="lightseagreen">#20b2aa</color>-->
     <color name="lightseagreen">#000000</color>
@@ -12,4 +11,8 @@
 
     <color name="lay_select_bg">#fd5757d1</color>
     <color name="lay_select_lose">#87CEEB</color>
+    
+    <color name="Reached">#0071fa</color>
+    <color name="Unreached">#9c0071fa</color>
+
 </resources>

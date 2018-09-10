@@ -23,7 +23,7 @@
         <TextView
             android:text="@string/fragment4LoginHint"
             android:textSize="32sp"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/black"
             android:layout_marginBottom="20dp"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/fragment4LogeCentre"
@@ -91,7 +91,7 @@
                 <TextView
                     android:textSize="32sp"
                     android:text="@string/fragment4outVRow"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </TableRow>
@@ -101,7 +101,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/fragmnet4Utv"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
@@ -116,7 +116,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/unitV"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Button
@@ -134,7 +134,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/fragmnet4Vtv"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
@@ -149,7 +149,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/unitV"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Button
@@ -167,7 +167,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/fragmnet4Wtv"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
@@ -182,7 +182,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/unitV"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Button
@@ -212,7 +212,7 @@
                 <TextView
                     android:textSize="32sp"
                     android:text="@string/fragment4outARow"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </TableRow>
@@ -223,7 +223,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/fragmnet4Uitv"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
@@ -238,7 +238,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/unitA"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Button
@@ -256,7 +256,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/fragmnet4Vitv"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
@@ -271,7 +271,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/unitA"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Button
@@ -289,7 +289,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/fragmnet4Witv"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
@@ -304,7 +304,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/unitA"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Button
@@ -334,7 +334,7 @@
                 <TextView
                     android:textSize="32sp"
                     android:text="@string/fragment4outARow"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </TableRow>
@@ -345,7 +345,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/fragmnet4Rtv"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
@@ -360,7 +360,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/unitV"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Button
@@ -378,7 +378,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/fragmnet4Stv"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
@@ -393,7 +393,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/unitV"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Button
@@ -411,7 +411,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/fragmnet4Ttv"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
@@ -426,7 +426,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/unitV"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Button
@@ -456,7 +456,7 @@
                 <TextView
                     android:textSize="32sp"
                     android:text="@string/fragment4otherRow"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </TableRow>
@@ -467,7 +467,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/fragment4capV"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
@@ -483,7 +483,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/unitV"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Button
@@ -502,7 +502,7 @@
                 <TextView
                     android:textSize="28sp"
                     android:text="@string/fragment4timeSet"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

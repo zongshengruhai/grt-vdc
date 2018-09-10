@@ -23,63 +23,103 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent" />-->
 
-        <TextView
-            android:id="@+id/fragment2TVtime"
-            android:text="@string/fragment2RecordTime"
-            android:textSize="26sp"
-            android:textColor="@color/colorBlack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/fragment2TVcontent"
-            android:text="@string/fragment2RecordContent"
-            android:textColor="@color/colorBlack"
-            android:textSize="24sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/f2_LineChart_1"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
+            <TextView
+                android:id="@+id/fragment2TVtime"
+                android:text="@string/fragment2RecordTime"
+                android:textSize="26sp"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/fragment2TVcontent"
+                android:text="@string/fragment2RecordContent"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:layout_height="match_parent">
 
-            </com.github.mikephil.charting.charts.LineChart>
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/f2_LineChart_1"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+                </com.github.mikephil.charting.charts.LineChart>
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/f2_LineChart_2"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp">
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/f2_LineChart_2"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+                </com.github.mikephil.charting.charts.LineChart>
 
-            </com.github.mikephil.charting.charts.LineChart>
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/f2_LineChart_3"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+                </com.github.mikephil.charting.charts.LineChart>
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/f2_LineChart_3"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp">
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:id="@+id/f2_Progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="50dp"
+                    android:visibility="gone"
+                    app:progress_reached_color="@color/Reached"
+                    app:progress_unreached_color="@color/Unreached"
+                    app:progress_reached_bar_height="10dp"
+                    app:progress_unreached_bar_height="8dp"
+                    app:progress_text_color="@color/Reached"
+                    app:progress_text_size="26dp"
+                    app:progress_text_visibility="visible"
+                    app:progress_text_offset="1dp"
+                    app:progress_max="100"
+                    app:progress_current="0" />
 
-            </com.github.mikephil.charting.charts.LineChart>
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!--<com.github.mikephil.charting.charts.LineChart-->
-        <!--android:id="@+id/fragment2LineChart"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
-        <!--</com.github.mikephil.charting.charts.LineChart>-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+            <!--<com.daimajia.numberprogressbar.NumberProgressBar-->
+                <!--android:id="@+id/f2_Progress_bar"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:progress_reached_color="@color/Reached"-->
+                <!--app:progress_unreached_color="@color/Unreached"-->
+                <!--app:progress_reached_bar_height="5dp"-->
+                <!--app:progress_unreached_bar_height="4.5dp"-->
+                <!--app:progress_text_color="@color/Reached"-->
+                <!--app:progress_text_size="28dp"-->
+                <!--app:progress_text_visibility="visible"-->
+                <!--app:progress_text_offset="1dp"-->
+                <!--app:progress_max="100"-->
+                <!--app:progress_current="0" />-->
+
+        <!--</RelativeLayout>-->
+
     </LinearLayout>
 
     <RelativeLayout

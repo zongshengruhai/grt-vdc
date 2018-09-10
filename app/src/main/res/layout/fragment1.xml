@@ -54,7 +54,7 @@
                         android:layout_weight="1"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorBlack"/>
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/dataB"
@@ -64,7 +64,7 @@
                         android:layout_weight="1"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorBlack"/>
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/dataC"
@@ -74,7 +74,7 @@
                         android:layout_weight="1"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorBlack"/>
+                        android:textColor="@color/black"/>
 
                 </LinearLayout>
 
@@ -104,7 +104,7 @@
                     android:textSize="28sp"
                     android:layout_weight="1"
                     android:layout_margin="5dp"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
 
@@ -112,7 +112,7 @@
                     android:id="@+id/fragment1RecorTV"
                     android:text="@string/fragment1RecordTime"
                     android:textSize="28sp"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_weight="1"
                     android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
@@ -157,7 +157,7 @@
                     android:id="@+id/realAlarm"
                     android:text="@string/fragment1RealAlarm"
                     android:textSize="28sp"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/black"
                     android:layout_margin="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

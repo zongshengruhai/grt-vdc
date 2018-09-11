@@ -291,7 +291,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 //            Log.e(TAG,"双击图表");
         }
 
-//        单击
+        //        单击
         @Override
         public void onChartSingleTapped(MotionEvent me) {
 //            Log.e(TAG,"单击图表");
@@ -408,17 +408,14 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         TextView pickTextUrl = view.findViewById(R.id.txt_mUrl);
-        String pickFileName = pickTextUrl.getText().toString();
+        String pickName = pickTextUrl.getText().toString();
 
-        if (pickFileName.contains(".xls")){
-            this.pickFileName = pickFileName;
+        if (pickName.contains(".xls")){
+            pickFileName = pickName;
             _isLoadFlag = false;
-//            new LongThread().start();
-            String[] fillContent;
-            fillContent = (pickFileName.replace(".xls","")).split("_");
-            Log.e(TAG, "run: "+fillContent.length );
+            new LongThread().start();
         }else {
-            this.pickFileName = null;
+            pickFileName = null;
         }
     }
 
@@ -515,12 +512,11 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                 fragment2_Loading.setProgress(jd);
             }else {
                 if (pickFileName != null){
-                    //更新录波的详细数据
+                    //填充表头
                     String[] fillContent;
                     fillContent = (pickFileName.replace(".xls","")).split("_");
-                    Log.e(TAG, "run: "+fillContent.length );
-//                    fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),Integer.parseInt(fillContent[0])));
-//                    fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),(fillContent[4] + "_" + fillContent[5]),(Integer.parseInt(fillContent[2])),(Integer.parseInt(fillContent[3])),""));
+                    fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),Integer.parseInt(fillContent[0])));
+                    fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),(fillContent[4] + "_" + fillContent[5]),(Integer.parseInt(fillContent[2])),(Integer.parseInt(fillContent[3])),""));
                     //显示图表，隐藏进度条
                     fragment2LineChart[0].setVisibility(View.VISIBLE);
                     fragment2LineChart[1].setVisibility(View.VISIBLE);
@@ -538,37 +534,22 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
      */
     class LongThread extends Thread{
         public void run(){
-//            for (int i = 0; i < 16000; i++) {
-//                jd = (((100000/16000)*i)/1000);
-//                Log.e(TAG, "run: " + jd);
-//                try {
-//                    Thread.sleep(1);
-//                }catch (InterruptedException e){
-//                    e.printStackTrace();
-//                }
-//            }
-            String PATH = fragment2_Context.getFilesDir().getPath() + "/record_log/";
 
             int rows;                                                           //行数量
             int columns;                                                        //列数量
 
             if (pickFileName == null){
-                Log.e(TAG,"没有文件名");
-            }else {
-                //填充表头
-                String[] fillContent;
-                fillContent = (pickFileName.replace(".xls","")).split("_");
-                if (fillContent.length > 0){
-//                    fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),Integer.parseInt(fillContent[0])));
-//                    fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),(fillContent[4] + "_" + fillContent[5]),(Integer.parseInt(fillContent[2])),(Integer.parseInt(fillContent[3])),""));
-                }
 
-                pickFileName = PATH + pickFileName;
-                Log.e(TAG,"准备加载："+pickFileName);
+                Log.e(TAG,"没有文件名");
+
+            }else {
+
+                String pickFilePath = fragment2_Context.getFilesDir().getPath() + "/record_log/" + pickFileName;
+                Log.e(TAG,"准备加载："+ pickFilePath);
 
                 try {
 
-                    FileInputStream mfis = new FileInputStream(pickFileName);
+                    FileInputStream mfis = new FileInputStream(pickFilePath);
                     Workbook mbook = Workbook.getWorkbook(mfis);
                     int msheer = mbook.getNumberOfSheets();                     //表数量
                     Sheet[] mSheetlist = mbook.getSheets();                     //表内容

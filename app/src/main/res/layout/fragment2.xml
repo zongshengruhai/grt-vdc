@@ -96,27 +96,27 @@
         </LinearLayout>
 
         <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content" />-->
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
 
-            <!--<com.daimajia.numberprogressbar.NumberProgressBar-->
-                <!--android:id="@+id/f2_Progress_bar"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:progress_reached_color="@color/Reached"-->
-                <!--app:progress_unreached_color="@color/Unreached"-->
-                <!--app:progress_reached_bar_height="5dp"-->
-                <!--app:progress_unreached_bar_height="4.5dp"-->
-                <!--app:progress_text_color="@color/Reached"-->
-                <!--app:progress_text_size="28dp"-->
-                <!--app:progress_text_visibility="visible"-->
-                <!--app:progress_text_offset="1dp"-->
-                <!--app:progress_max="100"-->
-                <!--app:progress_current="0" />-->
+        <!--<com.daimajia.numberprogressbar.NumberProgressBar-->
+        <!--android:id="@+id/f2_Progress_bar"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:progress_reached_color="@color/Reached"-->
+        <!--app:progress_unreached_color="@color/Unreached"-->
+        <!--app:progress_reached_bar_height="5dp"-->
+        <!--app:progress_unreached_bar_height="4.5dp"-->
+        <!--app:progress_text_color="@color/Reached"-->
+        <!--app:progress_text_size="28dp"-->
+        <!--app:progress_text_visibility="visible"-->
+        <!--app:progress_text_offset="1dp"-->
+        <!--app:progress_max="100"-->
+        <!--app:progress_current="0" />-->
 
         <!--</RelativeLayout>-->
 

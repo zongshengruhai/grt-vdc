@@ -20,9 +20,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 
 /**
  * 系统级公共方法
@@ -31,9 +38,8 @@ import java.util.Map;
  */
 public class SystemFunc {
 
-    static private String TAG = "SystemMethod";
+    final static private String TAG = "SystemMethod";
     static private boolean _isBeep = false;             //防止并发
-    static private int[] test = new int[]{1,2,3,4,5,6,7,8,9,7,5,249,64,631,634,1,313,54,43,13,184,16,341,653,6,16,16,16,46,16,46,13,16,416,2,6,46,16,16,5,5,2,9,6,32,4,79,1,1,6,6,4,1,9,8,1,48748,46616,451,15645,441,15616,16841,61416,16,416,161,151};
 
     /**
      * getNewTime 获取当前系统时间
@@ -169,17 +175,92 @@ public class SystemFunc {
     }
 
     /**
+     * 读取Execl表格
+     * @param file_Name 文件绝对路径
+     * @return 读取成功时 返回 Object型list，读取失败时 返回 null
+     */
+    public static List<List<Object>> readExcel(String file_Name){
+        String extension = file_Name.lastIndexOf(".") == -1 ? "" : file_Name.substring(file_Name.lastIndexOf(".") + 1);
+        if ("xls".equals(extension)){
+            List<List<Object>> dataList = new ArrayList<List<Object>>();
+            try {
+
+                Workbook workbook = Workbook.getWorkbook(new File(file_Name));
+                Sheet sheet = workbook.getSheet(0);
+
+                int Rows = sheet.getRows();
+                int Cols = sheet.getColumns();
+                Log.e(TAG, "当前工作表名："+sheet.getName() );
+                Log.e(TAG, "总行数：" + Rows +" ，总列数：" + Cols);
+
+                List<Object> objects = new ArrayList<Object>();
+                String val;
+                for (int i = 0; i < Rows ; i++){
+                    boolean null_row = true;
+                    for (int j = 0; j < Cols ; j++) {
+                        val = (sheet.getCell(j,i).getContents());
+                        if (val == null || val.equals("")){
+                            val = "null";
+                        }else {
+                            null_row = false;
+                        }
+                        objects.add(val);
+                    }
+                    if (!null_row){
+                        dataList.add(objects);
+                        null_row = true;
+                    }
+                    objects = new ArrayList<Object>();
+                }
+                workbook.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return dataList;
+        }
+        Log.e(TAG, "不支持的文件类型");
+        return null;
+    }
+
+    /**
+     * 写入Execl
+     * 实际是直接创建了一个新的xls文件
+     * @param file_Name 文件绝对路径
+     * @param data_List 文件内容
+     * @return true 写入成功 ，false 写入失败
+     */
+    public static boolean writeExecl(String file_Name,List<List<Object>> data_List){
+        try {
+            WritableWorkbook workbook = Workbook.createWorkbook(new File(file_Name));
+            WritableSheet sheet = workbook.createSheet("录波数据",0);
+            for (int i = 0; i < data_List.size() ; i++) {
+                List<Object> obj_list = data_List.get(i);
+                for (int j = 0; j < obj_list.size(); j++) {
+                    Label label = new Label(j,i,obj_list.get(j).toString());
+                    sheet.addCell(label);
+                }
+            }
+            workbook.write();
+            workbook.close();
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 写入txt
      * @param path 写入路径
      * @return true 写入成功，false 写入失败
      */
-    static public boolean writeTxt(String path){
+    static public boolean writeTxt(String path,int[] context){
         if (path != null && path.contains(".txt")){
             if (checkFileExist(path)){
                 try {
                     PrintWriter mPw = new PrintWriter(new BufferedWriter(new FileWriter(path)));
                     mPw.print(1);
-                    for (int i:test) {
+                    for (int i:context) {
                         mPw.print(i);
                         mPw.print(",");
                     }
@@ -226,14 +307,6 @@ public class SystemFunc {
         }
     }
 
-//    static public boolean
-
-//    static public void writeSharedPreferences(Context mContext, String spName, Object obj){
-//        SharedPreferences sp = mContext.getSharedPreferences(spName,0);
-//        SharedPreferences.Editor editor = sp.edit();
-//
-//
-//    }
 
 
 }

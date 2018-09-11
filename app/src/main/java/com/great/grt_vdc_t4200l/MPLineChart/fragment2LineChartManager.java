@@ -1,5 +1,7 @@
 package com.great.grt_vdc_t4200l.MPLineChart;
 
+import android.util.Log;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -148,6 +150,7 @@ public class fragment2LineChartManager {
         if (lineDataSets.get(0).getEntryCount() == 0) {
             lineData = new LineData(lineDataSets);
             lineChart.setData(lineData);
+            Log.e("111","执行了");
         }
 
         if (timeList.size() > 11) {
@@ -164,6 +167,12 @@ public class fragment2LineChartManager {
             lineChart.setVisibleXRangeMaximum(150);                                                   //X轴最大显示条目数
             lineChart.moveViewToX(lineData.getEntryCount() - 5);
         }
+    }
+
+    public void clearLineChart(){
+//        Log.e( "clearLineChart: ",lineDataSets.get(0).toString() );
+//        Log.e( "clearLineChart: ",lineDataSets.get(1).toString() );
+//        Log.e( "clearLineChart: ",lineDataSets.get(2).toString() );
     }
 
     //设置Y轴值

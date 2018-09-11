@@ -1,49 +1,25 @@
 package com.great.grt_vdc_t4200l.Fragment;
 
-import android.app.AlarmManager;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
 import android.content.IntentFilter;
 import android.os.Handler;
-import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
-import android.widget.TimePicker;
-
 import com.great.grt_vdc_t4200l.R;
-import com.great.grt_vdc_t4200l.SystemFunc;
+import java.util.ArrayList;
+import java.util.List;
+import static com.great.grt_vdc_t4200l.SystemFunc.readExcel;
 
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
-import jxl.Workbook;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
-import jxl.write.biff.JxlWriteException;
 
 public class fragment4 extends Fragment implements View.OnClickListener{
 
@@ -120,38 +96,8 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     }
 
     private void test1(){
-//        String file =  fragment4_Context.getFilesDir().getPath()+"123.xls";
-//        WritableWorkbook test;
-//        try {
-//            OutputStream os = new FileOutputStream(file);
-//            test = Workbook.createWorkbook(os);
-//            WritableSheet mSheet = test.createSheet("test",0);
-//            String[] list = {"1","2","3"};
-//            Label label;
-//            for (int i = 0; i < list.length ; i++) {
-//                label = new Label(i,0,list[0]);
-//                mSheet.addCell(label);
-//            }
-//        }catch (FileNotFoundException e){
-//            e.printStackTrace();
-//        }catch (IOException e){
-//            e.printStackTrace();
-//        }catch (WriteException e){
-//            e.printStackTrace();
-//        }
-        String path = fragment4_Context.getFilesDir().getPath()+"/test.txt";
-        if (!SystemFunc.checkFileExist(path)){
-            Log.e(TAG, "test1: 没有文件" );
-            if (SystemFunc.createFile(path)){
-                Log.e(TAG, "test1: 创建文件" );
-                boolean a = SystemFunc.writeTxt(path);
-                Log.e(TAG, "test1: 写入文件 "+a );
-            }
-        }
     }
     private void test2(){
-        String path = fragment4_Context.getFilesDir().getPath()+"/test.txt";
-        SystemFunc.readTxt(path,0);
     }
 
     Handler mHandler = new Handler();

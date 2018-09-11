@@ -1,8 +1,6 @@
 package com.great.grt_vdc_t4200l.Fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -17,7 +15,6 @@ import android.os.Bundle;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.great.grt_vdc_t4200l.ListView.record;
@@ -27,12 +24,10 @@ import com.great.grt_vdc_t4200l.R;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,26 +35,12 @@ import android.graphics.Color;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
-
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
-
-import org.w3c.dom.Text;
-
-import android_serialport_api.SerialPort;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
+
 
 
 public class fragment2 extends Fragment implements AdapterView.OnItemClickListener{
@@ -88,8 +69,11 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
     //进度条
     private NumberProgressBar fragment2_Loading;            //进度条实例
-    private int jd;                                         //进度
+    private int iProgress;                                         //进度
     private boolean _isLoadFlag = true;                     //控制进度条显示位
+
+    //控制线程
+    private volatile boolean _isUpData = false;                      //控制线程
 
     //加载文件内容
     private String pickFileName = null;                            //选择的文件名
@@ -299,7 +283,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
         @Override
         public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
-            Log.e(TAG,"now is onChartFling");
+//            Log.e(TAG,"now is onChartFling");
         }
 
         //缩放
@@ -329,7 +313,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         //存放填充数据的集合
         String[] temp = new String[3];
 
-        String str = "";
+        String str;
 
         //历遍路径中的所有文件夹
         File file = new File(PATH);
@@ -355,9 +339,11 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                 int SearchNull = 0;
 
                 //历遍所有文件名
-                for (int i = 0; i < files.length; i++) {
+//                for (int i = 0; i < files.length; i++) {
+                for(File i : files){
 
-                    str = files[i].getAbsolutePath().replace(PATH, "");
+//                    str = files[i].getAbsolutePath().replace(PATH, "");
+                    str = i.getAbsolutePath().replace(PATH, "");
 
                     String[] regroupFiles;
 
@@ -412,8 +398,15 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
         if (pickName.contains(".xls")){
             pickFileName = pickName;
-            _isLoadFlag = false;
-            new LongThread().start();
+            if (_isLoadFlag){
+                _isLoadFlag = false;
+                fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),0));
+                fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),"0.0.0_00:00",0,0,""));
+                fragment2ChartManager[0].clearLineChart();
+                fragment2ChartManager[1].clearLineChart();
+                fragment2ChartManager[2].clearLineChart();
+                new LongThread().start();
+            }
         }else {
             pickFileName = null;
         }
@@ -509,9 +502,10 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                 fragment2LineChart[1].setVisibility(View.GONE);
                 fragment2LineChart[2].setVisibility(View.GONE);
                 fragment2_Loading.setVisibility(View.VISIBLE);
-                fragment2_Loading.setProgress(jd);
+                fragment2_Loading.setProgress(iProgress);
             }else {
                 if (pickFileName != null){
+                    iProgress = 0;
                     //填充表头
                     String[] fillContent;
                     fillContent = (pickFileName.replace(".xls","")).split("_");
@@ -522,6 +516,10 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                     fragment2LineChart[1].setVisibility(View.VISIBLE);
                     fragment2LineChart[2].setVisibility(View.VISIBLE);
                     fragment2_Loading.setVisibility(View.GONE);
+                    //移动到表头
+                    fragment2LineChart[0].moveViewToX(0);
+                    fragment2LineChart[1].moveViewToX(0);
+                    fragment2LineChart[2].moveViewToX(0);
                     //清零选择
                     pickFileName = null;
                 }
@@ -546,7 +544,6 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
                 String pickFilePath = fragment2_Context.getFilesDir().getPath() + "/record_log/" + pickFileName;
                 Log.e(TAG,"准备加载："+ pickFilePath);
-
                 try {
 
                     FileInputStream mfis = new FileInputStream(pickFilePath);
@@ -573,13 +570,13 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                                 fragment2ChartManager[k].addEntry(list);
                                 list.clear();
                             }
-                            jd = (((100000/rows)*j)/1000);
+                            iProgress = (((100000/rows)*j)/1000);
                         }
                     }
                     mbook.close();
 
                 }catch (Exception e){
-                    System.out.println("fragment2,Exception: " + e);
+                    e.printStackTrace();
                 }
             }
             _isLoadFlag = true;

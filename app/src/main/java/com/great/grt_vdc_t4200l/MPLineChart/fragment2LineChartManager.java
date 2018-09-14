@@ -32,6 +32,9 @@ public class fragment2LineChartManager {
     private SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");//设置日期格式
     private List<String> timeList = new ArrayList<>(); //存储x轴的时间
 
+    private List<String> names = new ArrayList<>();
+    private List<Integer> colors = new ArrayList<>();
+
     //多条曲线
     public fragment2LineChartManager(LineChart mLineChart, List<String> names, List<Integer> colors) {
         this.lineChart = mLineChart;
@@ -40,6 +43,8 @@ public class fragment2LineChartManager {
         xAxis = lineChart.getXAxis();
         initLineChart();
         initLineDataSet(names, colors);
+        this.names = names;
+        this.colors = colors;
     }
 
 //    private void initLineChart(){
@@ -150,7 +155,6 @@ public class fragment2LineChartManager {
         if (lineDataSets.get(0).getEntryCount() == 0) {
             lineData = new LineData(lineDataSets);
             lineChart.setData(lineData);
-            Log.e("111","执行了");
         }
 
         if (timeList.size() > 11) {
@@ -170,9 +174,13 @@ public class fragment2LineChartManager {
     }
 
     public void clearLineChart(){
-//        Log.e( "clearLineChart: ",lineDataSets.get(0).toString() );
+//        Log.e( "clearLineChart: ",lineDataSets.get(0).getEntryCount() + "-----/n"+lineDataSets.get(0).toString() );
 //        Log.e( "clearLineChart: ",lineDataSets.get(1).toString() );
 //        Log.e( "clearLineChart: ",lineDataSets.get(2).toString() );
+        lineDataSets.clear();
+        lineData.clearValues();
+        lineChart.clear();
+        initLineDataSet(names,colors);
     }
 
     //设置Y轴值

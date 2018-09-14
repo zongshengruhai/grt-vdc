@@ -153,30 +153,70 @@
             <!--android:textColor="@color/colorBlack"-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content" />-->
-            <TextView
-                android:id="@+id/realAlarm"
-                android:text="@string/fragment1RealAlarm"
-                android:textSize="28sp"
-                android:textColor="@color/black"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
-            <LinearLayout
-                android:layout_below="@+id/realAlarm"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:scrollbars="vertical">
+            <!--<TextView-->
+                <!--android:id="@+id/realAlarm"-->
+                <!--android:text="@string/fragment1RealAlarm"-->
+                <!--android:textSize="28sp"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content" />-->
 
-                <ListView
-                    android:id="@+id/fragment1_ListView"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:dividerHeight="2dp"
-                    android:divider="#B8B8B8" />
+            <!--<LinearLayout-->
+                <!--android:layout_below="@+id/realAlarm"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:orientation="vertical"-->
+                <!--android:scrollbars="vertical">-->
 
-            </LinearLayout>
+                <!--<ListView-->
+                    <!--android:id="@+id/fragment1_ListView"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="fill_parent"-->
+                    <!--android:dividerHeight="2dp"-->
+                    <!--android:divider="#B8B8B8" />-->
+            <!--</LinearLayout>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/realFlag"-->
+                <!--android:text="@string/fragment1RealFlag"-->
+                <!--android:textSize="28sp"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content" />-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_below="@+id/realFlag"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:orientation="vertical"-->
+                <!--android:scrollbars="vertical">-->
+
+                <!--<LinearLayout-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content">-->
+
+                    <!--<TextView-->
+                        <!--android:text="充电状态"-->
+                        <!--android:textSize="24sp"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--<ImageView-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:src="@mipmap/search_delete"-->
+                        <!--android:layout_width="40dp"-->
+                        <!--android:layout_height="40dp" />-->
+
+                <!--</LinearLayout>-->
+
+
+            <!--</LinearLayout>-->
 
         </RelativeLayout>
 

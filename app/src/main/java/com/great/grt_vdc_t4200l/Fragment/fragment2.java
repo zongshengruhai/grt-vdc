@@ -511,15 +511,15 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                     fillContent = (pickFileName.replace(".xls","")).split("_");
                     fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),Integer.parseInt(fillContent[0])));
                     fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),(fillContent[4] + "_" + fillContent[5]),(Integer.parseInt(fillContent[2])),(Integer.parseInt(fillContent[3])),""));
+                    //移动到表头
+                    fragment2LineChart[0].moveViewToX(0);
+                    fragment2LineChart[1].moveViewToX(0);
+                    fragment2LineChart[2].moveViewToX(0);
                     //显示图表，隐藏进度条
                     fragment2LineChart[0].setVisibility(View.VISIBLE);
                     fragment2LineChart[1].setVisibility(View.VISIBLE);
                     fragment2LineChart[2].setVisibility(View.VISIBLE);
                     fragment2_Loading.setVisibility(View.GONE);
-                    //移动到表头
-                    fragment2LineChart[0].moveViewToX(0);
-                    fragment2LineChart[1].moveViewToX(0);
-                    fragment2LineChart[2].moveViewToX(0);
                     //清零选择
                     pickFileName = null;
                 }

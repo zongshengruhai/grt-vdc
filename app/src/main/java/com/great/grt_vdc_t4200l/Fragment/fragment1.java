@@ -118,11 +118,11 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
         fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime),0));
 
         fragment1_Context = view.getContext();
-        fragment1_ListView = view.findViewById(R.id.fragment1_ListView);
+//        fragment1_ListView = view.findViewById(R.id.fragment1_ListView);
 
         initTabLayout();
         initLineChart();
-        initListView();
+//        initListView();
 
         return view;
     }
@@ -309,8 +309,10 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             Log.e(TAG, "initListView: 文件夹存在" );
             File[] files = file.listFiles();
             if (files != null){
-                for (int i = 0; i < files.length; i++) {
-                    pathFileName = files[i].getAbsolutePath();
+//                for (int i = 0; i < files.length; i++) {
+//                    pathFileName = files[i].getAbsolutePath();
+                for (File i : files){
+                    pathFileName = i.getAbsolutePath();
 //                    Log.e(TAG, "initListView: "+pathFileName);
                     if (pathFileName.equals(fragment1_Context.getFilesDir().getPath() + "/fault_log/fault_record.xls")){
                         loadListData(pathFileName,true);
@@ -346,7 +348,6 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
 
                 for (int i = 0; i < msheer; i++) {
                     rows = mSheetlist[i].getRows();
-                    Log.e(TAG,rows+" *************");
                     for (int j  = 0; j < rows; j++) {
                         Cell[] cellList = mSheetlist[i].getRow(j);
                         for (Cell cell : cellList) {
@@ -384,14 +385,16 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             //定时时间
             fragment1Handler.postDelayed(this,500);
 
-            SharedPreferences rRealData = getActivity().getSharedPreferences("RealData", 0);
-
             SharedPreferences rStateData = getActivity().getSharedPreferences("StateData", 0);
             boolean _isCommFlag = rStateData.getBoolean("is_CommFlag",false);
             int layPage = rStateData.getInt("layPage",0);
 
             if (layPage == 1){
-                if (_isCommFlag) {
+                if (!_isCommFlag) {
+
+                    SharedPreferences rRealData = getActivity().getSharedPreferences("RealData", 0);
+                    SharedPreferences rAlarmData = getActivity().getSharedPreferences("AlarmData",0);
+
                     switch (selectTabType) {
                         case "输出电压":
                             fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv), rRealData.getInt("i_Uv", 0)));
@@ -430,8 +433,8 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                     dynamicLineChartManager.addEntry(list);
                     list.clear();
 
-                    fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime), rRealData.getInt("AlarmTime", 0)));
-                    fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime), rRealData.getInt("i_SagSum", 0)));
+                    fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime), rAlarmData.getInt("i_AlarmTime", 0)));
+                    fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime), rAlarmData.getInt("i_RecordTime", 0)));
                 }
             }
         }

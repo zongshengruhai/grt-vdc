@@ -18,8 +18,13 @@ import android.widget.RelativeLayout;
 import com.great.grt_vdc_t4200l.R;
 import java.util.ArrayList;
 import java.util.List;
-import static com.great.grt_vdc_t4200l.SystemFunc.readExcel;
 
+import static com.great.grt_vdc_t4200l.SystemFunc.Beep;
+import static com.great.grt_vdc_t4200l.SystemFunc.addExeclData;
+import static com.great.grt_vdc_t4200l.SystemFunc.alterExcelData;
+import static com.great.grt_vdc_t4200l.SystemFunc.delExcelData;
+import static com.great.grt_vdc_t4200l.SystemFunc.getNewTime;
+import static com.great.grt_vdc_t4200l.SystemFunc.readExcel;
 
 public class fragment4 extends Fragment implements View.OnClickListener{
 
@@ -40,10 +45,6 @@ public class fragment4 extends Fragment implements View.OnClickListener{
 
     //button
     private Button[] but = new Button[2];
-
-    //test
-    private boolean flga1 = false;
-    private boolean flag2 = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
@@ -96,8 +97,50 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     }
 
     private void test1(){
+        String path = "/data/data/com.great.grt_vdc_t4200l/files/fault_log/fault_record.xls";
+//        Log.e(TAG, "row " + readExcel(path));
+//        Log.e(TAG, "del flag " + alterExcelData(path,0,0,"小田") + " row " + readExcel(path) );
+
+//        Beep(fragment4_Context,true);
+//        List<List<Object>> test = new ArrayList<>();
+//        List<Object> test1 = new ArrayList<>();
+//        test1.add(1);
+//        test1.add("测试");
+//        test1.add(getNewTime());
+//        test1.add("");
+//        test.add(test1);
+//        Log.e(TAG, "test1: " + addExeclData(path,test) + " " + readExcel(path) );
+
     }
     private void test2(){
+//        Beep(fragment4_Context,false);
+
+//        List<List<Object>> test = new ArrayList<>();
+//        List<Object> test1 = new ArrayList<>();
+//        test1.add(1);
+//        test1.add(2);
+//        test.add(test1);
+//        test1 = new ArrayList<>();
+//        test1.add(3);
+//        test1.add(4);
+//        test.add(test1);
+//        test1 = new ArrayList<>();
+//        test1.add(5);
+//        test1.add(6);
+//        test.add(test1);
+//        test1 = new ArrayList<>();
+//        test1.add(7);
+//        test1.add(8);
+//        test.add(test1);
+//        test1 = new ArrayList<>();
+//        test1.add("");
+//        Log.e(TAG, "list length = "+test.size() + " , list row = " + test);
+//        Log.e(TAG, "list length = "+test.size() + " , change = " + test.get(0).set(0,"田宇旺"));
+//        Log.e(TAG, "list length = "+test.size() + " , list row = " + test);
+//        Log.e(TAG, "list length = "+test.size() + " , list row = " + test);
+////        test.get(0).clear();
+//        test.remove(0);
+//        Log.e(TAG, "list length = "+test.size() + " , list row = " + test);
     }
 
     Handler mHandler = new Handler();

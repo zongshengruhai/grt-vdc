@@ -23,6 +23,8 @@ import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 
+import static com.great.grt_vdc_t4200l.SystemFunc.checkFileExist;
+
 public class fragment3 extends Fragment{
 
     private String TAG = "fragment3";
@@ -92,9 +94,8 @@ public class fragment3 extends Fragment{
 
         String[] temp = new String[4];
 
-        File file = new File(PATH);
-
-        if (file.exists()) {
+        if (checkFileExist(PATH)) {
+            fragment3_Data.clear();
             try {
 
                 FileInputStream mfis = new FileInputStream(PATH);
@@ -104,13 +105,13 @@ public class fragment3 extends Fragment{
 
                 for (int i = 0; i < msheer; i++) {
                     rows = mSheetlist[i].getRows();
-                    Log.e(TAG, "行数：" + rows);
+//                    Log.e(TAG, "行数：" + rows);
                     for (int j = 0; j < rows; j++) {
                         Cell[] cellList = mSheetlist[i].getRow(j);
                         for (Cell cell : cellList) {
                             temp[cell.getColumn()] = cell.getContents();
                         }
-                        fragment3_Data.add(new fragment3Item(temp[0], temp[2], temp[3], temp[1]));
+                        fragment3_Data.add(new fragment3Item(temp[0], temp[1], temp[2], temp[3]));
                         fragment3_RecordAdapter = new fragment3ItemAdapter((LinkedList<fragment3Item>) fragment3_Data, fragment3_Context);
                         fragment3_ListView.setAdapter(fragment3_RecordAdapter);
 //                       fragment3_ListView.setOnItemClickListener(this);

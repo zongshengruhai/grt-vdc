@@ -41,6 +41,20 @@ public class SystemFunc {
     final static private String TAG = "SystemMethod";
     static private boolean _isBeep = false;             //防止并发
 
+    //系统监控机制类方法--------------------------------------------------------------------------------------------------------
+    /**
+     * restart 重启设备
+     */
+    static public void restart(){
+        try {
+            Process mRestart =Runtime.getRuntime().exec(new String[]{"su","-c","reboot "});
+            mRestart.waitFor();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //系统操作类方法--------------------------------------------------------------------------------------------------------
     /**
      * getNewTime 获取当前系统时间
      * @return String:"yyyy.MM.dd HH:mm:ss"
@@ -73,7 +87,6 @@ public class SystemFunc {
         }
     }
 
-
     /**
      *  Beep 振铃
      *  @param mContext 执行活动的上下文
@@ -95,18 +108,7 @@ public class SystemFunc {
         }
     }
 
-    /**
-     * restart 重启设备
-     */
-    static public void restart(){
-        try {
-            Process mRestart =Runtime.getRuntime().exec(new String[]{"su","-c","reboot "});
-            mRestart.waitFor();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
+    //文件操作类方法--------------------------------------------------------------------------------------------------------
     /**
      * 检测文件是否存在
      * @param path 检测文件路径
@@ -174,12 +176,13 @@ public class SystemFunc {
         return true;
     }
 
+    //Excel操作类方法--------------------------------------------------------------------------------------------------------
     /**
-     * 读取Execl表格
+     * 读取Excel表格
      * @param file_Name 文件绝对路径
      * @return 读取成功时 返回 Object型list，读取失败时 返回 null
      */
-    public static List<List<Object>> readExcel(String file_Name){
+    static public List<List<Object>> readExcel(String file_Name){
         String extension = file_Name.lastIndexOf(".") == -1 ? "" : file_Name.substring(file_Name.lastIndexOf(".") + 1);
         if ("xls".equals(extension)){
             List<List<Object>> dataList = new ArrayList<List<Object>>();
@@ -190,8 +193,8 @@ public class SystemFunc {
 
                 int Rows = sheet.getRows();
                 int Cols = sheet.getColumns();
-                Log.e(TAG, "当前工作表名："+sheet.getName() );
-                Log.e(TAG, "总行数：" + Rows +" ，总列数：" + Cols);
+//                Log.e(TAG, "当前工作表名："+sheet.getName() );
+                Log.e(TAG, "当前表格，行数：" + Rows +" ，列数：" + Cols);
 
                 List<Object> objects = new ArrayList<Object>();
                 String val;
@@ -223,13 +226,13 @@ public class SystemFunc {
     }
 
     /**
-     * 写入Execl
+     * 创建Excel
      * 实际是直接创建了一个新的xls文件
      * @param file_Name 文件绝对路径
      * @param data_List 文件内容
      * @return true 写入成功 ，false 写入失败
      */
-    public static boolean writeExecl(String file_Name,List<List<Object>> data_List){
+    static public boolean createExcel(String file_Name,List<List<Object>> data_List){
         try {
             WritableWorkbook workbook = Workbook.createWorkbook(new File(file_Name));
             WritableSheet sheet = workbook.createSheet("录波数据",0);
@@ -249,6 +252,80 @@ public class SystemFunc {
         return true;
     }
 
+    /**
+     * 追加Excel数据
+     * @param file_Name 文件绝对路径
+     * @param new_data  追加的内容
+     * @return true 写入成功 ，false 写入失败
+     */
+    static public boolean addExeclData(String file_Name,List<List<Object>> new_data){
+        if (checkFileExist(file_Name)) {
+            final List<List<Object>> old_data = readExcel(file_Name);
+            if (old_data != null && new_data != null) {
+                //控制文件总长度不能超过3000，如果超出，将从起始位置删除对应长度的内容
+                if ((old_data.size() + new_data.size()) > 3000) {
+                    delExcelData(file_Name, 0, new_data.size());
+                }
+                if (deleteFile(file_Name)) {
+                    old_data.addAll(new_data);
+                    return createExcel(file_Name, old_data);
+                } else {
+                    return false;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * 删除Excel数据
+     * 根据index 删除 length 长度的数据
+     * @param file_Name 文件绝对路径
+     * @param index Excel List数据的索引地址
+     * @param length 删除长度
+     * @return true 删除成功 ， false 删除失败
+     */
+    static public boolean delExcelData(String file_Name,int index,int length){
+        if (checkFileExist(file_Name)) {
+            final List<List<Object>> old_data = readExcel(file_Name);
+            if (old_data != null) {
+                if ((length + index) < old_data.size()) {
+                    for (int i = index; i < length; i++) {
+                        old_data.remove(i);
+                    }
+                    return deleteFile(file_Name) && createExcel(file_Name, old_data);
+                } else {
+                    return false;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * 修改Excel内的单个数据
+     * @param file_Name 文件绝对路径
+     * @param row_index Excel行路径
+     * @param col_index Excel列路径
+     * @param data 需要修改的数据
+     * @return true 修改成功 ， false 修改失败
+     */
+    static public boolean alterExcelData(String file_Name,int row_index,int col_index,String data){
+        if (checkFileExist(file_Name)){
+            final List<List<Object>> old_data = readExcel(file_Name);
+            if (old_data != null && row_index < old_data.size() && col_index < old_data.get(row_index).size()){
+                old_data.get(row_index).set(col_index,data);
+                return deleteFile(file_Name) && createExcel(file_Name, old_data);
+            }else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    //Txt操作类方法--------------------------------------------------------------------------------------------------------
     /**
      * 写入txt
      * @param path 写入路径

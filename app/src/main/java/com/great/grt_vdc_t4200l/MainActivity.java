@@ -83,6 +83,7 @@ public class MainActivity extends BaseCourse{
 
     Intent fragment4Intent = new Intent("drc.xxx.yyy.fragment4");
     Intent dataChange = new Intent("drc.xxx.yyy.MainActivity");
+
     //活动创建----------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,16 +100,8 @@ public class MainActivity extends BaseCourse{
         //创建手势检测器
         //detector=new GestureDetector(this);
     }
-    //活动开始----------------------------------------------------
-    @Override
-    protected void onStart(){
-        super.onStart();
-    }
-    //活动重启----------------------------------------------------
-    @Override
-    protected void onRestart(){
-        super.onRestart();
-    }
+
+
     //活动重载----------------------------------------------------
     @Override
     public void onResume(){
@@ -120,16 +113,6 @@ public class MainActivity extends BaseCourse{
     protected void onPause(){
         super.onPause();
         handler.removeCallbacks(task);
-    }
-    //活动停止----------------------------------------------------
-    @Override
-    protected void onStop(){
-        super.onStop();
-    }
-    //活动销毁----------------------------------------------------
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
     }
 
     Handler handler = new Handler();

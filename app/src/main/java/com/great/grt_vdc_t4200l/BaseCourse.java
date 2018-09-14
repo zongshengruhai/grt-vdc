@@ -36,10 +36,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import android_serialport_api.SerialPort;
+
+import static com.great.grt_vdc_t4200l.SystemFunc.checkFileExist;
+import static com.great.grt_vdc_t4200l.SystemFunc.createExcel;
+import static com.great.grt_vdc_t4200l.SystemFunc.createFile;
+import static com.great.grt_vdc_t4200l.SystemFunc.restart;
 
 public class BaseCourse extends FragmentActivity {
 
@@ -65,6 +72,11 @@ public class BaseCourse extends FragmentActivity {
     //其他声明----------------------------------------------------
     boolean globalError = false;                                //全局错误
     private Context mContext;
+    //系统自检声明----------------------------------------------------
+    static private String faultPath ;
+    static private String faultName;
+    static private String recordPath;
+    public boolean _isSystem = false;
 
     /**
      * 活动生命周期
@@ -82,6 +94,11 @@ public class BaseCourse extends FragmentActivity {
         //全屏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //申明路径
+        faultPath = this.getFilesDir().getPath()+"/fault_log/";
+        faultName = faultPath + "fault_record.xls";
+        recordPath = this.getFilesDir().getPath()+"/record_log/";
 
     }
     //活动开始----------------------------------------------------
@@ -141,87 +158,6 @@ public class BaseCourse extends FragmentActivity {
         super.onDestroy();
         //Log.e(TAG,"底层退出");
     }
-    //定时主线程----------------------------------------------------
-    Handler handler = new Handler();
-    Runnable task = new Runnable() {
-        @Override
-        public void run() {
-            handler.postDelayed(this,500);
-            if (downCom.getIsOpen()){
-
-                //通讯错误振铃：5次定时未接受到数据、接收数据错误、校验错误、帧错误等
-                boolean _isCommFlag = downCom.getisCommFlag();
-                if (!_isCommFlag){ if (iCommError < 10){iCommError ++;} }else { iCommError = 0;}
-//                if (iCommError > 5){SystemFunc.Beep(mContext,true);}else {SystemFunc.Beep(mContext,false);}
-
-                bOutData[1] = (byte)0x03;
-                bOutData[5] = (byte)0x13;
-                bOutData[6] = MyFunc.addCrc(bOutData);
-                sendPortData(downCom,"bArr");
-
-//                //int text[] = new int[3];
-//                text[0] = (int)(Math.random()*400);
-//                text[1] = (int)(Math.random()*400);
-//                text[2] = (int)(Math.random()*400);
-//                text[3] = (int)(Math.random()*400);
-//
-//                text[4]++;
-//                if(text[4]>100) text[4]=0;
-////                dataChange.putExtra("dataChange",text);
-////                sendBroadcast(dataChange);
-//
-//                SharedPreferences.Editor editor = getSharedPreferences("temp",MODE_PRIVATE).edit();
-//                editor.putInt("Uv",text[0]);
-//                editor.putInt("Vv",text[1]);
-//                editor.putInt("Wv",text[2]);
-//                editor.putInt("Capv",text[3]);
-//                editor.putInt("batterCapacity",text[4]);
-//                editor.commit()
-//
-//                iTelemetry = downCom.getiTelemetry();
-//                _isTelecommand = downCom.getisTelecommand();
-//                _isTelecontrol = downCom.getisTelecontrol();
-//                sSystemTime = downCom.getSystemTime();
-//
-//                SharedPreferences.Editor editor = getSharedPreferences("realTimeData",MODE_PRIVATE).edit();
-//                // 遥测
-//                editor.putInt("i_Rv",iTelemetry[0]);                             //R相电压
-//                editor.putInt("i_Sv",iTelemetry[1]);                             //S相电压
-//                editor.putInt("i_Tv",iTelemetry[2]);                             //T相电压
-//                editor.putInt("i_Uv",iTelemetry[3]);                             //U相电压
-//                editor.putInt("i_Vv",iTelemetry[4]);                             //V相电压
-//                editor.putInt("i_Wv",iTelemetry[5]);                             //W相电压
-//                editor.putInt("i_Ua",iTelemetry[6]);                             //U相电流
-//                editor.putInt("i_Va",iTelemetry[7]);                             //V相电流
-//                editor.putInt("i_Wa",iTelemetry[8]);                             //W相电流
-//                editor.putInt("i_Hz",iTelemetry[9]);                             //频率
-//                editor.putInt("i_SagTime",iTelemetry[10]);                       //录波次数
-//                editor.putInt("i_Capv",iTelemetry[11]);                          //电容电压
-//                editor.putInt("i_CapAh",(((iTelemetry[11]-232)/142)));           //电容容量
-//                editor.putInt("i_NewSagSite",iTelemetry[12]);                    //当前录波位置
-//                editor.putInt("i_SagSum",iTelemetry[13]);                        //录波总数
-//                //系统事件
-//                editor.putString("s_SystemTime",sSystemTime);                    //下位机系统时间
-//                //遥信
-//                editor.putBoolean("is_RechargeFlag",_isTelecommand[0]);          //充电状态
-//                editor.putBoolean("is_CompensateFlag",_isTelecommand[1]);        //补偿状态
-//                editor.putBoolean("is_InAlarm",_isTelecommand[3]);               //输入异常
-//                editor.putBoolean("is_OutOC",_isTelecommand[4]);                 //输出过流
-//                editor.putBoolean("is_OutRl",_isTelecommand[5]);                 //输出短路
-//                editor.putBoolean("is_AhLose",_isTelecommand[6]);                //容量失效
-//                editor.putBoolean("is_ComError",_isTelecommand[7]);              //通讯异常
-//                //遥控
-//                editor.putBoolean("is_SystemMode",_isTelecontrol[0]);            //系统模式
-//                editor.putBoolean("is_CompensateEnabled",_isTelecontrol[1]);     //补偿使能
-//                editor.commit();
-//                sendPortData(downCom,"01020304050607");
-
-
-
-
-            }
-        }
-    };
 
     /**
      * 总线广播
@@ -246,7 +182,7 @@ public class BaseCourse extends FragmentActivity {
                     Log.e(TAG,"广播接收到底层重装");
                     break;
 
-                 //底层中止
+                //底层中止
                 case 2:
                     //restart();
                     Log.e(TAG,"广播接收到底层中止");
@@ -452,99 +388,225 @@ public class BaseCourse extends FragmentActivity {
      */
     //重载流程----------------------------------------------------
     private void loadSOP(){
-        String fileNaem;
-        boolean _fileExists;
 
-        //1、检测root权限
+        for (int i = 0; i < 3; i++) {
 
-        //2、打开串口
-        for (int i = 0; i < 3 ; i++) {
-            if (!downCom.getIsOpen()){ openCom(downCom); }else { break; }
+            //故障文件夹
+            if (!checkFileExist(faultPath)){ createFile(faultPath); }
+            //故障文件
+            if (!checkFileExist(faultName)){
+                List<List<Object>> mList = new ArrayList<>();
+                List<Object> mRow = new ArrayList<>();
+                mRow.add("编号");
+                mRow.add("事件类型");
+                mRow.add("开始时间");
+                mRow.add("结束时间");
+                mList.add(mRow);
+                createExcel(faultName,mList);
+            }
+            //录波文件夹
+            if (!checkFileExist(recordPath)){createFile(recordPath);}
+
+            //串口
+            if (!downCom.getIsOpen()){ openCom(downCom); }
         }
 
-
-        //3.1、检测录波记录文件夹
-        fileNaem = "/record_log/";
-        _fileExists = checkFile(fileNaem);
-        if (!_fileExists){
-//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
+        if (!checkFileExist(faultName)&&!checkFileExist(recordPath)&&!downCom.getIsOpen()){
+//            restart();//重启
         }else {
-//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");
+            _isSystem = true;
         }
 
-        //3.2、检测故障记录文件
-        fileNaem = "/fault_log/";
-        _fileExists = checkFile(fileNaem);
-        if (!_fileExists){
-//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
-        }else {
-//            Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");
-        }
-
-//        fileNaem = "/fault_log/fault_record.xls";
-//        _fileExists = checkFile(fileNaem);
-//        if (!_fileExists){
-////            Log.e(TAG,"SOP, "+fileNaem+" 文件不存在");
-//        }else {
-////            Log.e(TAG,"SOP, "+fileNaem+" 文件存在");
+//        String fileName;
+//        boolean _fileExists;
+//
+//        //1、检测root权限
+//
+//        //2、打开串口
+//        for (int i = 0; i < 3 ; i++) {
+//            if (!downCom.getIsOpen()){ openCom(downCom); }
 //        }
+//
+//        //3.1、检测录波记录文件夹
+////        fileName = this.getFilesDir().getPath()+"/record_log/";
+////        if (!checkFileExist(fileName)){
+////            createFile(fileName);
+////        }
+//
+//
+//        //3.2、检测故障记录文件
+//        fileName = "/fault_log/";
+//        _fileExists = checkFile(fileName);
+//        if (!_fileExists){
+////            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
+//        }else {
+////            Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");
+//        }
+//
+////        fileNaem = "/fault_log/fault_record.xls";
+////        _fileExists = checkFile(fileNaem);
+////        if (!_fileExists){
+//////            Log.e(TAG,"SOP, "+fileNaem+" 文件不存在");
+////        }else {
+//////            Log.e(TAG,"SOP, "+fileNaem+" 文件存在");
+////        }
 
     }
-    //SOP启动错误处理----------------------------------------------------
-    private void errorSOP(int type){
-        switch (type){
-            case 1:
-                Toast.makeText(this,"串口打开失败！",Toast.LENGTH_SHORT).show();
-                break;
-            case 10:
-                Toast.makeText(this,"录波记录文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
-                break;
-            case 11:
-                Toast.makeText(this,"故障记录文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
-                break;
-            case 12:
-                Toast.makeText(this,"实时采样文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
-                break;
-            case 15:
-                Toast.makeText(this,"故障记录文件不存在或创建失败！",Toast.LENGTH_SHORT).show();
-                break;
-        }
-        Toast.makeText(this,"初始化失败，即将重启！",Toast.LENGTH_SHORT).show();
-    }
+
+//    //SOP启动错误处理----------------------------------------------------
+//    private void errorSOP(int type){
+//        switch (type){
+//            case 1:
+//                Toast.makeText(this,"串口打开失败！",Toast.LENGTH_SHORT).show();
+//                break;
+//            case 10:
+//                Toast.makeText(this,"录波记录文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
+//                break;
+//            case 11:
+//                Toast.makeText(this,"故障记录文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
+//                break;
+//            case 12:
+//                Toast.makeText(this,"实时采样文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
+//                break;
+//            case 15:
+//                Toast.makeText(this,"故障记录文件不存在或创建失败！",Toast.LENGTH_SHORT).show();
+//                break;
+//        }
+//        Toast.makeText(this,"初始化失败，即将重启！",Toast.LENGTH_SHORT).show();
+//    }
+
     //中止流程----------------------------------------------------
     private void pauseSOP(){
+        _isSystem = false;
         colseCom(downCom);
         if (!downCom.getIsOpen()){ Log.e(TAG,"SOP,串口关闭成功");}else{ Log.e(TAG,"SOP,串口关闭失败");}
     }
-    //检测文件----------------------------------------------------
-    private boolean checkFile(String fileName){
-        String PATH = this.getFilesDir().getPath()+fileName;
-        try {
-            File file = new File(PATH);
-            if (!file.exists()){
-                if (fileName.contains(".")){
-                    Log.e(TAG,"文件不存在,开始创建");
-                    return createFile(fileName);
-//                    file.createNewFile();
-                }else{
-                    Log.e(TAG,"文件夹不存在,开始创建");
-                    file.mkdir();
-                }
-            }
-        }catch (Exception e){ return false; }
-        return true;
-    }
-    //创建文件----------------------------------------------------
-    private boolean createFile(String fileName){
-        String PATH = this.getFilesDir().getPath()+fileName;
-        try {
-            File file = new File(PATH);
-            if (!file.exists()){
-                file.createNewFile();
-            }
-        }catch (Exception e){ return false; }
-        return true;
-    }
 
+
+//    //检测文件----------------------------------------------------
+//    private boolean checkFile(String fileName){
+//        String PATH = this.getFilesDir().getPath()+fileName;
+//        try {
+//            File file = new File(PATH);
+//            if (!file.exists()){
+//                if (fileName.contains(".")){
+//                    Log.e(TAG,"文件不存在,开始创建");
+//                    return createFile(fileName);
+////                    file.createNewFile();
+//                }else{
+//                    Log.e(TAG,"文件夹不存在,开始创建");
+//                    file.mkdir();
+//                }
+//            }
+//        }catch (Exception e){ return false; }
+//        return true;
+//    }
+//    //创建文件----------------------------------------------------
+//    private boolean createFile(String fileName){
+//        String PATH = this.getFilesDir().getPath()+fileName;
+//        try {
+//            File file = new File(PATH);
+//            if (!file.exists()){
+//                file.createNewFile();
+//            }
+//        }catch (Exception e){ return false; }
+//        return true;
+//    }
+//
+
+    //定时主线程----------------------------------------------------
+    Handler handler = new Handler();
+    Runnable task = new Runnable() {
+        @Override
+        public void run() {
+            handler.postDelayed(this,500);
+            if (downCom.getIsOpen()){
+
+                //通讯错误振铃：5次定时未接受到数据、接收数据错误、校验错误、帧错误等
+                boolean _isCommFlag = downCom.getisCommFlag();
+                if (!_isCommFlag){ if (iCommError < 10){iCommError ++;} }else { iCommError = 0;}
+//                if (iCommError > 5){SystemFunc.Beep(mContext,true);}else {SystemFunc.Beep(mContext,false);}
+
+                bOutData[1] = (byte)0x03;
+                bOutData[5] = (byte)0x13;
+                bOutData[6] = MyFunc.addCrc(bOutData);
+                sendPortData(downCom,"bArr");
+
+                SharedPreferences.Editor wRealData = mContext.getSharedPreferences("RealData",MODE_PRIVATE).edit();
+                wRealData.putInt("i_Rv",(int)(Math.random()*400));                             //R相电压
+                wRealData.putInt("i_Sv",(int)(Math.random()*400));                             //S相电压
+                wRealData.putInt("i_Tv",(int)(Math.random()*400));                             //T相电压
+                wRealData.putInt("i_Uv",(int)(Math.random()*400));                             //U相电压
+                wRealData.putInt("i_Vv",(int)(Math.random()*400));                             //V相电压
+                wRealData.putInt("i_Wv",(int)(Math.random()*400));                             //W相电压
+                wRealData.putInt("i_Ua",(int)(Math.random()*100));                             //U相电流
+                wRealData.putInt("i_Va",(int)(Math.random()*100));                             //V相电流
+                wRealData.putInt("i_Wa",(int)(Math.random()*100));                             //W相电流
+                wRealData.putInt("i_Capv",(int)(Math.random()*100));
+                wRealData.putBoolean("is_RechargeFlag",true);
+                wRealData.putBoolean("is_CompensateFlag",false);
+
+                wRealData.commit();
+//                //int text[] = new int[3];
+//                text[0] = (int)(Math.random()*400);
+//                text[1] = (int)(Math.random()*400);
+//                text[2] = (int)(Math.random()*400);
+//                text[3] = (int)(Math.random()*400);
+//
+//                text[4]++;
+//                if(text[4]>100) text[4]=0;
+////                dataChange.putExtra("dataChange",text);
+////                sendBroadcast(dataChange);
+//
+//                SharedPreferences.Editor editor = getSharedPreferences("temp",MODE_PRIVATE).edit();
+//                editor.putInt("Uv",text[0]);
+//                editor.putInt("Vv",text[1]);
+//                editor.putInt("Wv",text[2]);
+//                editor.putInt("Capv",text[3]);
+//                editor.putInt("batterCapacity",text[4]);
+//                editor.commit()
+//
+//                iTelemetry = downCom.getiTelemetry();
+//                _isTelecommand = downCom.getisTelecommand();
+//                _isTelecontrol = downCom.getisTelecontrol();
+//                sSystemTime = downCom.getSystemTime();
+//
+//                SharedPreferences.Editor editor = getSharedPreferences("realTimeData",MODE_PRIVATE).edit();
+//                // 遥测
+//                editor.putInt("i_Rv",iTelemetry[0]);                             //R相电压
+//                editor.putInt("i_Sv",iTelemetry[1]);                             //S相电压
+//                editor.putInt("i_Tv",iTelemetry[2]);                             //T相电压
+//                editor.putInt("i_Uv",iTelemetry[3]);                             //U相电压
+//                editor.putInt("i_Vv",iTelemetry[4]);                             //V相电压
+//                editor.putInt("i_Wv",iTelemetry[5]);                             //W相电压
+//                editor.putInt("i_Ua",iTelemetry[6]);                             //U相电流
+//                editor.putInt("i_Va",iTelemetry[7]);                             //V相电流
+//                editor.putInt("i_Wa",iTelemetry[8]);                             //W相电流
+//                editor.putInt("i_Hz",iTelemetry[9]);                             //频率
+//                editor.putInt("i_SagTime",iTelemetry[10]);                       //录波次数
+//                editor.putInt("i_Capv",iTelemetry[11]);                          //电容电压
+//                editor.putInt("i_CapAh",(((iTelemetry[11]-232)/142)));           //电容容量
+//                editor.putInt("i_NewSagSite",iTelemetry[12]);                    //当前录波位置
+//                editor.putInt("i_SagSum",iTelemetry[13]);                        //录波总数
+//                //系统事件
+//                editor.putString("s_SystemTime",sSystemTime);                    //下位机系统时间
+//                //遥信
+//                editor.putBoolean("is_RechargeFlag",_isTelecommand[0]);          //充电状态
+//                editor.putBoolean("is_CompensateFlag",_isTelecommand[1]);        //补偿状态
+//                editor.putBoolean("is_InAlarm",_isTelecommand[3]);               //输入异常
+//                editor.putBoolean("is_OutOC",_isTelecommand[4]);                 //输出过流
+//                editor.putBoolean("is_OutRl",_isTelecommand[5]);                 //输出短路
+//                editor.putBoolean("is_AhLose",_isTelecommand[6]);                //容量失效
+//                editor.putBoolean("is_ComError",_isTelecommand[7]);              //通讯异常
+//                //遥控
+//                editor.putBoolean("is_SystemMode",_isTelecontrol[0]);            //系统模式
+//                editor.putBoolean("is_CompensateEnabled",_isTelecontrol[1]);     //补偿使能
+//                editor.commit();
+//                sendPortData(downCom,"01020304050607");
+
+
+            }
+        }
+    };
 
 }

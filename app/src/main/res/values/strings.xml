@@ -78,5 +78,25 @@
     <string name="fragment4timeSet">时间：</string>
     <!-- fragment5 -->
     <string name="fragment5Cap">0%</string>
-
+    <string name="fragment5map">状态动画</string>
+    <string name="fragment5Yx_1">输入异常</string>
+    <string name="fragment5Yx_2">输出过流</string>
+    <string name="fragment5Yx_3">输出短路</string>
+    <string name="fragment5Yx_4">容量失效</string>
+    <string name="fragment5Yx_5">通讯异常</string>
+    <!--<string name="fragment5Dash">输入电压</string>-->
+    <!--<string-array name="meter">-->
+        <!--<item>0V</item>-->
+        <!--<item>50V</item>-->
+        <!--<item>100V</item>-->
+        <!--<item>150V</item>-->
+        <!--<item>200V</item>-->
+        <!--<item>250V</item>-->
+        <!--<item>300V</item>-->
+        <!--<item>350V</item>-->
+        <!--<item>400V</item>-->
+        <!--<item>450V</item>-->
+        <!--<item>500V</item>-->
+    <!--</string-array>-->
+    
 </resources>

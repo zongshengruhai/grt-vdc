@@ -16,15 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import com.great.grt_vdc_t4200l.R;
+import com.great.grt_vdc_t4200l.SerialPortHelp.MyFunc;
+import com.great.grt_vdc_t4200l.SystemFunc;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.great.grt_vdc_t4200l.SystemFunc.Beep;
-import static com.great.grt_vdc_t4200l.SystemFunc.addExeclData;
-import static com.great.grt_vdc_t4200l.SystemFunc.alterExcelData;
-import static com.great.grt_vdc_t4200l.SystemFunc.delExcelData;
-import static com.great.grt_vdc_t4200l.SystemFunc.getNewTime;
-import static com.great.grt_vdc_t4200l.SystemFunc.readExcel;
+
 
 public class fragment4 extends Fragment implements View.OnClickListener{
 
@@ -98,23 +97,53 @@ public class fragment4 extends Fragment implements View.OnClickListener{
 
     private void test1(){
         String path = "/data/data/com.great.grt_vdc_t4200l/files/fault_log/fault_record.xls";
-//        Log.e(TAG, "row " + readExcel(path));
-//        Log.e(TAG, "del flag " + alterExcelData(path,0,0,"小田") + " row " + readExcel(path) );
+        int[] a = new int[54];
 
-//        Beep(fragment4_Context,true);
+        int k = 2;
+        for (int i = 0; i <a.length ; i++) {
+            a[i] = k;
+            k ++;
+        }
+
+        for (int i = 0; i < a.length; i++) {
+            int b = (a[i]-13)%6;
+            if (b>0){b = 1;}else if (b<0){ b = 0;}
+            Log.e(TAG, "test1: " + (((a[i]-13)/6) + b +1) );
+//            if (a[i]%6 == 1 ){
+//                Log.e(TAG, "****************************" );
+//            }
+        }
+
 //        List<List<Object>> test = new ArrayList<>();
 //        List<Object> test1 = new ArrayList<>();
-//        test1.add(1);
-//        test1.add("测试");
-//        test1.add(getNewTime());
-//        test1.add("");
-//        test.add(test1);
-//        Log.e(TAG, "test1: " + addExeclData(path,test) + " " + readExcel(path) );
+//        for (int i = 1; i < 5; i++) {
+//            test1.add(i);
+//            for (int j = 0; j < 3; j++) {
+//                test1.add(0);
+//            }
+//            test.add(test1);
+//            test1 = new ArrayList<>();
+//        }
+//        Beep(fragment4_Context,SystemFunc.addExcelData(path,test));
+//
+//        List<List<Object>> qqq = SystemFunc.readExcel(path);
+//        Log.e(TAG, "test1: " + qqq );
 
+//        Log.e(TAG, "test1: " + addExeclData(path,test) + " " + readExcel(path) );
     }
     private void test2(){
+        String path = "/data/data/com.great.grt_vdc_t4200l/files/fault_log/fault_record.xls";
+        Log.e(TAG, "test2: " + MyFunc.ByteArrToHex(MyFunc.InToByteArr(4096)) + MyFunc.InToByteArr(4096)[2]);
+        //        List<Object> test = new ArrayList<>();
+//        for (int i = 1; i < 8 ; i++) {
+//            test.add(i);
+//        }
 //        Beep(fragment4_Context,false);
-
+//        SystemFunc.alterExcelDatas(path,1,1,test);
+//
+//        List<List<Object>> qqq = SystemFunc.readExcel(path);
+//        Log.e(TAG, "test2: " + qqq );
+//        Beep(fragment4_Context,false);
 //        List<List<Object>> test = new ArrayList<>();
 //        List<Object> test1 = new ArrayList<>();
 //        test1.add(1);

@@ -258,7 +258,7 @@ public class SystemFunc {
      * @param new_data  追加的内容
      * @return true 写入成功 ，false 写入失败
      */
-    static public boolean addExeclData(String file_Name,List<List<Object>> new_data){
+    static public boolean addExcelData(String file_Name,List<List<Object>> new_data){
         if (checkFileExist(file_Name)) {
             final List<List<Object>> old_data = readExcel(file_Name);
             if (old_data != null && new_data != null) {
@@ -320,6 +320,27 @@ public class SystemFunc {
                 return deleteFile(file_Name) && createExcel(file_Name, old_data);
             }else {
                 return false;
+            }
+        }
+        return false;
+    }
+
+    /**+
+     * 修改Excel内的多个数据
+     * @param file_Name 文件路径
+     * @param row_index Excel行路径
+     * @param col_index Excel列路径
+     * @param data 需要写入的数据
+     * @return true 修改成功，false 修改失败
+     */
+    static public boolean alterExcelDatas(String file_Name,int row_index,int col_index,List<Object> data){
+        if (checkFileExist(file_Name)){
+            final  List<List<Object>> old_data = readExcel(file_Name);
+            if (old_data != null && row_index + data.size()< old_data.size() && col_index < old_data.get(row_index).size()){
+                for (int i = 0; i <  data.size(); i++) {
+                    old_data.get(row_index+i).set(col_index,data.get(i));
+                }
+                return deleteFile(file_Name) && createExcel(file_Name,old_data);
             }
         }
         return false;

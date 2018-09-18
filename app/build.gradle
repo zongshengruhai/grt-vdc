@@ -45,4 +45,6 @@ dependencies {
 ////    classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
     //进度条依赖
     implementation 'com.daimajia.numberprogressbar:library:1.4@aar'
+    //仪表盘依赖
+//    implementation 'com.github.SuperKung:DashboardView:1.2.1'
 }

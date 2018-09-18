@@ -59,7 +59,7 @@ public class BaseCourse extends FragmentActivity {
     int text[] = new int[5];
     //串口声明----------------------------------------------------
     SerialControl downCom;                                      //串口
-    private String sOutData = "7E0000000000000D";
+//    private String sOutData = "7E0000000000000D";
     private byte[] bOutData = new byte[]{(byte)0x7E,0x00,0x00,0x00,0x00,0x00,0x00,(byte)0x0D};
     //数据声明----------------------------------------------------
     private int[] iTelemetry = new int[14];                     //遥测
@@ -67,6 +67,7 @@ public class BaseCourse extends FragmentActivity {
     private boolean[] _isTelecontrol = new boolean[2];          //遥控
     private String sSystemTime;                                 //时间
     private int iCommError = 0;
+    private int iReadRecordError = 0;
     //硬件声明----------------------------------------------------
 
     //其他声明----------------------------------------------------
@@ -366,10 +367,10 @@ public class BaseCourse extends FragmentActivity {
         if (ComPort != null && ComPort.getIsOpen()){
             switch (type){
                 case "Hex":
-                    ComPort.sendHex(sOutData);
+//                    ComPort.sendHex(sOutData);
                     break;
                 case "Txt":
-                    ComPort.sendTxt(sOutData);
+//                    ComPort.sendTxt(sOutData);
                     break;
                 case "bArr":
                     ComPort.send(bOutData);
@@ -527,86 +528,97 @@ public class BaseCourse extends FragmentActivity {
                 if (!_isCommFlag){ if (iCommError < 10){iCommError ++;} }else { iCommError = 0;}
 //                if (iCommError > 5){SystemFunc.Beep(mContext,true);}else {SystemFunc.Beep(mContext,false);}
 
-                bOutData[1] = (byte)0x03;
-                bOutData[5] = (byte)0x13;
-                bOutData[6] = MyFunc.addCrc(bOutData);
-                sendPortData(downCom,"bArr");
+                //写入
+                SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
+//                SharedPreferences.Editor wRealData = mContext.getSharedPreferences("RealData",MODE_PRIVATE).edit();
 
-                SharedPreferences.Editor wRealData = mContext.getSharedPreferences("RealData",MODE_PRIVATE).edit();
-                wRealData.putInt("i_Rv",(int)(Math.random()*400));                             //R相电压
-                wRealData.putInt("i_Sv",(int)(Math.random()*400));                             //S相电压
-                wRealData.putInt("i_Tv",(int)(Math.random()*400));                             //T相电压
-                wRealData.putInt("i_Uv",(int)(Math.random()*400));                             //U相电压
-                wRealData.putInt("i_Vv",(int)(Math.random()*400));                             //V相电压
-                wRealData.putInt("i_Wv",(int)(Math.random()*400));                             //W相电压
-                wRealData.putInt("i_Ua",(int)(Math.random()*100));                             //U相电流
-                wRealData.putInt("i_Va",(int)(Math.random()*100));                             //V相电流
-                wRealData.putInt("i_Wa",(int)(Math.random()*100));                             //W相电流
-                wRealData.putInt("i_Capv",(int)(Math.random()*100));
-                wRealData.putBoolean("is_RechargeFlag",true);
-                wRealData.putBoolean("is_CompensateFlag",false);
+                //读取
+                SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
+                SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
+                SharedPreferences rAlarmData = mContext.getSharedPreferences("AlarmData",0);
 
-                wRealData.commit();
-//                //int text[] = new int[3];
-//                text[0] = (int)(Math.random()*400);
-//                text[1] = (int)(Math.random()*400);
-//                text[2] = (int)(Math.random()*400);
-//                text[3] = (int)(Math.random()*400);
-//
-//                text[4]++;
-//                if(text[4]>100) text[4]=0;
-////                dataChange.putExtra("dataChange",text);
-////                sendBroadcast(dataChange);
-//
-//                SharedPreferences.Editor editor = getSharedPreferences("temp",MODE_PRIVATE).edit();
-//                editor.putInt("Uv",text[0]);
-//                editor.putInt("Vv",text[1]);
-//                editor.putInt("Wv",text[2]);
-//                editor.putInt("Capv",text[3]);
-//                editor.putInt("batterCapacity",text[4]);
-//                editor.commit()
-//
-//                iTelemetry = downCom.getiTelemetry();
-//                _isTelecommand = downCom.getisTelecommand();
-//                _isTelecontrol = downCom.getisTelecontrol();
-//                sSystemTime = downCom.getSystemTime();
-//
-//                SharedPreferences.Editor editor = getSharedPreferences("realTimeData",MODE_PRIVATE).edit();
-//                // 遥测
-//                editor.putInt("i_Rv",iTelemetry[0]);                             //R相电压
-//                editor.putInt("i_Sv",iTelemetry[1]);                             //S相电压
-//                editor.putInt("i_Tv",iTelemetry[2]);                             //T相电压
-//                editor.putInt("i_Uv",iTelemetry[3]);                             //U相电压
-//                editor.putInt("i_Vv",iTelemetry[4]);                             //V相电压
-//                editor.putInt("i_Wv",iTelemetry[5]);                             //W相电压
-//                editor.putInt("i_Ua",iTelemetry[6]);                             //U相电流
-//                editor.putInt("i_Va",iTelemetry[7]);                             //V相电流
-//                editor.putInt("i_Wa",iTelemetry[8]);                             //W相电流
-//                editor.putInt("i_Hz",iTelemetry[9]);                             //频率
-//                editor.putInt("i_SagTime",iTelemetry[10]);                       //录波次数
-//                editor.putInt("i_Capv",iTelemetry[11]);                          //电容电压
-//                editor.putInt("i_CapAh",(((iTelemetry[11]-232)/142)));           //电容容量
-//                editor.putInt("i_NewSagSite",iTelemetry[12]);                    //当前录波位置
-//                editor.putInt("i_SagSum",iTelemetry[13]);                        //录波总数
-//                //系统事件
-//                editor.putString("s_SystemTime",sSystemTime);                    //下位机系统时间
-//                //遥信
-//                editor.putBoolean("is_RechargeFlag",_isTelecommand[0]);          //充电状态
-//                editor.putBoolean("is_CompensateFlag",_isTelecommand[1]);        //补偿状态
-//                editor.putBoolean("is_InAlarm",_isTelecommand[3]);               //输入异常
-//                editor.putBoolean("is_OutOC",_isTelecommand[4]);                 //输出过流
-//                editor.putBoolean("is_OutRl",_isTelecommand[5]);                 //输出短路
-//                editor.putBoolean("is_AhLose",_isTelecommand[6]);                //容量失效
-//                editor.putBoolean("is_ComError",_isTelecommand[7]);              //通讯异常
-//                //遥控
-//                editor.putBoolean("is_SystemMode",_isTelecontrol[0]);            //系统模式
-//                editor.putBoolean("is_CompensateEnabled",_isTelecontrol[1]);     //补偿使能
-//                editor.commit();
-//                sendPortData(downCom,"01020304050607");
+                //判断是否需要读取录波
+                if ((rRealData.getInt("i_NewSagSite",0) != rStateData.getInt("i_OldSagSite",0)) && !rStateData.getBoolean("is_RecordFlag",false)){
+                    wStateData.putBoolean("is_RecordFlag",true);       //开始录波标志
+                    wStateData.commit();
+                }
 
+
+                Log.e(TAG, "run: " + rStateData.getBoolean("is_RecordFlag",false)+ "," +rStateData.getBoolean("is_ReadRecordFlag",false));
+                //需要读录波，且没有在读录波
+                if (rStateData.getBoolean("is_RecordFlag",false) && !rStateData.getBoolean("is_ReadRecordFlag",false)){
+                    iReadRecordError = 0;
+                    wStateData.putBoolean("is_ReadRecordFlag",true);
+                    bOutData[1] = (byte)0x10;
+                    //求地址
+                    int recordAddress_1 = rStateData.getInt("i_OldSagSite",0) + 4096;
+                    bOutData[2] = MyFunc.InToByteArr(recordAddress_1)[2];
+                    bOutData[3] = MyFunc.InToByteArr(recordAddress_1)[3];
+
+                    int recordAddress_2 = rStateData.getInt("i_RecordAddress_2",0) + 1;
+                    bOutData[4] = MyFunc.InToByteArr(recordAddress_2)[2];
+                    bOutData[5] = MyFunc.InToByteArr(recordAddress_2)[3];
+
+                    bOutData[6] = MyFunc.addCrc(bOutData);
+                    new ComThread().start();
+                }//不需要读录波，或已经在处理录波
+                else if (!rStateData.getBoolean("is_RecordFlag",false) || rStateData.getBoolean("is_ReadRecordFlag",false)){
+                    bOutData[1] = (byte)0x03;
+                    bOutData[2] = (byte)0x00;
+                    bOutData[3] = (byte)0x00;
+                    bOutData[4] = (byte)0x00;
+                    bOutData[5] = (byte)0x14;
+                    bOutData[6] = MyFunc.addCrc(bOutData);
+                    new ComThread().start();
+                }
+
+                //防止遥测录波时通讯失败
+                iReadRecordError ++;
+                if (iReadRecordError > 3 ){
+                    iReadRecordError = 0;
+                    wStateData.putBoolean("is_ReadRecordFlag",false);
+                }
+
+                wStateData.commit();
+
+
+                //计数
+//                bOutData[1] = (byte)0x03;
+//                bOutData[5] = (byte)0x14;
+//                bOutData[6] = MyFunc.addCrc(bOutData);
+//
+//
+//                new ComThread().start();
+
+//                sendPortData(downCom,"bArr");
+
+
+
+//                SharedPreferences.Editor wRealData = mContext.getSharedPreferences("RealData",MODE_PRIVATE).edit();
+//                wRealData.putInt("i_Rv",(int)(Math.random()*400));                             //R相电压
+//                wRealData.putInt("i_Sv",(int)(Math.random()*400));                             //S相电压
+//                wRealData.putInt("i_Tv",(int)(Math.random()*400));                             //T相电压
+//                wRealData.putInt("i_Uv",(int)(Math.random()*400));                             //U相电压
+//                wRealData.putInt("i_Vv",(int)(Math.random()*400));                             //V相电压
+//                wRealData.putInt("i_Wv",(int)(Math.random()*400));                             //W相电压
+//                wRealData.putInt("i_Ua",(int)(Math.random()*100));                             //U相电流
+//                wRealData.putInt("i_Va",(int)(Math.random()*100));                             //V相电流
+//                wRealData.putInt("i_Wa",(int)(Math.random()*100));                             //W相电流
+//                wRealData.putInt("i_Capv",(int)(Math.random()*100));
+//                wRealData.putBoolean("is_RechargeFlag",false);
+//                wRealData.putBoolean("is_CompensateFlag",true);
+//
+//                wRealData.commit();
 
             }
         }
     };
+
+    //定时通讯子线程
+    class ComThread extends Thread{
+        public void run(){
+            sendPortData(downCom,"bArr");
+        }
+    }
 
 }

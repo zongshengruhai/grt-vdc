@@ -93,6 +93,16 @@ public class MyFunc {
         return result;
     }
     //-------------------------------------------------------
+    //int转Byte
+    static public byte[] InToByteArr(int inInt){
+        return new byte[]{
+                (byte)((inInt >> 24) & 0xFF),
+                (byte)((inInt >> 16) & 0xFF),
+                (byte)((inInt >> 8) & 0xFF),
+                (byte)(inInt & 0xFF),
+        };
+    }
+    //-------------------------------------------------------
     //字节指定位置转boolen
     static public boolean ByteToBool(byte inByte,int site){
         boolean result;
@@ -131,5 +141,13 @@ public class MyFunc {
             }
         }
         return bCrc;
+    }
+    //-------------------------------------------------------
+    //byte数组相加
+    static public byte[] addByteArr(byte[] bytes1,byte[] bytes2){
+        byte[] bytes3 = new byte[bytes1.length+bytes2.length];
+        System.arraycopy(bytes1,0,bytes3,0,bytes1.length);
+        System.arraycopy(bytes2,0,bytes3,bytes1.length,bytes2.length);
+        return bytes3;
     }
 }

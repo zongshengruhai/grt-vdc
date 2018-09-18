@@ -70,7 +70,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     private static final String TAG = "fragment1";
 
     //TabLayout
-    private static final String[] sTitle = new String[]{"输出电压","输出电流","输入电压","其他数据"};
+    private static final String[] sTitle = new String[]{"输出电流","输出电压","输入电压","其他数据"};
     private TabLayout tl;
 
     private TextView[] fragment1TempRow = new TextView[5];
@@ -88,7 +88,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     private IntentFilter fragment1IntentFilter = new IntentFilter("drc.xxx.yyy.fragment1");
 
     //更新UI
-    private String selectTabType="输出电压";
+    private String selectTabType="输出电流";
 
     //listView
     private Context fragment1_Context;
@@ -390,20 +390,12 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             int layPage = rStateData.getInt("layPage",0);
 
             if (layPage == 1){
-                if (!_isCommFlag) {
+                if (_isCommFlag) {
 
                     SharedPreferences rRealData = getActivity().getSharedPreferences("RealData", 0);
                     SharedPreferences rAlarmData = getActivity().getSharedPreferences("AlarmData",0);
 
                     switch (selectTabType) {
-                        case "输出电压":
-                            fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv), rRealData.getInt("i_Uv", 0)));
-                            fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv), rRealData.getInt("i_Vv", 0)));
-                            fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv), rRealData.getInt("i_Wv", 0)));
-                            list.add(rRealData.getInt("i_Uv", 0));
-                            list.add(rRealData.getInt("i_Vv", 0));
-                            list.add(rRealData.getInt("i_Wv", 0));
-                            break;
                         case "输出电流":
                             fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua), rRealData.getInt("i_Ua", 0)));
                             fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va), rRealData.getInt("i_Va", 0)));
@@ -411,6 +403,14 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                             list.add(rRealData.getInt("i_Ua", 0));
                             list.add(rRealData.getInt("i_Va", 0));
                             list.add(rRealData.getInt("i_Wa", 0));
+                            break;
+                        case "输出电压":
+                            fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv), rRealData.getInt("i_Uv", 0)));
+                            fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv), rRealData.getInt("i_Vv", 0)));
+                            fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv), rRealData.getInt("i_Wv", 0)));
+                            list.add(rRealData.getInt("i_Uv", 0));
+                            list.add(rRealData.getInt("i_Vv", 0));
+                            list.add(rRealData.getInt("i_Wv", 0));
                             break;
                         case "输入电压":
                             fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv), rRealData.getInt("i_Rv", 0)));

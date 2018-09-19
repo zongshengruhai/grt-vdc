@@ -105,17 +105,23 @@ public class fragment3 extends Fragment{
 
                 for (int i = 0; i < msheer; i++) {
                     rows = mSheetlist[i].getRows();
-//                    Log.e(TAG, "行数：" + rows);
                     for (int j = 0; j < rows; j++) {
                         Cell[] cellList = mSheetlist[i].getRow(j);
                         for (Cell cell : cellList) {
                             temp[cell.getColumn()] = cell.getContents();
                         }
                         fragment3_Data.add(new fragment3Item(temp[0], temp[1], temp[2], temp[3]));
-                        fragment3_RecordAdapter = new fragment3ItemAdapter((LinkedList<fragment3Item>) fragment3_Data, fragment3_Context);
-                        fragment3_ListView.setAdapter(fragment3_RecordAdapter);
 //                       fragment3_ListView.setOnItemClickListener(this);
                     }
+                    if (rows == 1){
+                        temp[0]  = "提示";
+                        temp[1] = "当前暂无故障记录";
+                        temp[2] = "";
+                        temp[3] = "";
+                        fragment3_Data.add(new fragment3Item(temp[0], temp[1], temp[2], temp[3]));
+                    }
+                    fragment3_RecordAdapter = new fragment3ItemAdapter((LinkedList<fragment3Item>) fragment3_Data, fragment3_Context);
+                    fragment3_ListView.setAdapter(fragment3_RecordAdapter);
                 }
 
                 mbook.close();

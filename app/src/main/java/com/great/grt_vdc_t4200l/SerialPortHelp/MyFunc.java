@@ -80,6 +80,11 @@ public class MyFunc {
             result += (inByteArr[site] & 0xff) << 8;
             result += (inByteArr[site+1] & 0xff);
         }
+        //取反
+        if (result > 32768){
+            Log.e("ts","需要取反"+result);
+            result = (result - 65536);
+        }
         return result;
     }
     //-------------------------------------------------------

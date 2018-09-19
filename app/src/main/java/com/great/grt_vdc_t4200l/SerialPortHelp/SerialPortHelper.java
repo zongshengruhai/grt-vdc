@@ -126,6 +126,7 @@ public class SerialPortHelper {
                 }
                 bBuffer = new byte[0];
                 mOutputStream.write(bOutArray);
+                Log.e("串口消息", "发送数据：" + MyFunc.ByteArrToHex(bOutArray));
             }
         }catch (IOException e){
             e.printStackTrace();
@@ -173,7 +174,7 @@ public class SerialPortHelper {
                     if ((iReadNewLength == iReadLength)&& _isOpen){
 //                        ComBean comRecData = new ComBean(sPortName,buffer,size)
                         if (mContext != null){
-//                            Log.e("串口消息", "数据" + MyFunc.ByteArrToHex(bBuffer));
+                            Log.e("串口消息", "接收数据：" + MyFunc.ByteArrToHex(bBuffer));
                             readData(bBuffer.length,bBuffer);
                         }else {
                             Log.e("串口消息","环境未来准备好");
@@ -342,10 +343,8 @@ public class SerialPortHelper {
         SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
         SharedPreferences rAlarmData = mContext.getSharedPreferences("AlarmData",0);
 
-        Log.e("readData: ", temp);
         if (size > 0 && size< 600 && buffer[0] == 0x7E && buffer[size-1] == 0x0D){
 
-            Log.e( "readData: ", MyFunc.addCrc(buffer)+"");
             if (MyFunc.addCrc(buffer) == buffer[size - 2]){
                 _isCommFlag = true;
 
@@ -369,16 +368,16 @@ public class SerialPortHelper {
                             sSystemTime = MyFunc.BCDArrtoString(bTime);
 
                             // 遥测
-                            wRealData.putInt("i_Rv",iYc[0]);                             //R相电压
-                            wRealData.putInt("i_Sv",iYc[1]);                             //S相电压
-                            wRealData.putInt("i_Tv",iYc[2]);                             //T相电压
-                            wRealData.putInt("i_Uv",iYc[3]);                             //U相电压
-                            wRealData.putInt("i_Vv",iYc[4]);                             //V相电压
-                            wRealData.putInt("i_Wv",iYc[5]);                             //W相电压
-                            wRealData.putInt("i_Ua",iYc[6]);                             //U相电流
-                            wRealData.putInt("i_Va",iYc[7]);                             //V相电流
-                            wRealData.putInt("i_Wa",iYc[8]);                             //W相电流
-                            wRealData.putInt("i_Hz",iYc[9]);                             //频率
+                            wRealData.putInt("i_Uv",iYc[0]);                             //U相电压
+                            wRealData.putInt("i_Vv",iYc[1]);                             //V相电压
+                            wRealData.putInt("i_Wv",iYc[2]);                             //W相电压
+                            wRealData.putInt("i_Ua",iYc[3]);                             //U相电流
+                            wRealData.putInt("i_Va",iYc[4]);                             //V相电流
+                            wRealData.putInt("i_Wa",iYc[5]);                             //W相电流
+                            wRealData.putInt("i_Hz",iYc[6]);                             //频率
+                            wRealData.putInt("i_Rv",iYc[7]);                             //R相电压
+                            wRealData.putInt("i_Sv",iYc[8]);                             //S相电压
+                            wRealData.putInt("i_Tv",iYc[9]);                             //T相电压
                             wRealData.putInt("i_SagTime",iYc[10]);                       //录波次数
                             wRealData.putInt("i_Capv",iYc[11]);                          //电容电压
                             wRealData.putInt("i_CapAh",(((iYc[11]-232)/142)));           //电容容量
@@ -495,19 +494,22 @@ public class SerialPortHelper {
 
                                     //写入数值，写入成功后，将录波地址+1
                                     if (SystemFunc.alterExcelDatas(fileName,row_index,col_index,eventData)){
-//                                        int iRecordAddress = rStateData.getInt("i_RecordAddress_2",1) + 1;
+
                                         wStateData.putInt("i_RecordAddress_2",(rStateData.getInt("i_RecordAddress_2",1) + 1));
 
                                         //当一条录波读完后，复位相关标志位
                                         if (eventAddress[1] == 55){
+
                                             wStateData.putInt("i_RecordAddress_1",0);           //复位当前录波地址1
                                             wStateData.putInt("i_RecordAddress_2",0);           //复位当前录波地址2
                                             wStateData.putBoolean("is_RecordFlag",false);       //复位开始录波标志
                                             wStateData.putString("s_RecordFileName","");        //复位当前录波文件名
+
                                             //上位机录波地址往前移动
                                             int oldSagSite = rStateData.getInt("i_OldSagSite",0);
                                             if (oldSagSite == 3){ oldSagSite = 0; }else{ oldSagSite = oldSagSite + 1; }
                                             wStateData.putInt("i_OldSagSite",oldSagSite);
+
                                             //录波记录数+1
                                             wAlarmData.putInt("i_RecordTime",(rAlarmData.getInt("i_RecordTime",0)+1));
                                         }
@@ -515,7 +517,6 @@ public class SerialPortHelper {
 
                                     //复位录波在读的标志
                                     wStateData.putBoolean("is_ReadRecordFlag",false);
-
                                 }
                             }else {
                                 Log.e("串口信息","没有找到对应的EXCEL文件");

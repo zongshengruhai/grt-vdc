@@ -222,7 +222,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         names.add("Sv");
         names.add("Tv");
         fragment2ChartManager[0] = new fragment2LineChartManager(fragment2LineChart[0],names,colour);
-        fragment2ChartManager[0].setYAxis(500,-500,10);
+        fragment2ChartManager[0].setYAxis(520,-500,10);
         fragment2ChartManager[0].setDescription("输入电压");
         fragment2LineChart[0].setOnChartGestureListener(chartListener);
         names.clear();
@@ -231,7 +231,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         names.add("Vv");
         names.add("Wv");
         fragment2ChartManager[1] = new fragment2LineChartManager(fragment2LineChart[1],names,colour);
-        fragment2ChartManager[1].setYAxis(500,-500,10);
+        fragment2ChartManager[1].setYAxis(520,-520,10);
         fragment2ChartManager[1].setDescription("输出电压");
         fragment2LineChart[1].setOnChartGestureListener(chartListener);
         names.clear();

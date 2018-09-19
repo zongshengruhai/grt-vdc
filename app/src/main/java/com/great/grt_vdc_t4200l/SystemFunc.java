@@ -194,7 +194,7 @@ public class SystemFunc {
                 int Rows = sheet.getRows();
                 int Cols = sheet.getColumns();
 //                Log.e(TAG, "当前工作表名："+sheet.getName() );
-                Log.e(TAG, "当前表格，行数：" + Rows +" ，列数：" + Cols);
+//                Log.e(TAG, "当前表格，行数：" + Rows +" ，列数：" + Cols);
 
                 List<Object> objects = new ArrayList<Object>();
                 String val;
@@ -335,8 +335,8 @@ public class SystemFunc {
      */
     static public boolean alterExcelDatas(String file_Name,int row_index,int col_index,List<Object> data){
         if (checkFileExist(file_Name)){
-            final  List<List<Object>> old_data = readExcel(file_Name);
-            if (old_data != null && row_index + data.size()< old_data.size() && col_index < old_data.get(row_index).size()){
+            final List<List<Object>> old_data = readExcel(file_Name);
+            if (old_data != null && (row_index + data.size()) <= old_data.size() && col_index < old_data.get(row_index).size()){
                 for (int i = 0; i <  data.size(); i++) {
                     old_data.get(row_index+i).set(col_index,data.get(i));
                 }

@@ -64,15 +64,6 @@ public class fragment4 extends Fragment implements View.OnClickListener{
         fragment4Password = view.findViewById(R.id.fragment4PasswordIn);
         fragment4Login = view.findViewById(R.id.fragment4LoginBut);
         fragment4Login.setOnClickListener(this);
-//        fragment4Login.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                LoginClick();
-//            }
-//        });
-
-//        pickTime = view.findViewById(R.id.pickTime);
-//        pickTime.setOnClickListener(this);
 
         return view;
     }
@@ -109,67 +100,13 @@ public class fragment4 extends Fragment implements View.OnClickListener{
             int b = (a[i]-13)%6;
             if (b>0){b = 1;}else if (b<0){ b = 0;}
             Log.e(TAG, "test1: " + (((a[i]-13)/6) + b +1) );
-//            if (a[i]%6 == 1 ){
-//                Log.e(TAG, "****************************" );
-//            }
         }
 
-//        List<List<Object>> test = new ArrayList<>();
-//        List<Object> test1 = new ArrayList<>();
-//        for (int i = 1; i < 5; i++) {
-//            test1.add(i);
-//            for (int j = 0; j < 3; j++) {
-//                test1.add(0);
-//            }
-//            test.add(test1);
-//            test1 = new ArrayList<>();
-//        }
-//        Beep(fragment4_Context,SystemFunc.addExcelData(path,test));
-//
-//        List<List<Object>> qqq = SystemFunc.readExcel(path);
-//        Log.e(TAG, "test1: " + qqq );
-
-//        Log.e(TAG, "test1: " + addExeclData(path,test) + " " + readExcel(path) );
     }
     private void test2(){
         String path = "/data/data/com.great.grt_vdc_t4200l/files/fault_log/fault_record.xls";
-        Log.e(TAG, "test2: " + MyFunc.ByteArrToHex(MyFunc.InToByteArr(4096)) + MyFunc.InToByteArr(4096)[2]);
-        //        List<Object> test = new ArrayList<>();
-//        for (int i = 1; i < 8 ; i++) {
-//            test.add(i);
-//        }
-//        Beep(fragment4_Context,false);
-//        SystemFunc.alterExcelDatas(path,1,1,test);
-//
-//        List<List<Object>> qqq = SystemFunc.readExcel(path);
-//        Log.e(TAG, "test2: " + qqq );
-//        Beep(fragment4_Context,false);
-//        List<List<Object>> test = new ArrayList<>();
-//        List<Object> test1 = new ArrayList<>();
-//        test1.add(1);
-//        test1.add(2);
-//        test.add(test1);
-//        test1 = new ArrayList<>();
-//        test1.add(3);
-//        test1.add(4);
-//        test.add(test1);
-//        test1 = new ArrayList<>();
-//        test1.add(5);
-//        test1.add(6);
-//        test.add(test1);
-//        test1 = new ArrayList<>();
-//        test1.add(7);
-//        test1.add(8);
-//        test.add(test1);
-//        test1 = new ArrayList<>();
-//        test1.add("");
-//        Log.e(TAG, "list length = "+test.size() + " , list row = " + test);
-//        Log.e(TAG, "list length = "+test.size() + " , change = " + test.get(0).set(0,"田宇旺"));
-//        Log.e(TAG, "list length = "+test.size() + " , list row = " + test);
-//        Log.e(TAG, "list length = "+test.size() + " , list row = " + test);
-////        test.get(0).clear();
-//        test.remove(0);
-//        Log.e(TAG, "list length = "+test.size() + " , list row = " + test);
+        byte[] a = new byte[]{(byte)0xFF,(byte)0xFF};
+        Log.e(TAG, "test2: " + MyFunc.ByteArrToInt(a,0) + ~5);
     }
 
     Handler mHandler = new Handler();
@@ -177,7 +114,6 @@ public class fragment4 extends Fragment implements View.OnClickListener{
         @Override
         public void run() {
             mHandler.postDelayed(this,500);
-
         }
     };
     //登录事件

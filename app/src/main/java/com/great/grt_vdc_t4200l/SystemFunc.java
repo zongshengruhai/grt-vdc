@@ -39,7 +39,7 @@ import jxl.write.WritableWorkbook;
 public class SystemFunc {
 
     final static private String TAG = "SystemMethod";
-    static private boolean _isBeep = false;             //防止并发
+    static private boolean _isBeep = false;             //防止振铃并发
 
     //系统监控机制类方法--------------------------------------------------------------------------------------------------------
     /**

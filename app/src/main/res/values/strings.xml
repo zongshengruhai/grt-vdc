@@ -53,6 +53,7 @@
     <string name="fragment2RecordContent">发生于 %1$S，跌落到 %2$d V，跌落时长 %3$d ms %4$s</string>
     <string name="fragment2SearchHint">请输入关键字</string>
     <string name="fragment2SearchText">查询</string>
+    <string name="fragment2NullFileHint">请先从右侧选择指定录波记录</string>
     <!-- fragment3 -->
     <string name="fragment3ContentText">故障记录</string>
     <string name="fragment3RealState">实时状态</string>

@@ -1,6 +1,7 @@
 package com.great.grt_vdc_t4200l.Fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -49,6 +50,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
     private TextView[] fragment2TempRow = new TextView[2];
 
+    private TextView fragment2_Null;
+
     //MPAndroidChart
     private fragment2LineChartManager[] fragment2ChartManager = new fragment2LineChartManager[3];
     private LineChart[] fragment2LineChart = new LineChart[3];
@@ -91,7 +94,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         fragment2TempRow[0] = view.findViewById(R.id.fragment2TVtime);
         fragment2TempRow[1] = view.findViewById(R.id.fragment2TVcontent);
         fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),0));
-        fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),"0.0.0_00:00",0,0,""));
+        fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),"0.0.0_00:00:00",0,0,""));
 
         //List内容
         fragment2_Context = view.getContext();
@@ -104,6 +107,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
         //进度条实例化
         fragment2_Loading = view.findViewById(R.id.f2_Progress_bar);
+
+        fragment2_Null = view.findViewById(R.id.f2_nullFileHint);
 
         initSearch();
         SearchListData(null);
@@ -119,7 +124,6 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     @Override
     public void onResume(){
         super.onResume();
-
         f2_UiHandler.post(f2_UiRunable);
     }
 
@@ -129,7 +133,6 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     @Override
     public void onPause(){
         super.onPause();
-
         f2_UiHandler.removeCallbacks(f2_UiRunable);
     }
 
@@ -218,29 +221,30 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         colour.add(Color.GREEN);
         colour.add(Color.RED);
 
+        names = new ArrayList<>();
         names.add("Rv");
         names.add("Sv");
         names.add("Tv");
         fragment2ChartManager[0] = new fragment2LineChartManager(fragment2LineChart[0],names,colour);
-        fragment2ChartManager[0].setYAxis(520,-500,10);
+//        fragment2ChartManager[0].setYAxis(520,-500,10);
         fragment2ChartManager[0].setDescription("输入电压");
         fragment2LineChart[0].setOnChartGestureListener(chartListener);
-        names.clear();
 
+        names = new ArrayList<>();
         names.add("Uv");
         names.add("Vv");
         names.add("Wv");
         fragment2ChartManager[1] = new fragment2LineChartManager(fragment2LineChart[1],names,colour);
-        fragment2ChartManager[1].setYAxis(520,-520,10);
+//        fragment2ChartManager[1].setYAxis(520,-520,10);
         fragment2ChartManager[1].setDescription("输出电压");
         fragment2LineChart[1].setOnChartGestureListener(chartListener);
-        names.clear();
 
+        names = new ArrayList<>();
         names.add("Ua");
         names.add("Va");
         names.add("Wa");
         fragment2ChartManager[2] = new fragment2LineChartManager(fragment2LineChart[2],names,colour);
-        fragment2ChartManager[2].setYAxis(500,-500,10);
+//        fragment2ChartManager[2].setYAxis(500,-500,10);
         fragment2ChartManager[2].setDescription("输出电流");
         fragment2LineChart[2].setOnChartGestureListener(chartListener);
 
@@ -354,7 +358,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                     if (SearchFileName == null) {
 
                         temp[0] = regroupFiles[0];
-                        temp[1] = regroupFiles[4] + " " + regroupFiles[5];
+                        temp[1] = regroupFiles[4] + " " + regroupFiles[5].substring(0,regroupFiles[5].length()-3).trim().replace("：",":");
 
                     } else {
 
@@ -364,7 +368,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
                         if (SearchMatcher.find()) {
                             temp[0] = regroupFiles[0];
-                            temp[1] = regroupFiles[4] + " " + regroupFiles[5];
+                            temp[1] = regroupFiles[4] + " " + regroupFiles[5].substring(0,regroupFiles[5].length()-3).trim().replace("：",":");
+
                         } else {
                             SearchNull++;
                             if (SearchNull < files.length) {
@@ -401,7 +406,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
             if (_isLoadFlag){
                 _isLoadFlag = false;
                 fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),0));
-                fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),"0.0.0_00:00",0,0,""));
+                fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),"0.0.0_00:00:00",0,0,""));
                 fragment2ChartManager[0].clearLineChart();
                 fragment2ChartManager[1].clearLineChart();
                 fragment2ChartManager[2].clearLineChart();
@@ -494,34 +499,55 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         public void run() {
             f2_UiHandler.postDelayed(this,500);
 
-            SearchListData(Search_EditText.getText().toString());
+            SharedPreferences rStateData = getActivity().getSharedPreferences("StateData", 0);
+            if (rStateData.getInt("layPage",0) == 2) {
 
-            if (!_isLoadFlag){
-                //隐藏图表，显示进度条
-                fragment2LineChart[0].setVisibility(View.GONE);
-                fragment2LineChart[1].setVisibility(View.GONE);
-                fragment2LineChart[2].setVisibility(View.GONE);
-                fragment2_Loading.setVisibility(View.VISIBLE);
-                fragment2_Loading.setProgress(iProgress);
-            }else {
-                if (pickFileName != null){
-                    iProgress = 0;
-                    //填充表头
-                    String[] fillContent;
-                    fillContent = (pickFileName.replace(".xls","")).split("_");
-                    fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),Integer.parseInt(fillContent[0])));
-                    fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),(fillContent[4] + "_" + fillContent[5]),(Integer.parseInt(fillContent[2])),(Integer.parseInt(fillContent[3])),""));
-                    //移动到表头
-                    fragment2LineChart[0].moveViewToX(0);
-                    fragment2LineChart[1].moveViewToX(0);
-                    fragment2LineChart[2].moveViewToX(0);
-                    //显示图表，隐藏进度条
-                    fragment2LineChart[0].setVisibility(View.VISIBLE);
-                    fragment2LineChart[1].setVisibility(View.VISIBLE);
-                    fragment2LineChart[2].setVisibility(View.VISIBLE);
-                    fragment2_Loading.setVisibility(View.GONE);
-                    //清零选择
-                    pickFileName = null;
+                SearchListData(Search_EditText.getText().toString());
+
+                if (!_isLoadFlag) {
+                    //隐藏图表，显示进度条
+                    fragment2LineChart[0].setVisibility(View.GONE);
+                    fragment2LineChart[1].setVisibility(View.GONE);
+                    fragment2LineChart[2].setVisibility(View.GONE);
+                    fragment2_Loading.setVisibility(View.VISIBLE);
+                    fragment2_Loading.setProgress(iProgress);
+                    //提示点击
+                    fragment2_Null.setVisibility(View.GONE);
+                    fragment2TempRow[0].setVisibility(View.VISIBLE);
+                    fragment2TempRow[1].setVisibility(View.VISIBLE);
+                } else {
+                    if (pickFileName != null) {
+                        iProgress = 0;
+                        //填充表头
+                        String[] fillContent;
+                        fillContent = (pickFileName.replace(".xls", "")).split("_");
+                        fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime), Integer.parseInt(fillContent[0])));
+                        fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent), (fillContent[4] + " " + fillContent[5]).replace("：",":"), (Integer.parseInt(fillContent[2])), (Integer.parseInt(fillContent[3])), ""));
+                        //移动到表头
+                        fragment2LineChart[0].moveViewToX(0);
+                        fragment2LineChart[1].moveViewToX(0);
+                        fragment2LineChart[2].moveViewToX(0);
+                        //显示图表，隐藏进度条
+                        fragment2LineChart[0].setVisibility(View.VISIBLE);
+                        fragment2LineChart[1].setVisibility(View.VISIBLE);
+                        fragment2LineChart[2].setVisibility(View.VISIBLE);
+                        fragment2_Loading.setVisibility(View.GONE);
+                        //提示点击
+                        fragment2_Null.setVisibility(View.GONE);
+                        fragment2TempRow[0].setVisibility(View.VISIBLE);
+                        fragment2TempRow[1].setVisibility(View.VISIBLE);
+                        //清零选择
+                        pickFileName = null;
+                    }
+//                    else {
+//                        fragment2LineChart[0].setVisibility(View.GONE);
+//                        fragment2LineChart[1].setVisibility(View.GONE);
+//                        fragment2LineChart[2].setVisibility(View.GONE);
+//                        fragment2_Loading.setVisibility(View.GONE);
+//                        fragment2_Null.setVisibility(View.VISIBLE);
+//                        fragment2TempRow[0].setVisibility(View.GONE);
+//                        fragment2TempRow[1].setVisibility(View.GONE);
+//                    }
                 }
             }
         }

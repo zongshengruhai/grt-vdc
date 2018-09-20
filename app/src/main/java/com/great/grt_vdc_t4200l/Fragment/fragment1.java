@@ -386,11 +386,10 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             fragment1Handler.postDelayed(this,500);
 
             SharedPreferences rStateData = getActivity().getSharedPreferences("StateData", 0);
-            boolean _isCommFlag = rStateData.getBoolean("is_CommFlag",false);
-            int layPage = rStateData.getInt("layPage",0);
 
-            if (layPage == 1){
-                if (_isCommFlag) {
+            if (rStateData.getInt("layPage",0) == 1){
+
+//                if (rStateData.getBoolean("is_CommFlag",false)) {
 
                     SharedPreferences rRealData = getActivity().getSharedPreferences("RealData", 0);
                     SharedPreferences rAlarmData = getActivity().getSharedPreferences("AlarmData",0);
@@ -435,7 +434,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
 
                     fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime), rAlarmData.getInt("i_AlarmTime", 0)));
                     fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime), rAlarmData.getInt("i_RecordTime", 0)));
-                }
+//                }
             }
         }
     };

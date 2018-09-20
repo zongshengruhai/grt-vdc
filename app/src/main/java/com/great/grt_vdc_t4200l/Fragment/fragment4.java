@@ -69,6 +69,28 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        //注册广播
+        if (fragment4ActivityBroad == null){
+            fragment4ActivityBroad = new fragment4Broad();
+            getActivity().registerReceiver(fragment4ActivityBroad,fragment4IntentFilter);
+        }
+        mHandler.post(mRunable);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        //注销广播
+        if (fragment4ActivityBroad != null){
+            getActivity().unregisterReceiver(fragment4ActivityBroad);
+            fragment4ActivityBroad = null;
+        }
+        mHandler.removeCallbacks(mRunable);
+    }
+
+    @Override
     public void onClick(View v){
         switch(v.getId()){
 //            case R.id.pickTime:
@@ -88,34 +110,13 @@ public class fragment4 extends Fragment implements View.OnClickListener{
 
     private void test1(){
         String path = "/data/data/com.great.grt_vdc_t4200l/files/fault_log/fault_record.xls";
-        int[] a = new int[54];
-
-        int k = 2;
-        for (int i = 0; i <a.length ; i++) {
-            a[i] = k;
-            k ++;
-        }
-
-        for (int i = 0; i < a.length; i++) {
-            int b = (a[i]-13)%6;
-            if (b>0){b = 1;}else if (b<0){ b = 0;}
-            Log.e(TAG, "test1: " + (((a[i]-13)/6) + b +1) );
-        }
-
     }
+
     private void test2(){
-        String path = "/data/data/com.great.grt_vdc_t4200l/files/fault_log/fault_record.xls";
-        byte[] a = new byte[]{(byte)0xFF,(byte)0xFF};
-        Log.e(TAG, "test2: " + MyFunc.ByteArrToInt(a,0) + ~5);
+        String s = "11：05：55";
+        Log.e(TAG, "原始："+s+",删除："+s.substring(0,s.length()-3).trim().replace("：",":") );
     }
 
-    Handler mHandler = new Handler();
-    Runnable mRunable = new Runnable() {
-        @Override
-        public void run() {
-            mHandler.postDelayed(this,500);
-        }
-    };
     //登录事件
     private void LoginClick(){
 
@@ -145,7 +146,6 @@ public class fragment4 extends Fragment implements View.OnClickListener{
     private void hideFragment4Rl(){
 //        fragment4Rlayout[0].setVisibility(View.VISIBLE);
 //        fragment4Rlayout[1].setVisibility(View.GONE);
-        //tempshow
         fragment4Rlayout[0].setVisibility(View.GONE);
         fragment4Rlayout[1].setVisibility(View.VISIBLE);
     }
@@ -176,27 +176,13 @@ public class fragment4 extends Fragment implements View.OnClickListener{
         }
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        //注册广播
-        if (fragment4ActivityBroad == null){
-            fragment4ActivityBroad = new fragment4Broad();
-            getActivity().registerReceiver(fragment4ActivityBroad,fragment4IntentFilter);
+    Handler mHandler = new Handler();
+    Runnable mRunable = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.postDelayed(this,500);
         }
-        mHandler.post(mRunable);
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        //注销广播
-        if (fragment4ActivityBroad != null){
-            getActivity().unregisterReceiver(fragment4ActivityBroad);
-            fragment4ActivityBroad = null;
-        }
-        mHandler.removeCallbacks(mRunable);
-    }
+    };
 
 }
 

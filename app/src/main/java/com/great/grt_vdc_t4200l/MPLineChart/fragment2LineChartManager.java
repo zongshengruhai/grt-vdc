@@ -117,7 +117,7 @@ public class fragment2LineChartManager {
         xAxis.setEnabled(false);                                                                    //X轴使能
 
         //Y轴设置
-        leftAxis.setAxisMinimum(0f);                                                                //最小值
+//        leftAxis.setAxisMinimum(0f);                                                                //最小值
 //        rightAxis.setAxisMinimum(0f);
         leftAxis.enableGridDashedLine(10,5,0);                    //左Y轴网格虚线
 //        rightAxis.setEnabled(false);                                                                //右Y轴使能

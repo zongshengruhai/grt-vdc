@@ -44,7 +44,7 @@ public class Response  {
                             //时间
                             byte[] bTime = new byte[6];
                             System.arraycopy(bRec,35,bTime,0,6);
-                            sSystemTime = MyFunc.BCDArrtoString(bTime);
+                            sSystemTime = MyFunc.BCDArrToTime(bTime,"SystemTime");
 
                             SharedPreferences.Editor editor = mContext.getSharedPreferences("realTimeData",MODE_PRIVATE).edit();
 //                            SharedPreferences sharedPreferences = get

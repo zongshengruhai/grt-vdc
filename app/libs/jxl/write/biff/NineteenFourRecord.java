@@ -26,7 +26,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.WritableRecordData;
 
 /**
- * A record which indicates whether or the 1904 date system is
+ * A shortItem which indicates whether or the 1904 date system is
  * in use
  */
 class NineteenFourRecord extends WritableRecordData

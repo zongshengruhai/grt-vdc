@@ -82,7 +82,7 @@ class ColumnInfoRecord extends WritableRecordData
    * Constructor used when copying an existing spreadsheet
    * 
    * @param col the column number
-   * @param cir the column info record read in
+   * @param cir the column info shortItem read in
    * @param fr  the format records
    */
   public ColumnInfoRecord(jxl.read.biff.ColumnInfoRecord cir, 
@@ -161,7 +161,7 @@ class ColumnInfoRecord extends WritableRecordData
   }
 
   /**
-   * Gets the cell format associated with this column info record
+   * Gets the cell format associated with this column info shortItem
    *
    * @retun the cell format for this column
    */

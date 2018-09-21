@@ -67,6 +67,6 @@ class Name extends Operand implements ParsedThing
    */
   public void getString(StringBuffer buf)
   {
-    buf.append("[Name record not implemented]");
+    buf.append("[Name shortItem not implemented]");
   }
 }

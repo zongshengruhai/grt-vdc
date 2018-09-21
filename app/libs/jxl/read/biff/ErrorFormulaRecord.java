@@ -122,7 +122,7 @@ class ErrorFormulaRecord extends CellValue
    * Gets the raw bytes for the formula.  This will include the
    * parsed tokens array
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    */
   public byte[] getFormulaData()
   {

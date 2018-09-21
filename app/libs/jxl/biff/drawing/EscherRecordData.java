@@ -22,13 +22,13 @@ package jxl.biff.drawing;
 import jxl.biff.IntegerHelper;
 
 /**
- * A single record from an Escher stream.  Basically this a container for
- * the header data for each Escher record
+ * A single shortItem from an Escher stream.  Basically this a container for
+ * the header data for each Escher shortItem
  */
 final class EscherRecordData
 {
   /**
-   * The byte position of this record in the escher stream
+   * The byte position of this shortItem in the escher stream
    */
   private int pos;
 
@@ -43,22 +43,22 @@ final class EscherRecordData
   private int version;
 
   /**
-   * The record id
+   * The shortItem id
    */
   private int recordId;
 
   /**
-   * The length of the record, excluding the 8 byte header
+   * The length of the shortItem, excluding the 8 byte header
    */
   private int length;
 
   /**
-   * Indicates whether this record is a container
+   * Indicates whether this shortItem is a container
    */
   private boolean container;
 
   /**
-   * The type of this record
+   * The type of this shortItem
    */
   private EscherRecordType type;
 
@@ -86,7 +86,7 @@ final class EscherRecordData
     // Version is the last four bits
     version = value & 0xf;
 
-    // Bytes 2 and 3 are the record id
+    // Bytes 2 and 3 are the shortItem id
     recordId = IntegerHelper.getInt(data[pos+2], data[pos+3]);
 
     // Length is bytes 4,5,6 and 7
@@ -106,7 +106,7 @@ final class EscherRecordData
   /**
    * Constructor
    *
-   * @param t the type of the escher record
+   * @param t the type of the escher shortItem
    */
   public EscherRecordData(EscherRecordType t)
   {
@@ -115,7 +115,7 @@ final class EscherRecordData
   }
 
   /**
-   * Determines whether this record is a container
+   * Determines whether this shortItem is a container
    *
    * @return TRUE if this is a container, FALSE otherwise
    */
@@ -135,9 +135,9 @@ final class EscherRecordData
   }
 
   /**
-   * Accessor for the record id
+   * Accessor for the shortItem id
    *
-   * @return the record id
+   * @return the shortItem id
    */
   public int getRecordId()
   {
@@ -165,7 +165,7 @@ final class EscherRecordData
   }
 
   /**
-   * Gets the escher type of this record
+   * Gets the escher type of this shortItem
    */
   EscherRecordType getType()
   {
@@ -209,7 +209,7 @@ final class EscherRecordData
   }
 
   /**
-   * Called when writing to set the length of this record
+   * Called when writing to set the length of this shortItem
    *
    * @param l the length
    */
@@ -219,7 +219,7 @@ final class EscherRecordData
   }
 
   /**
-   * Called when writing to set the version of this record
+   * Called when writing to set the version of this shortItem
    *
    * @param v the version
    */
@@ -250,7 +250,7 @@ final class EscherRecordData
     value |= version;
     IntegerHelper.getTwoBytes(value, data, 0);
 
-    // Bytes 2 and 3 are the record id
+    // Bytes 2 and 3 are the shortItem id
     IntegerHelper.getTwoBytes(recordId, data, 2);
 
     // Length is bytes 4,5,6 and 7

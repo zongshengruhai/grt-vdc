@@ -187,7 +187,7 @@ public class SheetDrawingWriter
                                firstMsoData[31]);
     IntegerHelper.getFourBytes(len+length, firstMsoData, 28);
 
-    // Now write out each MsoDrawing record and object record
+    // Now write out each MsoDrawing shortItem and object shortItem
 
     // First MsoRecord
     MsoDrawingRecord msoDrawingRecord = new MsoDrawingRecord(firstMsoData);
@@ -325,7 +325,7 @@ public class SheetDrawingWriter
                                firstMsoData[31]);
     IntegerHelper.getFourBytes(len+length, firstMsoData, 28);
 
-    // Now write out each MsoDrawing record and object record
+    // Now write out each MsoDrawing shortItem and object shortItem
 
     // First MsoRecord
     MsoDrawingRecord msoDrawingRecord = new MsoDrawingRecord(firstMsoData);

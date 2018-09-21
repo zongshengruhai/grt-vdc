@@ -18,8 +18,8 @@ import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
-import com.great.grt_vdc_t4200l.ListView.record;
-import com.great.grt_vdc_t4200l.ListView.recordAdapter;
+import com.great.grt_vdc_t4200l.ListView.shortItem;
+import com.great.grt_vdc_t4200l.ListView.shortItemAdapter;
 import com.great.grt_vdc_t4200l.MPLineChart.fragment2LineChartManager;
 import com.great.grt_vdc_t4200l.R;
 
@@ -62,8 +62,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     //listView
     private Context fragment2_Context;
     private ListView fragment2_ListView;
-    private List<record> fragment2_Data  = new LinkedList<>();
-    private recordAdapter fragment2_RecordAdapter;
+    private List<shortItem> fragment2_Data  = new LinkedList<>();
+    private shortItemAdapter fragment2_RecordAdapter;
 
     //筛选
     private EditText Search_EditText;
@@ -327,14 +327,14 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
             //清空ListView
             fragment2_Data.clear();
-            fragment2_RecordAdapter = new recordAdapter((LinkedList<record>) fragment2_Data,fragment2_Context);
+            fragment2_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment2_Data,fragment2_Context,"");
             fragment2_ListView.setAdapter(fragment2_RecordAdapter);
 
             //路径中没有文件
             if (files.length <= 0){
 
-                fragment2_Data.add(new record("","当前暂无录波记录","",""));
-                fragment2_RecordAdapter = new recordAdapter((LinkedList<record>) fragment2_Data,fragment2_Context);
+                fragment2_Data.add(new shortItem("","当前暂无录波记录","",""));
+                fragment2_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment2_Data,fragment2_Context,"");
                 fragment2_ListView.setAdapter(fragment2_RecordAdapter);
                 fragment2_ListView.setOnItemClickListener(this);
 
@@ -383,8 +383,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                     }
 
                     //更新ListView
-                    fragment2_Data.add(new record(temp[0], temp[1], "", str));
-                    fragment2_RecordAdapter = new recordAdapter((LinkedList<record>) fragment2_Data, fragment2_Context);
+                    fragment2_Data.add(new shortItem(temp[0], temp[1], "", str));
+                    fragment2_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment2_Data, fragment2_Context,"");
                     fragment2_ListView.setAdapter(fragment2_RecordAdapter);
                     fragment2_ListView.setOnItemClickListener(this);
 

@@ -175,7 +175,7 @@ public abstract class DateRecord extends CellValue
    * 
    * @param c the column
    * @param r the row
-   * @param dr the record to copy
+   * @param dr the shortItem to copy
    */
   protected DateRecord(int c, int r, DateRecord dr)
   {

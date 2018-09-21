@@ -15,4 +15,8 @@
     <color name="Reached">#0071fa</color>
     <color name="Unreached">#9c0071fa</color>
 
+    <color name="ListLine">#9cffffff</color>
+    <color name="ListHideLine">#00000000</color>
+    <color name="TextInHint">#646464</color>
+
 </resources>

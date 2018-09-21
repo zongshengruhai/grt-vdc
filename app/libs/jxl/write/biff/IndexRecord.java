@@ -33,11 +33,11 @@ class IndexRecord extends WritableRecordData
    */
   private byte[] data;
   /**
-   * The numbe of rows served by this index record
+   * The numbe of rows served by this index shortItem
    */
   private int rows;
   /**
-   * The position of the BOF record in the excel output stream
+   * The position of the BOF shortItem in the excel output stream
    */
   private int bofPosition;
   /**
@@ -53,7 +53,7 @@ class IndexRecord extends WritableRecordData
   /**
    * Constructor
    * 
-   * @param pos the position of the BOF record
+   * @param pos the position of the BOF shortItem
    * @param bl the number of blocks
    * @param r the number of rows
    */
@@ -83,7 +83,7 @@ class IndexRecord extends WritableRecordData
   }
 
   /**
-   * Adds another index record into the array
+   * Adds another index shortItem into the array
    * 
    * @param pos the position in the output file
    */
@@ -95,7 +95,7 @@ class IndexRecord extends WritableRecordData
 
   /**
    * Sets the position of the data start.  This happens to be the position
-   * of the DEFCOLWIDTH record
+   * of the DEFCOLWIDTH shortItem
    */
   void setDataStartPosition(int pos)
   {

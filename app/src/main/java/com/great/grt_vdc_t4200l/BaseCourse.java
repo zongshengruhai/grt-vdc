@@ -61,6 +61,9 @@ public class BaseCourse extends FragmentActivity {
     SerialControl downCom;                                      //串口
 //    private String sOutData = "7E0000000000000D";
     private byte[] bOutData = new byte[]{(byte)0x7E,0x00,0x00,0x00,0x00,0x00,0x00,(byte)0x0D};
+    //系统自检声明----------------------------------------------------
+    private boolean _isUserSet = false;
+    private String[] sUserData = new String[3];
     //数据声明----------------------------------------------------
     private int[] iTelemetry = new int[14];                     //遥测
     private boolean[] _isTelecommand = new boolean[8];          //遥信
@@ -194,6 +197,17 @@ public class BaseCourse extends FragmentActivity {
             int fragmentToast = intent.getIntExtra("fragmentToast",0);
             if (fragmentToast > 0){
                 Toast(fragmentToast);
+            }
+
+            //fragment4设置触发事件
+            String[] test = intent.getStringArrayExtra("UserSet");
+            if (test != null ){
+                if (test[2].equals("校准")) {
+                    _isUserSet = true;
+                    sUserData = test;
+                }else if (test[2].equals("设置")){
+
+                }
             }
 
         }
@@ -546,49 +560,24 @@ public class BaseCourse extends FragmentActivity {
 
 //                Log.e(TAG, "run: " + rStateData.getBoolean("is_RecordFlag",false)+ "," +rStateData.getBoolean("is_ReadRecordFlag",false));
                 //需要读录波，且没有在读录波
-                if (rStateData.getBoolean("is_RecordFlag",false) && !rStateData.getBoolean("is_ReadRecordFlag",false)){
+                if (rStateData.getBoolean("is_RecordFlag",false) && !rStateData.getBoolean("is_ReadRecordFlag",false) && !_isUserSet){
                     iReadRecordError = 0;
                     wStateData.putBoolean("is_ReadRecordFlag",true);
                     bOutData[1] = (byte)0x10;
-                    //求地址
+                    //地址1
                     int recordAddress_1 = rStateData.getInt("i_OldSagSite",0) + 256;
                     bOutData[2] = MyFunc.InToByteArr(recordAddress_1)[2];
                     bOutData[3] = MyFunc.InToByteArr(recordAddress_1)[3];
-
+                    //地址2
                     int recordAddress_2 = rStateData.getInt("i_RecordAddress_2",0) + 1;
-
-                    //临时测试用
-//                    if ( recordAddress_2 == 1){
-//                        List<List<Object>> execel = new ArrayList<>();
-//                        execel.clear();
-//                        List<Object> excelHead = new ArrayList<>();
-//                        excelHead.add("R相输入电压");
-//                        excelHead.add("S相输入电压");
-//                        excelHead.add("T相输入电压");
-//                        excelHead.add("U相输出电压");
-//                        excelHead.add("V相输出电压");
-//                        excelHead.add("W相输出电压");
-//                        excelHead.add("U相输出电流");
-//                        excelHead.add("V相输出电流");
-//                        excelHead.add("W相输出电流");
-//                        execel.add(excelHead);
-//                        int recordNum = rAlarmData.getInt("i_RecordTime",0) + 1;
-//                        String fileName = mContext.getFilesDir().getPath() + "/record_log/"+recordNum+"_"+"1_1_1_2018.08.08_08:08"+".xls";
-//                        if (SystemFunc.createExcel(fileName,execel)) {
-//                            wStateData.putInt("i_RecordAddress_2", 1);
-//                            wStateData.putString("s_RecordFileName", fileName);
-//                            recordAddress_2 = 2;
-//                        }
-//                    }
-
                     bOutData[4] = MyFunc.InToByteArr(recordAddress_2)[2];
                     bOutData[5] = MyFunc.InToByteArr(recordAddress_2)[3];
-
+                    //CRC
                     bOutData[6] = MyFunc.addCrc(bOutData);
                     new ComThread().start();
 
                 }//不需要读录波，或已经在处理录波
-                else if (!rStateData.getBoolean("is_RecordFlag",false) || rStateData.getBoolean("is_ReadRecordFlag",false)){
+                else if ((!rStateData.getBoolean("is_RecordFlag",false) || rStateData.getBoolean("is_ReadRecordFlag",false))&&!_isUserSet){
 
                     bOutData[1] = (byte)0x03;
                     bOutData[2] = (byte)0x00;
@@ -598,6 +587,27 @@ public class BaseCourse extends FragmentActivity {
                     bOutData[6] = MyFunc.addCrc(bOutData);
                     new ComThread().start();
 
+                }//用户触发遥控、遥调
+                else if (_isUserSet){
+
+                    bOutData[1] = (byte)0x06;
+                    //判断地址
+                    switch (sUserData[0]){
+                        case "R相输入电压:":
+                            bOutData[2] = (byte)0x00;
+                            bOutData[3] = (byte)0x07;
+                            break;
+                    }
+                    //转换数据
+                    int SetData = Integer.parseInt(sUserData[1]);
+                    bOutData[4] = MyFunc.InToByteArr(SetData)[2];
+                    bOutData[5] = MyFunc.InToByteArr(SetData)[3];
+                    //CRC
+                    bOutData[6] = MyFunc.addCrc(bOutData);
+                    new ComThread().start();
+                    //服务发送标准
+                    _isUserSet = false;
+                    sUserData = new String[3];
                 }
 
                 //防止遥测录波时通讯失败

@@ -39,8 +39,8 @@
             <EditText
                 android:id="@+id/fragment4PasswordIn"
                 android:textSize="30sp"
-                android:hint="请输入密码"
-                android:textColorHint="#646464"
+                android:hint="@string/fragment4PasswordHint"
+                android:textColorHint="@color/TextInHint"
                 android:maxLines="1"
                 android:inputType="textPassword"
                 android:maxLength="8"
@@ -50,7 +50,7 @@
 
             <Button
                 android:id="@+id/fragment4LoginBut"
-                android:text="@string/fragmnet4LoginBtu"
+                android:text="@string/fragment44LoginBtu"
                 android:textSize="28sp"
                 android:background="@drawable/txt_whiteborder"
                 android:layout_marginStart="10dp"
@@ -66,476 +66,570 @@
     <RelativeLayout
         android:id="@+id/fragment4Lay2"
         android:layout_weight="1.0"
-        android:layout_margin="5dp"
-        android:background="@drawable/txt_rectborder"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/fragment4Lay2Centre"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:id="@+id/fragment4_data"
+            android:orientation="vertical"
+            android:layout_margin="5dp"
+            android:layout_width="664dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/txt_rectborder">
 
-        <TableLayout
-            android:id="@+id/fragment4outVrow"
-            android:layout_toStartOf="@+id/fragment4Lay2Centre"
-            android:layout_above="@+id/fragment4Lay2Centre"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="15dp"
-            android:layout_width="432dp"
-            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/SettingHint"
+                android:text="@string/fragment4SettingHint"
+                android:textSize="32sp"
+                android:textColor="@color/black"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-            <TableRow
-                android:layout_margin="5dp">
-                <TextView
-                    android:textSize="32sp"
-                    android:text="@string/fragment4outVRow"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/fragmnet4Utv"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textSize="28sp"
-                    android:inputType="number"
-                    android:gravity="clip_vertical|end"
-                    android:hint="@string/fragment4hint"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/unitV"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:text="@string/fragment4btu"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
+            <ListView
+                android:id="@+id/pickContent"
+                android:dividerHeight="3dp"
+                android:divider="@color/ListHideLine"
+                android:layout_margin="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/fragmnet4Vtv"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textSize="28sp"
-                    android:inputType="number"
-                    android:gravity="clip_vertical|end"
-                    android:hint="@string/fragment4hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/unitV"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:text="@string/fragment4btu"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/fragmnet4Wtv"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textSize="28sp"
-                    android:inputType="number"
-                    android:gravity="clip_vertical|end"
-                    android:hint="@string/fragment4hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/unitV"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:text="@string/fragment4btu"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
+            </ListView>
 
 
-        </TableLayout>
+            <!--&lt;!&ndash;设置1&ndash;&gt;-->
+            <!--<LinearLayout-->
+                <!--android:id="@+id/SetLayout_1"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
 
-        <TableLayout
-            android:id="@+id/fragment4outArow"
-            android:layout_toStartOf="@+id/fragment4Lay2Centre"
-            android:layout_below="@+id/fragment4Lay2Centre"
+                <!--&lt;!&ndash;R相电压校准&ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="70dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="clip_vertical|end"-->
+                        <!--android:text="@string/fragment4Rtv"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/RvEt"-->
+                        <!--android:maxLength="4"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="end"-->
+                        <!--android:hint="@string/fragmentEdHint"-->
+                        <!--android:textColorHint="@color/TextInHint"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="200dp"-->
+                        <!--android:layout_height="match_parent" />-->
+
+                    <!--<Button-->
+                        <!--android:id="@+id/RvBt"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:layout_width="150dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/fragment4btu"-->
+                        <!--android:textSize="26sp"-->
+                        <!--android:background="@drawable/txt_whiteborder"/>-->
+
+                <!--</LinearLayout>-->
+                <!--&lt;!&ndash;S相电压校准&ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="70dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="clip_vertical|end"-->
+                        <!--android:text="@string/fragment4Stv"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/SvEt"-->
+                        <!--android:maxLength="4"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="end"-->
+                        <!--android:hint="@string/fragmentEdHint"-->
+                        <!--android:textColorHint="@color/TextInHint"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="200dp"-->
+                        <!--android:layout_height="match_parent" />-->
+
+                    <!--<Button-->
+                        <!--android:id="@+id/SvBt"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:layout_width="150dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/fragment4btu"-->
+                        <!--android:textSize="26sp"-->
+                        <!--android:background="@drawable/txt_whiteborder"/>-->
+
+                <!--</LinearLayout>-->
+                <!--&lt;!&ndash;T相电压校准&ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="70dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="clip_vertical|end"-->
+                        <!--android:text="@string/fragment4Ttv"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/TvEt"-->
+                        <!--android:maxLength="4"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="end"-->
+                        <!--android:hint="@string/fragmentEdHint"-->
+                        <!--android:textColorHint="@color/TextInHint"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="200dp"-->
+                        <!--android:layout_height="match_parent" />-->
+
+                    <!--<Button-->
+                        <!--android:id="@+id/TvBt"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:layout_width="150dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/fragment4btu"-->
+                        <!--android:textSize="26sp"-->
+                        <!--android:background="@drawable/txt_whiteborder"/>-->
+
+                <!--</LinearLayout>-->
+                <!--&lt;!&ndash;输入电压上限告警&ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="70dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="clip_vertical|end"-->
+                        <!--android:text="@string/fragment4IvMaX"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/InVMax"-->
+                        <!--android:maxLength="4"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="end"-->
+                        <!--android:hint="@string/fragmentEdHint"-->
+                        <!--android:textColorHint="@color/TextInHint"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="190dp"-->
+                        <!--android:layout_height="match_parent" />-->
+
+                    <!--<Button-->
+                        <!--android:id="@+id/InVMaxBt"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:layout_width="150dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/fragment4btu2"-->
+                        <!--android:textSize="26sp"-->
+                        <!--android:background="@drawable/txt_whiteborder"/>-->
+
+                <!--</LinearLayout>-->
+
+            <!--</LinearLayout>-->
+
+            <!--&lt;!&ndash;设置2&ndash;&gt;-->
+            <!--<LinearLayout-->
+                <!--android:id="@+id/SetLayout_2"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--&lt;!&ndash;U相电压校准&ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="70dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="clip_vertical|end"-->
+                        <!--android:text="@string/fragment4Utv"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/UvEt"-->
+                        <!--android:maxLength="4"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="end"-->
+                        <!--android:hint="@string/fragmentEdHint"-->
+                        <!--android:textColorHint="@color/TextInHint"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="200dp"-->
+                        <!--android:layout_height="match_parent" />-->
+
+                    <!--<Button-->
+                        <!--android:id="@+id/UvBt"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:layout_width="150dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/fragment4btu"-->
+                        <!--android:textSize="26sp"-->
+                        <!--android:background="@drawable/txt_whiteborder"/>-->
+
+                <!--</LinearLayout>-->
+
+                <!--&lt;!&ndash;V相电压校准&ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="70dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="clip_vertical|end"-->
+                        <!--android:text="@string/fragment4Vtv"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/VvEt"-->
+                        <!--android:maxLength="4"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="end"-->
+                        <!--android:hint="@string/fragmentEdHint"-->
+                        <!--android:textColorHint="@color/TextInHint"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="200dp"-->
+                        <!--android:layout_height="match_parent" />-->
+
+                    <!--<Button-->
+                        <!--android:id="@+id/VvBt"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:layout_width="150dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/fragment4btu"-->
+                        <!--android:textSize="26sp"-->
+                        <!--android:background="@drawable/txt_whiteborder"/>-->
+
+                <!--</LinearLayout>-->
+
+                <!--&lt;!&ndash;W相电压校准&ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="70dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="clip_vertical|end"-->
+                        <!--android:text="@string/fragment4Wtv"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/WvEt"-->
+                        <!--android:maxLength="4"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="end"-->
+                        <!--android:hint="@string/fragmentEdHint"-->
+                        <!--android:textColorHint="@color/TextInHint"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="200dp"-->
+                        <!--android:layout_height="match_parent" />-->
+
+                    <!--<Button-->
+                        <!--android:id="@+id/WvBt"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:layout_width="150dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/fragment4btu"-->
+                        <!--android:textSize="26sp"-->
+                        <!--android:background="@drawable/txt_whiteborder"/>-->
+
+                <!--</LinearLayout>-->
+
+                <!--&lt;!&ndash;U相电流校准&ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="70dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="clip_vertical|end"-->
+                        <!--android:text="@string/fragment4Uitv"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/UiEt"-->
+                        <!--android:maxLength="4"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="end"-->
+                        <!--android:hint="@string/fragmentEdHint"-->
+                        <!--android:textColorHint="@color/TextInHint"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="200dp"-->
+                        <!--android:layout_height="match_parent" />-->
+
+                    <!--<Button-->
+                        <!--android:id="@+id/UiBt"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:layout_width="150dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/fragment4btu"-->
+                        <!--android:textSize="26sp"-->
+                        <!--android:background="@drawable/txt_whiteborder"/>-->
+
+                <!--</LinearLayout>-->
+
+                <!--&lt;!&ndash;V相电流校准&ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="70dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="clip_vertical|end"-->
+                        <!--android:text="@string/fragment4Vitv"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/ViEt"-->
+                        <!--android:maxLength="4"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="end"-->
+                        <!--android:hint="@string/fragmentEdHint"-->
+                        <!--android:textColorHint="@color/TextInHint"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="200dp"-->
+                        <!--android:layout_height="match_parent" />-->
+
+                    <!--<Button-->
+                        <!--android:id="@+id/ViBt"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:layout_width="150dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/fragment4btu"-->
+                        <!--android:textSize="26sp"-->
+                        <!--android:background="@drawable/txt_whiteborder"/>-->
+
+                <!--</LinearLayout>-->
+
+                <!--&lt;!&ndash;U相电流校准&ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="70dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="clip_vertical|end"-->
+                        <!--android:text="@string/fragment4Witv"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/WiEt"-->
+                        <!--android:maxLength="4"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textSize="28sp"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="end"-->
+                        <!--android:hint="@string/fragmentEdHint"-->
+                        <!--android:textColorHint="@color/TextInHint"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:layout_width="200dp"-->
+                        <!--android:layout_height="match_parent" />-->
+
+                    <!--<Button-->
+                        <!--android:id="@+id/WiBt"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:layout_width="150dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/fragment4btu"-->
+                        <!--android:textSize="26sp"-->
+                        <!--android:background="@drawable/txt_whiteborder"/>-->
+
+                <!--</LinearLayout>-->
+
+
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/SetLayout_3"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content">-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/SetLayout_4"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content">-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/SetLayout_5"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content">-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_toEndOf="@+id/fragment4_data"
+            android:layout_marginEnd="5dp"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="15dp"
-            android:layout_width="432dp"
-            android:layout_height="wrap_content">
-
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="32sp"
-                    android:text="@string/fragment4outARow"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/fragmnet4Uitv"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textSize="28sp"
-                    android:inputType="number"
-                    android:gravity="clip_vertical|end"
-                    android:hint="@string/fragment4hint"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/unitA"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:text="@string/fragment4btu"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/fragmnet4Vitv"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textSize="28sp"
-                    android:inputType="number"
-                    android:gravity="clip_vertical|end"
-                    android:hint="@string/fragment4hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/unitA"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:text="@string/fragment4btu"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/fragmnet4Witv"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textSize="28sp"
-                    android:inputType="number"
-                    android:gravity="clip_vertical|end"
-                    android:hint="@string/fragment4hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/unitA"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:text="@string/fragment4btu"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-
-
-        </TableLayout>
-
-        <TableLayout
-            android:id="@+id/fragment4inVrow"
-            android:layout_toEndOf="@+id/fragment4Lay2Centre"
-            android:layout_above="@+id/fragment4Lay2Centre"
             android:layout_marginBottom="5dp"
-            android:layout_marginStart="15dp"
-            android:layout_width="432dp"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/txt_rectborder">
 
-            <TableRow
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="32sp"
-                    android:text="@string/fragment4outARow"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
+            <TextView
+                android:text="@string/fragment4ListHint"
+                android:textSize="30sp"
+                android:textColor="@color/black"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/fragmnet4Rtv"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textSize="28sp"
-                    android:inputType="number"
-                    android:gravity="clip_vertical|end"
-                    android:hint="@string/fragment4hint"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/unitV"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:text="@string/fragment4btu"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
+            <ListView
+                android:id="@+id/pickSet"
+                android:dividerHeight="3dp"
+                android:divider="@color/ListLine"
+                android:layout_margin="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/fragmnet4Stv"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textSize="28sp"
-                    android:inputType="number"
-                    android:gravity="clip_vertical|end"
-                    android:hint="@string/fragment4hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/unitV"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:text="@string/fragment4btu"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
+            </ListView>
 
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/fragmnet4Ttv"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textSize="28sp"
-                    android:inputType="number"
-                    android:gravity="clip_vertical|end"
-                    android:hint="@string/fragment4hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/unitV"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:text="@string/fragment4btu"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-
-
-        </TableLayout>
-
-        <TableLayout
-            android:id="@+id/fragment4otherrow"
-            android:layout_toEndOf="@+id/fragment4Lay2Centre"
-            android:layout_below="@+id/fragment4Lay2Centre"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="15dp"
-            android:layout_width="432dp"
-            android:layout_height="wrap_content">
-
-            <TableRow
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="32sp"
-                    android:text="@string/fragment4otherRow"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/fragment4capV"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textSize="28sp"
-                    android:inputType="number"
-                    android:gravity="clip_vertical|end"
-                    android:hint="@string/fragment4hint"
-
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/unitV"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:text="@string/fragment4btu"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp">
-
-                <TextView
-                    android:textSize="28sp"
-                    android:text="@string/fragment4timeSet"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <EditText
-                    android:textSize="28sp"
-                    android:inputType="datetime"
-                    android:gravity="clip_vertical|end"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-            </TableRow>
-
-            <TableRow>
-                <Button
-                    android:id="@+id/openMiuse"
-                    android:text="打开声音"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"/>
-
-                <Button
-                    android:id="@+id/closeMiuse"
-                    android:text="关闭声音"
-                    android:textSize="28sp"
-                    android:background="@drawable/button_style"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-
-        </TableLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 </LinearLayout>

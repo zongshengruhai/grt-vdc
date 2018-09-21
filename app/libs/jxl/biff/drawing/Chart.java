@@ -111,7 +111,7 @@ public class Chart implements ByteData, EscherStream
   }
 
   /**
-   * Gets the entire binary record for the chart as a chunk of binary data
+   * Gets the entire binary shortItem for the chart as a chunk of binary data
    *
    * @return the bytes
    */
@@ -238,9 +238,9 @@ public class Chart implements ByteData, EscherStream
   }
 
   /**
-   * Accessor for the mso drawing record
+   * Accessor for the mso drawing shortItem
    *
-   * @return the drawing record
+   * @return the drawing shortItem
    */
   MsoDrawingRecord  getMsoDrawingRecord()
   {
@@ -248,9 +248,9 @@ public class Chart implements ByteData, EscherStream
   }
 
   /**
-   * Accessor for the obj record
+   * Accessor for the obj shortItem
    *
-   * @return the obj record
+   * @return the obj shortItem
    */
   ObjRecord getObjRecord()
   {

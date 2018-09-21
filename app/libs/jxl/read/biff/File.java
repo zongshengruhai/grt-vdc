@@ -157,9 +157,9 @@ public class File
   }
 
   /**
-   * Returns the next data record and increments the pointer
+   * Returns the next data shortItem and increments the pointer
    *
-   * @return the next data record
+   * @return the next data shortItem
    */
   Record next()
   {
@@ -168,9 +168,9 @@ public class File
   }
 
   /**
-   * Peek ahead to the next record, without incrementing the file position
+   * Peek ahead to the next shortItem, without incrementing the file position
    *
-   * @return the next record
+   * @return the next shortItem
    */
   Record peek()
   {
@@ -286,7 +286,7 @@ public class File
    */
   public boolean hasNext()
   {
-    // Allow four bytes for the record code and its length
+    // Allow four bytes for the shortItem code and its length
     return filePos < data.length - 4;
   }
 }

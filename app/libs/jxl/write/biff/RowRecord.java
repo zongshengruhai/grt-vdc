@@ -114,10 +114,10 @@ class RowRecord extends WritableRecordData
   }
 
   /**
-   * Sets the row details based upon the readable row record passed in
+   * Sets the row details based upon the readable row shortItem passed in
    * Called when copying spreadsheets
    *
-   * @param height the height of the row record in 1/20ths of a point
+   * @param height the height of the row shortItem in 1/20ths of a point
    * @param the collapsed status of the row
    */
   void setRowDetails(int height, boolean col)
@@ -200,7 +200,7 @@ class RowRecord extends WritableRecordData
 
   /**
    * Writes out all the cells in this row.  If more than three integer
-   * values occur consecutively, then a MulRK record is used to group the
+   * values occur consecutively, then a MulRK shortItem is used to group the
    * numbers
    * 
    * @exception IOException 
@@ -243,7 +243,7 @@ class RowRecord extends WritableRecordData
           writeIntegerValues(integerValues, outputFile);
           outputFile.write(cells[i]);
 
-          // If the cell is a string formula, write out the string record
+          // If the cell is a string formula, write out the string shortItem
           // immediately afterwards
           if (cells[i].getType() == CellType.STRING_FORMULA)
           {
@@ -266,7 +266,7 @@ class RowRecord extends WritableRecordData
 
   /**
    * Writes out the list of integer values.  If there are more than three,
-   * a MulRK record is used, otherwise a sequence of Numbers is used
+   * a MulRK shortItem is used, otherwise a sequence of Numbers is used
    * 
    * @exception IOException 
    * @param outputFile the output file
@@ -282,7 +282,7 @@ class RowRecord extends WritableRecordData
 
     if (integerValues.size() >= 3 )
     {
-      // Write out as a MulRK record
+      // Write out as a MulRK shortItem
       MulRKRecord mulrk = new MulRKRecord(integerValues);
       outputFile.write(mulrk);
     }
@@ -307,7 +307,7 @@ class RowRecord extends WritableRecordData
    */
   public byte[] getData()
   {
-    // Write out the row record
+    // Write out the row shortItem
     byte[] data = new byte[16];
     IntegerHelper.getTwoBytes(rowNumber, data, 0);
     IntegerHelper.getTwoBytes(numColumns, data, 4);
@@ -426,7 +426,7 @@ class RowRecord extends WritableRecordData
       }
     }
 
-    // Adjust the maximum column record
+    // Adjust the maximum column shortItem
     numColumns++;
   }
 
@@ -464,7 +464,7 @@ class RowRecord extends WritableRecordData
       }
     }
 
-    // Adjust the maximum column record
+    // Adjust the maximum column shortItem
     numColumns--;
   }
 

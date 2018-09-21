@@ -66,12 +66,12 @@ final class SheetReader
   private SSTRecord sharedStrings;
 
   /**
-   * A handle to the sheet BOF record, which indicates the stream type
+   * A handle to the sheet BOF shortItem, which indicates the stream type
    */
   private BOFRecord sheetBof;
 
   /**
-   * A handle to the workbook BOF record, which indicates the stream type
+   * A handle to the workbook BOF shortItem, which indicates the stream type
    */
   private BOFRecord workbookBof;
 
@@ -142,7 +142,7 @@ final class SheetReader
   private boolean nineteenFour;
 
   /**
-   * The PLS print record
+   * The PLS print shortItem
    */
   private PLSRecord plsRecord;
 
@@ -183,12 +183,12 @@ final class SheetReader
    * @param fr the formatting records
    * @param sst the shared string table
    * @param f the excel file
-   * @param sb the bof record which indicates the start of the sheet
-   * @param wb the bof record which indicates the start of the sheet
+   * @param sb the bof shortItem which indicates the start of the sheet
+   * @param wb the bof shortItem which indicates the start of the sheet
    * @param wp the workbook which this sheet belongs to
    * @param sp the start position of the sheet bof in the excel file
    * @param sh the sheet
-   * @param nf 1904 date record flag
+   * @param nf 1904 date shortItem flag
    * @exception BiffException
    */
   SheetReader(File f,
@@ -262,13 +262,13 @@ final class SheetReader
     MsoDrawingRecord msoRecord = null;
     ObjRecord objRecord = null;
 
-    // A handle to window2 record
+    // A handle to window2 shortItem
     Window2Record window2Record = null;
 
-    // A handle to printgridlines record
+    // A handle to printgridlines shortItem
     PrintGridLinesRecord printGridLinesRecord = null;
 
-    // A handle to printheaders record
+    // A handle to printheaders shortItem
     PrintHeadersRecord printHeadersRecord = null;
 
     while (cont)
@@ -279,10 +279,10 @@ final class SheetReader
       {
         System.err.print("Warning:  biff code zero found");
 
-        // Try a dimension record
+        // Try a dimension shortItem
         if (r.getLength() == 0xa)
         {
-          logger.warn("Biff code zero found - trying a dimension record.");
+          logger.warn("Biff code zero found - trying a dimension shortItem.");
           r.setType(Type.DIMENSION);
         }
         else
@@ -359,7 +359,7 @@ final class SheetReader
       {
         MulRKRecord mulrk = new MulRKRecord(r);
 
-        // Get the individual cell records from the multiple record
+        // Get the individual cell records from the multiple shortItem
         int num = mulrk.getNumberOfColumns();
         int ixf = 0;
         for (int i = 0; i < num; i++)
@@ -515,7 +515,7 @@ final class SheetReader
           if (!sharedFormulaAdded && prevSharedFormula != null)
           {
             // Do nothing.  It's possible for the biff file to contain the
-            // record sequence
+            // shortItem sequence
             // FORMULA-SHRFMLA-FORMULA-SHRFMLA-FORMULA-FORMULA-FORMULA
             // ie. it first lists all the formula templates, then it
             // lists all the individual formulas
@@ -598,7 +598,7 @@ final class SheetReader
       {
         MulBlankRecord mulblank = new MulBlankRecord(r);
 
-        // Get the individual cell records from the multiple record
+        // Get the individual cell records from the multiple shortItem
         int num = mulblank.getNumberOfColumns();
 
         for (int i = 0; i < num; i++)
@@ -749,8 +749,8 @@ final class SheetReader
         {
           if (msoRecord == null)
           {
-            logger.warn("object record is not associated with a drawing " +
-                        " record - ignoring");
+            logger.warn("object shortItem is not associated with a drawing " +
+                        " shortItem - ignoring");
           }
           else
           {
@@ -871,9 +871,9 @@ final class SheetReader
    */
   private Cell revertSharedFormula(BaseSharedFormulaRecord f)
   {
-    // String formulas look for a STRING record soon after the formula
+    // String formulas look for a STRING shortItem soon after the formula
     // occurred.  Temporarily the position in the excel file back
-    // to the point immediately after the formula record
+    // to the point immediately after the formula shortItem
     int pos = excelFile.getPos();
     excelFile.setPos(f.getFilePos());
 
@@ -1031,7 +1031,7 @@ final class SheetReader
   /**
    * Accessor
    *
-   * @return the environment specific print record
+   * @return the environment specific print shortItem
    */
   final PLSRecord getPLS()
   {

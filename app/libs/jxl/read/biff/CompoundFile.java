@@ -282,7 +282,7 @@ public final class CompoundFile extends BaseCompoundFile
   /**
    * Gets the property set with the specified name
    * @param name the property storage name
-   * @return the property storage record
+   * @return the property storage shortItem
    * @exception BiffException
    */
   private PropertyStorage getPropertyStorage(String name)

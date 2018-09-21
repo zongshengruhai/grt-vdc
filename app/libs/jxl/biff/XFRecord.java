@@ -41,7 +41,7 @@ import jxl.format.Orientation;
 import jxl.read.biff.Record;
 
 /**
- * Holds an extended formatting record
+ * Holds an extended formatting shortItem
  */
 public class XFRecord extends WritableRecordData implements CellFormat
 {
@@ -51,7 +51,7 @@ public class XFRecord extends WritableRecordData implements CellFormat
   private static Logger logger = Logger.getLogger(XFRecord.class);
 
   /**
-   * The index to the format record
+   * The index to the format shortItem
    */
   private int formatIndex;
 
@@ -66,23 +66,23 @@ public class XFRecord extends WritableRecordData implements CellFormat
   private XFType xfFormatType;
 
   /**
-   * Indicates whether this is a date formatting record
+   * Indicates whether this is a date formatting shortItem
    */
   private boolean date;
 
   /**
-   * Indicates whether this is a number formatting record
+   * Indicates whether this is a number formatting shortItem
    */
   private boolean number;
 
   /**
-   * The date format for this record.  Deduced when the record is
+   * The date format for this shortItem.  Deduced when the shortItem is
    * read in from a spreadsheet
    */
   private DateFormat dateFormat;
 
   /**
-   * The number format for this record.  Deduced when the record is read in
+   * The number format for this shortItem.  Deduced when the shortItem is read in
    * from a spreadsheet
    */
   private NumberFormat numberFormat;
@@ -93,15 +93,15 @@ public class XFRecord extends WritableRecordData implements CellFormat
    */
   private byte usedAttributes;
   /**
-   * The index to the font record used by this XF record
+   * The index to the font shortItem used by this XF shortItem
    */
   private int fontIndex;
   /**
-   * Flag to indicate whether this XF record represents a locked cell
+   * Flag to indicate whether this XF shortItem represents a locked cell
    */
   private boolean locked;
   /**
-   * Flag to indicate whether this XF record is hidden
+   * Flag to indicate whether this XF shortItem is hidden
    */
   private boolean hidden;
   /**
@@ -175,20 +175,20 @@ public class XFRecord extends WritableRecordData implements CellFormat
    */
   private int options;
   /**
-   * The index of this XF record within the workbook
+   * The index of this XF shortItem within the workbook
    */
   private int xfIndex;
   /**
-   * The font object for this XF record
+   * The font object for this XF shortItem
    */
   private FontRecord font;
   /**
-   * The format object for this XF record.  This is used when creating
-   * a writable record
+   * The format object for this XF shortItem.  This is used when creating
+   * a writable shortItem
    */
   private DisplayFormat format;
   /**
-   * Flag to indicate whether this XF record has been initialized
+   * Flag to indicate whether this XF shortItem has been initialized
    */
   private boolean initialized;
 
@@ -199,7 +199,7 @@ public class XFRecord extends WritableRecordData implements CellFormat
   private boolean read;
 
   /**
-   * The excel format for this record. This is used to display the actual
+   * The excel format for this shortItem. This is used to display the actual
    * excel format string back to the user (eg. when generating certain
    * types of XML document) as opposed to the java equivalent
    */
@@ -207,7 +207,7 @@ public class XFRecord extends WritableRecordData implements CellFormat
 
   /**
    * Flag to indicate whether the format information has been initialized.
-   * This is false if the xf record has been read in, but true if it
+   * This is false if the xf shortItem has been read in, but true if it
    * has been written
    */
   private boolean formatInfoInitialized;
@@ -391,7 +391,7 @@ public class XFRecord extends WritableRecordData implements CellFormat
   }
 
   /**
-   * A constructor used when creating a writable record
+   * A constructor used when creating a writable shortItem
    *
    * @param fnt the font
    * @param form the format
@@ -568,7 +568,7 @@ public class XFRecord extends WritableRecordData implements CellFormat
     // This format was not read in
     read = false;
 
-    // Treat this as a new cell record, so set the copied flag to false
+    // Treat this as a new cell shortItem, so set the copied flag to false
     copied = false;
 
     // The font or format indexes need to be set, so set initialized to false
@@ -576,7 +576,7 @@ public class XFRecord extends WritableRecordData implements CellFormat
   }
 
   /**
-   * Gets the java date format for this format record
+   * Gets the java date format for this format shortItem
    *
    * @return returns the date format
    */
@@ -586,7 +586,7 @@ public class XFRecord extends WritableRecordData implements CellFormat
   }
 
   /**
-   * Gets the java number format for this format record
+   * Gets the java number format for this format shortItem
    *
    * @return returns the number format
    */
@@ -596,9 +596,9 @@ public class XFRecord extends WritableRecordData implements CellFormat
   }
 
   /**
-   * Gets the lookup number of the format record
+   * Gets the lookup number of the format shortItem
    *
-   * @return returns the lookup number of the format record
+   * @return returns the lookup number of the format shortItem
    */
   public int getFormatRecord()
   {
@@ -733,7 +733,7 @@ public class XFRecord extends WritableRecordData implements CellFormat
   /**
    * Accessor for the locked flag
    *
-   * @return TRUE if this XF record locks cells, FALSE otherwise
+   * @return TRUE if this XF shortItem locks cells, FALSE otherwise
    */
   protected final boolean getLocked()
   {
@@ -743,7 +743,7 @@ public class XFRecord extends WritableRecordData implements CellFormat
   /**
    * Accessor for the hidden flag
    *
-   * @return TRUE if this XF record hides the cell, FALSE otherwise
+   * @return TRUE if this XF shortItem hides the cell, FALSE otherwise
    */
   protected final boolean getHidden()
   {
@@ -751,7 +751,7 @@ public class XFRecord extends WritableRecordData implements CellFormat
   }
 
   /**
-   * Sets whether or not this XF record locks the cell
+   * Sets whether or not this XF shortItem locks the cell
    *
    * @param l the locked flag
    */
@@ -1136,10 +1136,10 @@ public class XFRecord extends WritableRecordData implements CellFormat
 
   /**
    * If this cell has not been read in from an existing Excel sheet,
-   * then initializes this record with the XF index passed in. Calls
-   * initialized on the font and format record
+   * then initializes this shortItem with the XF index passed in. Calls
+   * initialized on the font and format shortItem
    *
-   * @param pos the xf index to initialize this record with
+   * @param pos the xf index to initialize this shortItem with
    * @param fr the containing formatting records
    * @param fonts the container for the fonts
    * @exception NumFormatRecordsException
@@ -1220,7 +1220,7 @@ public class XFRecord extends WritableRecordData implements CellFormat
    * Accessor to see if this format was read in.  Used when checking merged
    * cells
    *
-   * @return TRUE if this XF record was read in, FALSE if it was generated by
+   * @return TRUE if this XF shortItem was read in, FALSE if it was generated by
    *         the user API
    */
   public final boolean isRead()
@@ -1275,10 +1275,10 @@ public class XFRecord extends WritableRecordData implements CellFormat
     // Initialize the font
     font = formattingRecords.getFonts().getFont(fontIndex);
 
-    // Initialize the cell format data from the binary record
+    // Initialize the cell format data from the binary shortItem
     byte[] data = getRecord().getData();
 
-    // Get the parent record
+    // Get the parent shortItem
     int cellAttributes = IntegerHelper.getInt(data[4], data[5]);
     parentFormat = (cellAttributes & 0xfff0) >> 4;
     int formatType = cellAttributes & 0x4;

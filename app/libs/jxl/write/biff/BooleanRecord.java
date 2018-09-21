@@ -80,7 +80,7 @@ public abstract class BooleanRecord extends CellValue
    * 
    * @param c the column
    * @param r the row
-   * @param br the record to copy
+   * @param br the shortItem to copy
    */
   protected BooleanRecord(int c, int r, BooleanRecord br)
   {

@@ -1,6 +1,5 @@
 package com.great.grt_vdc_t4200l.Fragment;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,49 +16,27 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.components.Legend;
-import com.great.grt_vdc_t4200l.ListView.record;
-import com.great.grt_vdc_t4200l.ListView.recordAdapter;
+import com.great.grt_vdc_t4200l.ListView.shortItem;
+import com.great.grt_vdc_t4200l.ListView.shortItemAdapter;
 import com.great.grt_vdc_t4200l.MPLineChart.DynamicLineChartManager;
 import com.great.grt_vdc_t4200l.R;
 
 //
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 
 //tablayout
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Switch;
-import android.widget.TextView;
 //import android.widget.Toolbar;
-import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import com.github.mikephil.charting.charts.LineChart;
-import java.io.File;
+
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -331,12 +308,12 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
     private void loadListData(String fileName,boolean type){
         int rows;                                                           //行数量
         String[] temp = new String[3];
-        List<record> fragment1_Data;
-        recordAdapter fragment1_RecordAdapter;
+        List<shortItem> fragment1_Data;
+        shortItemAdapter fragment1_RecordAdapter;
         fragment1_Data = new LinkedList<>();
 
         fragment1_Data.clear();
-        fragment1_RecordAdapter = new recordAdapter((LinkedList<record>) fragment1_Data,fragment1_Context);
+        fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
         fragment1_ListView.setAdapter(fragment1_RecordAdapter);
 
         if (fileName != null && type){
@@ -353,8 +330,8 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                         for (Cell cell : cellList) {
                             temp[cell.getColumn()] = cell.getContents();
                         }
-                        fragment1_Data.add(new record(temp[0],temp[1],temp[2],""));
-                        fragment1_RecordAdapter = new recordAdapter((LinkedList<record>) fragment1_Data,fragment1_Context);
+                        fragment1_Data.add(new shortItem(temp[0],temp[1],temp[2],""));
+                        fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
                         fragment1_ListView.setAdapter(fragment1_RecordAdapter);
                         fragment1_ListView.setOnItemClickListener(this);
                     }
@@ -363,15 +340,15 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             } catch (Exception e) {
                 System.out.println("fragment1,Exception:  " + e);
 
-                fragment1_Data.add(new record("","最近没有故障记录","",""));
-                fragment1_RecordAdapter = new recordAdapter((LinkedList<record>) fragment1_Data,fragment1_Context);
+                fragment1_Data.add(new shortItem("","最近没有故障记录","",""));
+                fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
                 fragment1_ListView.setAdapter(fragment1_RecordAdapter);
                 fragment1_ListView.setOnItemClickListener(this);
             }
         } else {
 
-            fragment1_Data.add(new record("","最近没有故障记录","",""));
-            fragment1_RecordAdapter = new recordAdapter((LinkedList<record>) fragment1_Data,fragment1_Context);
+            fragment1_Data.add(new shortItem("","最近没有故障记录","",""));
+            fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
             fragment1_ListView.setAdapter(fragment1_RecordAdapter);
             fragment1_ListView.setOnItemClickListener(this);
         }

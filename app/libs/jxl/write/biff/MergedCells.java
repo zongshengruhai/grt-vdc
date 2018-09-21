@@ -288,8 +288,8 @@ class MergedCells
     checkIntersections();
     checkRanges();
 
-    // If they will all fit into one record, then create a single
-    // record, write them and get out
+    // If they will all fit into one shortItem, then create a single
+    // shortItem, write them and get out
     if (ranges.size() < maxRangesPerSheet)
     {
       MergedCellsRecord mcr = new MergedCellsRecord(ranges);

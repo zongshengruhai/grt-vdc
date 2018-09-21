@@ -74,7 +74,7 @@ class StringFormulaRecord extends CellValue
 
   /**
    * Constructs this object from the raw data.  We need to use the excelFile
-   * to retrieve the String record which follows this formula record
+   * to retrieve the String shortItem which follows this formula shortItem
    *
    * @param t the raw data
    * @param excelFile the excel file
@@ -100,7 +100,7 @@ class StringFormulaRecord extends CellValue
 
     int pos = excelFile.getPos();
 
-    // Look for the string record in one of the records after the
+    // Look for the string shortItem in one of the records after the
     // formula.  Put a cap on it to prevent looping
 
     Record nextRecord = excelFile.next();
@@ -230,7 +230,7 @@ class StringFormulaRecord extends CellValue
    * Gets the raw bytes for the formula.  This will include the
    * parsed tokens array
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    */
   public byte[] getFormulaData()
   {

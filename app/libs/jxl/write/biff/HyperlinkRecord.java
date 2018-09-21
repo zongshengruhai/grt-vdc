@@ -42,8 +42,8 @@ import jxl.biff.Type;
 import jxl.biff.SheetRangeImpl;
 
 /**
- * A number record.  This is stored as 8 bytes, as opposed to the 
- * 4 byte RK record
+ * A number shortItem.  This is stored as 8 bytes, as opposed to the
+ * 4 byte RK shortItem
  */
 public class HyperlinkRecord extends WritableRecordData
 {
@@ -111,7 +111,7 @@ public class HyperlinkRecord extends WritableRecordData
   private WritableSheet sheet;
 
   /**
-   * Indicates whether this record has been modified since it was copied
+   * Indicates whether this shortItem has been modified since it was copied
    */
   private boolean modified;
 

@@ -81,7 +81,7 @@ class SSTRecord extends RecordData
   {
     super(t);
 
-    // If a continue record appears in the middle of
+    // If a continue shortItem appears in the middle of
     // a string, then the encoding character is repeated
 
     // Concatenate everything into one big bugger of a byte array
@@ -205,7 +205,7 @@ class SSTRecord extends RecordData
 
       if (pos > data.length)
       {
-        Assert.verify(false, "pos exceeds record length");
+        Assert.verify(false, "pos exceeds shortItem length");
       }
     }
   }

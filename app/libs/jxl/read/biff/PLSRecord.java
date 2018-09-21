@@ -22,7 +22,7 @@ package jxl.read.biff;
 import jxl.biff.RecordData;
 
 /**
- * The environment specific print record
+ * The environment specific print shortItem
  */
 public class PLSRecord extends RecordData
 {

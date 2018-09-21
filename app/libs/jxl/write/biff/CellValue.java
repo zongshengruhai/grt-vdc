@@ -42,7 +42,7 @@ import jxl.format.VerticalAlignment;
 /**
  * Abstract class which stores the common data used for cells, such
  * as row, column and formatting information.  
- * Any record which directly represents the contents of a cell, such
+ * Any shortItem which directly represents the contents of a cell, such
  * as labels and numbers, are derived from this class
  * data store
  */
@@ -75,7 +75,7 @@ public abstract class CellValue extends WritableRecordData
   private FormattingRecords formattingRecords;
 
   /**
-   * A flag to indicate that this record is already referenced within
+   * A flag to indicate that this shortItem is already referenced within
    * a worksheet
    */
   private boolean referenced;
@@ -262,9 +262,9 @@ public abstract class CellValue extends WritableRecordData
   }
 
   /**
-   * Gets the internal index of the formatting record
+   * Gets the internal index of the formatting shortItem
    * 
-   * @return the index of the format record
+   * @return the index of the format shortItem
    */
   final int getXFIndex()
   {

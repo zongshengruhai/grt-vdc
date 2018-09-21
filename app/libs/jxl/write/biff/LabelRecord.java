@@ -31,7 +31,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.FormattingRecords;
 
 /**
- * A label record, used for writing out string
+ * A label shortItem, used for writing out string
  */
 public abstract class LabelRecord extends CellValue
 {
@@ -74,7 +74,7 @@ public abstract class LabelRecord extends CellValue
 
   /**
    * Constructor used when creating a label from the API.  This is 
-   * overloaded to allow formatting information to be passed to the record
+   * overloaded to allow formatting information to be passed to the shortItem
    * 
    * @param c the column
    * @param cont the contents
@@ -98,7 +98,7 @@ public abstract class LabelRecord extends CellValue
    * 
    * @param c the column
    * @param r the row
-   * @param nr the record to copy
+   * @param nr the shortItem to copy
    */
   protected LabelRecord(int c, int r, LabelRecord lr)
   {
@@ -123,7 +123,7 @@ public abstract class LabelRecord extends CellValue
 
     if (contents.length() >= 512)
     {
-      logger.warn("String too long for label record - truncating.");
+      logger.warn("String too long for label shortItem - truncating.");
       contents = contents.substring(0, 512);
     }
   }

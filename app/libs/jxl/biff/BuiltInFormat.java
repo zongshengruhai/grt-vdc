@@ -86,7 +86,7 @@ final class BuiltInFormat implements Format, DisplayFormat
   /**
    * Initializes this format with the specified index number
    *
-   * @param pos the position of this format record in the workbook
+   * @param pos the position of this format shortItem in the workbook
    */
   public void initialize(int pos)
   {

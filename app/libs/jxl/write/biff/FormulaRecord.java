@@ -41,7 +41,7 @@ import jxl.biff.formula.FormulaParser;
 import jxl.biff.formula.FormulaException;
 
 /**
- * A formula record.  Parses the string passed in to deduce the set of
+ * A formula shortItem.  Parses the string passed in to deduce the set of
  * formula records
  */
 public class FormulaRecord extends CellValue implements FormulaData
@@ -106,7 +106,7 @@ public class FormulaRecord extends CellValue implements FormulaData
    * 
    * @param c the column
    * @param r the row
-   * @param fr the record to copy
+   * @param fr the shortItem to copy
    */
   protected FormulaRecord(int c, int r, FormulaRecord fr)
   {
@@ -292,7 +292,7 @@ public class FormulaRecord extends CellValue implements FormulaData
    * Gets the raw bytes for the formula.  This will include the
    * parsed tokens array
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    */
   public byte[] getFormulaData()
   {

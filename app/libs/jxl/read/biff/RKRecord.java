@@ -28,7 +28,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.FormattingRecords;
 
 /**
- * An individual RK record
+ * An individual RK shortItem
  */
 class RKRecord extends CellValue implements NumberCell
 {

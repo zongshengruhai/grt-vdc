@@ -139,8 +139,8 @@ public class Drawing implements EscherStream
   /**
    * Constructor used when reading images
    *
-   * @param mso the drawing record
-   * @param obj the object record
+   * @param mso the drawing shortItem
+   * @param obj the object shortItem
    * @param dg the drawing group
    */
   public Drawing(MsoDrawingRecord mso, ObjRecord obj, DrawingGroup dg)
@@ -360,9 +360,9 @@ public class Drawing implements EscherStream
   }
 
   /**
-   * Gets the drawing record which was read in
+   * Gets the drawing shortItem which was read in
    *
-   * @return the drawing record
+   * @return the drawing shortItem
    */
   MsoDrawingRecord  getMsoDrawingRecord()
   {
@@ -370,9 +370,9 @@ public class Drawing implements EscherStream
   }
 
   /**
-   * Gets the obj record which was read in
+   * Gets the obj shortItem which was read in
    *
-   * @return the obj record
+   * @return the obj shortItem
    */
   ObjRecord getObjRecord()
   {

@@ -111,10 +111,10 @@ public final class File
   }
 
   /**
-   * Adds the biff record data to the memory allocated for this File
+   * Adds the biff shortItem data to the memory allocated for this File
    * 
    * @exception IOException 
-   * @param record the record to add to the excel data
+   * @param record the shortItem to add to the excel data
    */
   public void write(ByteData record) throws IOException
   {

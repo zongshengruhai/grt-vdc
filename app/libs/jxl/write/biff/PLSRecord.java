@@ -37,7 +37,7 @@ class PLSRecord extends WritableRecordData
   /**
    * Consructor invoked when copying a spreadsheet
    * 
-   * @param hr the read header record
+   * @param hr the read header shortItem
    */
   public PLSRecord(jxl.read.biff.PLSRecord hr)
   {
@@ -49,7 +49,7 @@ class PLSRecord extends WritableRecordData
   /**
    * Consructor invoked when copying a sheets
    * 
-   * @param hr the read header record
+   * @param hr the read header shortItem
    */
   public PLSRecord(PLSRecord hr)
   {

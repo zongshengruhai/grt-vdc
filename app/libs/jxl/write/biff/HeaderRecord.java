@@ -53,7 +53,7 @@ class HeaderRecord extends WritableRecordData
   /**
    * Consructor invoked when copying a sheets
    * 
-   * @param hr the read header record
+   * @param hr the read header shortItem
    */
   public HeaderRecord(HeaderRecord hr)
   {

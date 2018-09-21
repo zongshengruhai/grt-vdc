@@ -21,7 +21,7 @@ package jxl.biff.drawing;
 
 
 /**
- * A BStoreContainer escher record
+ * A BStoreContainer escher shortItem
  */
 class BStoreContainer extends EscherContainer
 {
@@ -43,7 +43,7 @@ class BStoreContainer extends EscherContainer
   }
 
   /**
-   * Constructor used when writing out an escher record
+   * Constructor used when writing out an escher shortItem
    *
    * @param count the number of blips
    */

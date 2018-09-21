@@ -44,7 +44,7 @@ public class ColumnInfoRecord extends RecordData
   private int endColumn;
 
   /**
-   * The index to the XF record, which applies to each cell in this column
+   * The index to the XF shortItem, which applies to each cell in this column
    */
   private int xfIndex;
 
@@ -61,7 +61,7 @@ public class ColumnInfoRecord extends RecordData
   /**
    * Constructor which creates this object from the binary data
    *
-   * @param t the record
+   * @param t the shortItem
    */
   ColumnInfoRecord(Record t)
   {

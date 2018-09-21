@@ -112,7 +112,7 @@ public class WorkbookParser extends Workbook
   private ArrayList nameTable;
 
   /**
-   * The external sheet record.  Used by formulas, and names
+   * The external sheet shortItem.  Used by formulas, and names
    */
   private ExternalSheetRecord externSheet;
 
@@ -122,12 +122,12 @@ public class WorkbookParser extends Workbook
   private ArrayList supbooks;
 
   /**
-   * The bof record for this workbook
+   * The bof shortItem for this workbook
    */
   private BOFRecord workbookBof;
 
   /**
-   * The Mso Drawing Group record for this workbook
+   * The Mso Drawing Group shortItem for this workbook
    */
   private MsoDrawingGroupRecord msoDrawingGroup;
 
@@ -362,7 +362,7 @@ public class WorkbookParser extends Workbook
     }
     else if (sr.getType() == SupbookRecord.EXTERNAL)
     {
-      // External reference - get the sheet name from the supbook record
+      // External reference - get the sheet name from the supbook shortItem
       StringBuffer sb = new StringBuffer();
       sb.append('[');
       sb.append(sr.getFileName());
@@ -406,7 +406,7 @@ public class WorkbookParser extends Workbook
     }
     else if (sr.getType() == SupbookRecord.EXTERNAL)
     {
-      // External reference - get the sheet name from the supbook record
+      // External reference - get the sheet name from the supbook shortItem
       StringBuffer sb = new StringBuffer();
       sb.append('[');
       sb.append(sr.getFileName());
@@ -673,7 +673,7 @@ public class WorkbookParser extends Workbook
       }
     }
 
-    // Only get sheets for which there is a corresponding Boundsheet record
+    // Only get sheets for which there is a corresponding Boundsheet shortItem
     while (bof != null && getNumberOfSheets() < boundsheets.size())
     {
       if (!bof.isBiff8() && !bof.isBiff7())
@@ -725,7 +725,7 @@ public class WorkbookParser extends Workbook
         }
       }
 
-      // The next record will normally be a BOF or empty padding until
+      // The next shortItem will normally be a BOF or empty padding until
       // the end of the block is reached.  In exceptionally unlucky cases,
       // the last EOF  will coincide with a block division, so we have to
       // check there is more data to retrieve.
@@ -758,7 +758,7 @@ public class WorkbookParser extends Workbook
    * Accessor for the externSheet, used by the WritableWorkbook
    * when creating a copy of this
    *
-   * @return the external sheet record
+   * @return the external sheet shortItem
    */
   public ExternalSheetRecord getExternalSheetRecord()
   {
@@ -769,7 +769,7 @@ public class WorkbookParser extends Workbook
    * Accessor for the MsoDrawingGroup, used by the WritableWorkbook
    * when creating a copy of this
    *
-   * @return the Mso Drawing Group record
+   * @return the Mso Drawing Group shortItem
    */
   public MsoDrawingGroupRecord getMsoDrawingGroupRecord()
   {
@@ -909,7 +909,7 @@ public class WorkbookParser extends Workbook
    * Method used when parsing formulas to make sure we are trying
    * to parse a supported biff version
    *
-   * @return the BOF record
+   * @return the BOF shortItem
    */
   public BOFRecord getWorkbookBof()
   {
@@ -971,7 +971,7 @@ public class WorkbookParser extends Workbook
   }
 
   /**
-   * Gets the index of the name record for the name
+   * Gets the index of the name shortItem for the name
    *
    * @param name the name to search for
    * @return the index in the name table

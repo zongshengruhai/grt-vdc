@@ -105,12 +105,12 @@ public class FormattingRecords
   }
 
   /**
-   * Adds an extended formatting record to the list.  If the XF record passed
+   * Adds an extended formatting shortItem to the list.  If the XF shortItem passed
    * in has not been initialized, its index is determined based on the
    * xfRecords list, and
    * this position is passed to the XF records initialize method
    *
-   * @param xf the xf record to add
+   * @param xf the xf shortItem to add
    * @exception NumFormatRecordsException
    */
   public final void addStyle(XFRecord xf)
@@ -124,7 +124,7 @@ public class FormattingRecords
     }
     else
     {
-      // The XF record has probably been read in.  If the index is greater
+      // The XF shortItem has probably been read in.  If the index is greater
       // Than the size of the list, then it is not a preset format,
       // so add it
       if (xf.getXFIndex() >= xfRecords.size())
@@ -136,11 +136,11 @@ public class FormattingRecords
 
   /**
    * Adds a cell format to the hash map, keyed on its index.  If the format
-   * record is not initialized, then its index number is determined and its
+   * shortItem is not initialized, then its index number is determined and its
    * initialize method called.  If the font is not a built in format, then it
    * is added to the list of formats for writing out
    *
-   * @param fr the format record
+   * @param fr the format shortItem
    */
   public final void addFormat(DisplayFormat fr)
     throws NumFormatRecordsException
@@ -170,7 +170,7 @@ public class FormattingRecords
   }
 
   /**
-   * Sees if the extended formatting record at the specified position
+   * Sees if the extended formatting shortItem at the specified position
    * represents a date.  First checks against the built in formats, and
    * then checks against the hash map of FormatRecords
    *
@@ -247,10 +247,10 @@ public class FormattingRecords
   }
 
   /**
-   * Gets the format record
+   * Gets the format shortItem
    *
-   * @param index the formatting record index to retrieve
-   * @return the format record at the specified index
+   * @param index the formatting shortItem index to retrieve
+   * @return the format shortItem at the specified index
    */
   FormatRecord getFormatRecord(int index)
   {
@@ -317,8 +317,8 @@ public class FormattingRecords
    * Gets the XFRecord for the specified index.  Used when copying individual
    * cells
    *
-   * @param index the XF record to retrieve
-   * @return the XF record at the specified index
+   * @param index the XF shortItem to retrieve
+   * @return the XF shortItem at the specified index
    */
   public final XFRecord getXFRecord(int index)
   {

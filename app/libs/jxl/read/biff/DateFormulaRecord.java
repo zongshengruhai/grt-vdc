@@ -65,7 +65,7 @@ class DateFormulaRecord extends DateRecord
   /**
    * Constructs this object from the raw data
    *
-   * @param t the basic number formula record
+   * @param t the basic number formula shortItem
    * @param fr the formatting records
    * @param es the external sheet
    * @param nt the name table
@@ -97,7 +97,7 @@ class DateFormulaRecord extends DateRecord
    * Gets the raw bytes for the formula.  This will include the
    * parsed tokens array.  Used when copying spreadsheets
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    */
   public byte[] getFormulaData()
   {
@@ -114,7 +114,7 @@ class DateFormulaRecord extends DateRecord
   public String getFormula() throws FormulaException
   {
     // Note that the standard information was lopped off by the NumberFormula
-    // record when creating this formula
+    // shortItem when creating this formula
     if (formulaString == null)
     {
       byte[] tokens = new byte[data.length - 16];

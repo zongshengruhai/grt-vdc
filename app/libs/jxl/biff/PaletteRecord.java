@@ -23,7 +23,7 @@ import jxl.read.biff.Record;
 import jxl.format.Colour;
 
 /**
- * A record representing the RGB colour palette
+ * A shortItem representing the RGB colour palette
  */
 public class PaletteRecord extends WritableRecordData
 {
@@ -158,7 +158,7 @@ public class PaletteRecord extends WritableRecordData
   }
 
   /**
-   * Initialize the record data
+   * Initialize the shortItem data
    */
   private void initialize()
   {

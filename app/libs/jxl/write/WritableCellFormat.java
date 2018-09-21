@@ -204,7 +204,7 @@ public class WritableCellFormat extends CellXFRecord
   }
 
   /**
-   * Sets whether or not this XF record locks the cell.  For this to
+   * Sets whether or not this XF shortItem locks the cell.  For this to
    * have any effect, the sheet containing cells with this format must
    * also be locke3d
    *

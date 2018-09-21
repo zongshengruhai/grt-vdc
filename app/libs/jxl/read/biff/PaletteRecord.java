@@ -22,7 +22,7 @@ package jxl.read.biff;
 import jxl.biff.RecordData;
 
 /**
- * A password record
+ * A password shortItem
  */
 public class PaletteRecord extends RecordData
 {

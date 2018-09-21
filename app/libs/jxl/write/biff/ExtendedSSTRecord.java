@@ -28,7 +28,7 @@ import jxl.biff.WritableRecordData;
  * contains blank records
  *
  * Thanks to Guenther for contributing a proper implementation of the EXTSST
- * record, replacing my previous dummy version
+ * shortItem, replacing my previous dummy version
  */
 class ExtendedSSTRecord extends WritableRecordData
 {
@@ -43,7 +43,7 @@ class ExtendedSSTRecord extends WritableRecordData
    *
    * @param numstrings the number of strings per bucket
    * @param streampos the absolute stream position of the beginning of
-   * the SST record
+   * the SST shortItem
    */
   public ExtendedSSTRecord(int newNumberOfStrings)
   {
@@ -69,7 +69,7 @@ class ExtendedSSTRecord extends WritableRecordData
     // should come up with a more clever calculation
     // bucket limit should not be bigger than 1024, otherwise we end
     // up with too many buckets and would have to write continue records
-    // for the EXTSST record which we want to avoid for now.
+    // for the EXTSST shortItem which we want to avoid for now.
     final int bucketLimit = 128;
     return (numberOfStrings + bucketLimit - 1) / bucketLimit;
   }

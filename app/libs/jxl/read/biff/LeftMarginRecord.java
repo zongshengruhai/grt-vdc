@@ -29,7 +29,7 @@ class LeftMarginRecord extends MarginRecord
   /**
    * Constructor
    *
-   * @param r the raw record
+   * @param r the raw shortItem
    */
   LeftMarginRecord(Record r)
   {

@@ -32,7 +32,7 @@ public class BiffRecordReader
   private File file;
 
   /**
-   * The current record retrieved
+   * The current shortItem retrieved
    */
   private Record record;
 
@@ -57,9 +57,9 @@ public class BiffRecordReader
   }
 
   /**
-   * Gets the next record
+   * Gets the next shortItem
    *
-   * @return the next record
+   * @return the next shortItem
    */
   public Record next()
   {
@@ -68,7 +68,7 @@ public class BiffRecordReader
   }
 
   /**
-   * Gets the position of the current record in the biff file
+   * Gets the position of the current shortItem in the biff file
    *
    * @return the position
    */

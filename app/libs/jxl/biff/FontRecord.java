@@ -30,7 +30,7 @@ import jxl.format.ScriptStyle;
 import jxl.format.Colour;
 
 /**
- * A record containing the necessary data for the font information
+ * A shortItem containing the necessary data for the font information
  */
 public class FontRecord extends WritableRecordData implements Font
 {
@@ -130,7 +130,7 @@ public class FontRecord extends WritableRecordData implements Font
 
   /**
    * Constructs this object from the raw data.  Used when reading in a
-   * format record
+   * format shortItem
    *
    * @param t the raw data
    * @param ws the workbook settings
@@ -179,7 +179,7 @@ public class FontRecord extends WritableRecordData implements Font
 
   /**
    * Constructs this object from the raw data.  Used when reading in a
-   * format record
+   * format shortItem
    *
    * @param t the raw data
    * @param ws the workbook settings
@@ -294,7 +294,7 @@ public class FontRecord extends WritableRecordData implements Font
   /**
    * Accessor to see whether this object is initialized or not.
    *
-   * @return TRUE if this font record has been initialized, FALSE otherwise
+   * @return TRUE if this font shortItem has been initialized, FALSE otherwise
    */
   public final boolean isInitialized()
   {
@@ -302,7 +302,7 @@ public class FontRecord extends WritableRecordData implements Font
   }
 
   /**
-   * Sets the font index of this record.  Called from the FormattingRecords
+   * Sets the font index of this shortItem.  Called from the FormattingRecords
    *  object
    *
    * @param pos the position of this font in the workbooks font list

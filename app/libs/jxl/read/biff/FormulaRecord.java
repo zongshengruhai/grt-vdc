@@ -43,7 +43,7 @@ class FormulaRecord extends CellValue
   private static Logger logger = Logger.getLogger(FormulaRecord.class);
 
   /**
-   * The "real" formula record - will be either a string a or a number
+   * The "real" formula shortItem - will be either a string a or a number
    */
   private CellValue formula;
 

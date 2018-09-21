@@ -27,7 +27,7 @@ import jxl.biff.StringHelper;
 import jxl.biff.WritableRecordData;
 
 /**
- * Writes out some arbitrary record data.  Used during the debug process
+ * Writes out some arbitrary shortItem data.  Used during the debug process
  */
 class ArbitraryRecord extends WritableRecordData
 {

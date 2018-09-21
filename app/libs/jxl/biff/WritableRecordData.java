@@ -31,14 +31,14 @@ public abstract class WritableRecordData extends RecordData
                                          implements ByteData
 {
   /**
-   * The maximum length allowed by Excel for any record length
+   * The maximum length allowed by Excel for any shortItem length
    */
   protected static final int maxRecordLength = 8228;
 
   /**
    * Constructor used by the writable records
    *
-   * @param t the biff type of this record
+   * @param t the biff type of this shortItem
    */
   protected WritableRecordData(Type t)
   {
@@ -46,7 +46,7 @@ public abstract class WritableRecordData extends RecordData
   }
 
   /**
-   * Constructor used when reading a record
+   * Constructor used when reading a shortItem
    *
    * @param t the raw data read from the biff file
    */
@@ -57,10 +57,10 @@ public abstract class WritableRecordData extends RecordData
 
   /**
    * Used when writing out records.  This portion of the method handles the
-   * biff code and the length of the record and appends on the data retrieved
+   * biff code and the length of the shortItem and appends on the data retrieved
    * from the subclasses
    *
-   * @return the full record data to be written out to the compound file
+   * @return the full shortItem data to be written out to the compound file
    */
   public final byte[] getBytes()
   {
@@ -70,7 +70,7 @@ public abstract class WritableRecordData extends RecordData
 
     // Don't the call the automatic continuation code for now
     //    Assert.verify(dataLength <= maxRecordLength - 4);
-    // If the bytes length is greater than the max record length
+    // If the bytes length is greater than the max shortItem length
     // then split out the data set into continue records
     if (data.length > maxRecordLength - 4)
     {
@@ -89,7 +89,7 @@ public abstract class WritableRecordData extends RecordData
   }
 
   /**
-   * The number of bytes for this record exceeds the maximum record
+   * The number of bytes for this shortItem exceeds the maximum shortItem
    * length, so a continue is required
    * @param data the raw data
    * @return  the continued data
@@ -104,8 +104,8 @@ public abstract class WritableRecordData extends RecordData
     // code and length
     byte[] newdata = new byte[data.length + numContinueRecords * 4];
 
-    // Copy the bona fide record data into the beginning of the super
-    // record
+    // Copy the bona fide shortItem data into the beginning of the super
+    // shortItem
     System.arraycopy(data, 0, newdata, 0, maxRecordLength - 4);
     int oldarraypos = maxRecordLength - 4;
     int newarraypos = maxRecordLength - 4;
@@ -116,7 +116,7 @@ public abstract class WritableRecordData extends RecordData
       // The number of bytes to add into the new array
       int length = Math.min(data.length - oldarraypos, maxRecordLength - 4);
 
-      // Add in the continue record code
+      // Add in the continue shortItem code
       IntegerHelper.getTwoBytes(Type.CONTINUE.value, newdata, newarraypos);
       IntegerHelper.getTwoBytes(length, newdata, newarraypos + 2);
 
@@ -134,7 +134,7 @@ public abstract class WritableRecordData extends RecordData
   /**
    * Abstract method called by the getBytes method.  Subclasses implement
    * this method to incorporate their specific binary data - excluding the
-   * biff code and record length, which is handled by this class
+   * biff code and shortItem length, which is handled by this class
    *
    * @return subclass specific biff data
    */

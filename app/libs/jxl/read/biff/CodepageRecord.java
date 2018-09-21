@@ -38,7 +38,7 @@ class CodepageRecord extends RecordData
   /**
    * Constructor
    *
-   * @param t the record
+   * @param t the shortItem
    */
   public CodepageRecord(Record t)
   {

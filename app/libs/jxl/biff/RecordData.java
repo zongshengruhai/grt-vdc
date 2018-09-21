@@ -22,7 +22,7 @@ package jxl.biff;
 import jxl.read.biff.Record;
 
 /**
- * The record data within a record
+ * The shortItem data within a shortItem
  */
 public abstract class RecordData
 {
@@ -32,7 +32,7 @@ public abstract class RecordData
   private Record record;
 
   /**
-   * The Biff code for this record.  This is set up when the record is
+   * The Biff code for this shortItem.  This is set up when the shortItem is
    * used for writing
    */
   private int code;

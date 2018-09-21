@@ -49,7 +49,7 @@ class Dg extends EscherAtom
   /**
    * Constructor invoked when reading in an escher stream
    *
-   * @param erd the escher record
+   * @param erd the escher shortItem
    */
   public Dg(EscherRecordData erd)
   {

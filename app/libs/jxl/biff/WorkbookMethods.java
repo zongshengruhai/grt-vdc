@@ -44,7 +44,7 @@ public interface WorkbookMethods
   public String getName(int index);
 
   /**
-   * Gets the index of the name record for the name
+   * Gets the index of the name shortItem for the name
    *
    * @param name the name
    * @return the index in the name table

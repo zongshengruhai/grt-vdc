@@ -22,7 +22,7 @@ package jxl.biff;
 import jxl.read.biff.Record;
 
 /**
- * A record detailing whether the sheet is protected
+ * A shortItem detailing whether the sheet is protected
  */
 public class WorkspaceInformationRecord extends WritableRecordData
 {

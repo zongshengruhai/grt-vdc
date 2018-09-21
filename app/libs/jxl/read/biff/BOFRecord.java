@@ -23,7 +23,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.RecordData;
 
 /**
- * A Beginning Of File record, found at the commencement of all substreams
+ * A Beginning Of File shortItem, found at the commencement of all substreams
  * within a biff8 file
  */
 public class BOFRecord extends RecordData
@@ -142,9 +142,9 @@ public class BOFRecord extends RecordData
   }
 
   /**
-   * Gets the length of the data portion of this record
+   * Gets the length of the data portion of this shortItem
    * Used to adjust when reading sheets which contain just a chart
-   * @return the length of the data portion of this record
+   * @return the length of the data portion of this shortItem
    */
   int getLength()
   {

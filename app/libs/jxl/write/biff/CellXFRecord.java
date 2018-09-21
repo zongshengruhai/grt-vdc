@@ -104,7 +104,7 @@ public class CellXFRecord extends XFRecord
   }
 
   /**
-   * Sets whether or not this XF record locks the cell
+   * Sets whether or not this XF shortItem locks the cell
    * 
    * @param l the locked flag
    * @exception WriteException 

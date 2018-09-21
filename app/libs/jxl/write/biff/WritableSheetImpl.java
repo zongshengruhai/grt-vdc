@@ -131,7 +131,7 @@ class WritableSheetImpl implements WritableSheet
   private int numColumns;
 
   /**
-   * The environment specific print record, copied from the read spreadsheet
+   * The environment specific print shortItem, copied from the read spreadsheet
    */
   private PLSRecord plsRecord;
 
@@ -186,7 +186,7 @@ class WritableSheetImpl implements WritableSheet
   private static final String[] imageTypes = new String[] {"png"};
 
   /**
-   * The comparator for column info record
+   * The comparator for column info shortItem
    */
   private static class ColumnInfoComparator implements Comparator
   {
@@ -537,7 +537,7 @@ class WritableSheetImpl implements WritableSheet
       workbook.rowInserted(this, row);
     }
 
-    // Adjust the maximum row record
+    // Adjust the maximum row shortItem
     numRows++;
   }
 
@@ -754,7 +754,7 @@ class WritableSheetImpl implements WritableSheet
       workbook.rowRemoved(this, row);
     }
 
-    // Adjust the maximum row record
+    // Adjust the maximum row shortItem
     numRows--;
   }
 
@@ -799,11 +799,11 @@ class WritableSheetImpl implements WritableSheet
   }
 
   /** 
-   * Gets the row record at the specified row number, growing the
+   * Gets the row shortItem at the specified row number, growing the
    * array as needs dictate
    * 
    * @param row the row number we are interested in
-   * @return the row record at the specified row
+   * @return the row shortItem at the specified row
    * @exception RowsExceededException
    */
   private RowRecord getRowRecord(int row) throws RowsExceededException
@@ -836,10 +836,10 @@ class WritableSheetImpl implements WritableSheet
   }
 
   /**
-   * Gets the row record for the specified row
+   * Gets the row shortItem for the specified row
    * 
    * @param r the row
-   * @return the row record
+   * @return the row shortItem
    */
   RowRecord getRowInfo(int r)
   {
@@ -852,10 +852,10 @@ class WritableSheetImpl implements WritableSheet
   }
 
   /**
-   * Gets the column info record for the specified column
+   * Gets the column info shortItem for the specified column
    *
    * @param c the column
-   * @return the column record
+   * @return the column shortItem
    */
   ColumnInfoRecord getColumnInfo(int c)
   {
@@ -1270,7 +1270,7 @@ class WritableSheetImpl implements WritableSheet
       sheetWriter.setChartOnly();
     }
 
-    // Copy the environment specific print record
+    // Copy the environment specific print shortItem
     if (si.getPLS() != null)
     {
       plsRecord = new PLSRecord(si.getPLS());
@@ -1347,7 +1347,7 @@ class WritableSheetImpl implements WritableSheet
     // Copy the workspace options
     sheetWriter.setWorkspaceOptions(si.getWorkspaceOptions());
 
-    // Copy the environment specific print record
+    // Copy the environment specific print shortItem
     if (si.plsRecord != null)
     {
       plsRecord = new PLSRecord(si.plsRecord);

@@ -111,11 +111,11 @@ public class DrawingGroup implements EscherStream
   }
 
   /**
-   * Adds in a drawing group record to this drawing group.  The binary
+   * Adds in a drawing group shortItem to this drawing group.  The binary
    * data is extracted from the drawing group and added to a single
    * byte array
    *
-   * @param mso the drawing group record to add
+   * @param mso the drawing group shortItem to add
    */
   public void add(MsoDrawingGroupRecord mso)
   {
@@ -246,7 +246,7 @@ public class DrawingGroup implements EscherStream
 
 
   /**
-   * Initializes the drawing data from the escher record read in
+   * Initializes the drawing data from the escher shortItem read in
    */
   private void initialize()
   {

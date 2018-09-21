@@ -32,14 +32,14 @@ import jxl.biff.formula.FormulaParser;
 import jxl.biff.formula.FormulaException;
 
 /**
- * A number formula record, manufactured out of the Shared Formula
+ * A number formula shortItem, manufactured out of the Shared Formula
  * "optimization"
  */
 public class SharedDateFormulaRecord extends BaseSharedFormulaRecord
   implements DateCell, FormulaData
 {
   /**
-   * Re-use the date record to handle all the formatting information and
+   * Re-use the date shortItem to handle all the formatting information and
    * date calculations
    */
   private DateRecord dateRecord;
@@ -108,7 +108,7 @@ public class SharedDateFormulaRecord extends BaseSharedFormulaRecord
    * Gets the raw bytes for the formula.  This will include the
    * parsed tokens array.  Used when copying spreadsheets
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    * @exception FormulaException
    */
   public byte[] getFormulaData() throws FormulaException

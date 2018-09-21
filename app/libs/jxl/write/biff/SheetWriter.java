@@ -109,7 +109,7 @@ final class SheetWriter
   private MergedCells mergedCells;
 
   /**
-   * The environment specific print record
+   * The environment specific print shortItem
    */
   private PLSRecord plsRecord;
 
@@ -190,7 +190,7 @@ final class SheetWriter
     
     int indexPos = outputFile.getPos();
    
-    // Write the index record out now in order to serve as a place holder
+    // Write the index shortItem out now in order to serve as a place holder
     // The bof passed in is the bof of the workbook, not this sheet
     IndexRecord indexRecord = new IndexRecord(0, numRows, numBlocks);
     outputFile.write(indexRecord);
@@ -401,11 +401,11 @@ final class SheetWriter
         }
       }
 
-      // Now set the current file position in the index record
+      // Now set the current file position in the index shortItem
       indexRecord.addBlockPosition(outputFile.getPos());
       
       // Set the position of the file pointer and write out the DBCell
-      // record
+      // shortItem
       dbcell.setPosition(outputFile.getPos());
       outputFile.write(dbcell);
     }
@@ -427,7 +427,7 @@ final class SheetWriter
                                      settings.getVerticalFreeze());
       outputFile.write(pr);
 
-      // Handle the selection record.  First, there will always be a top left
+      // Handle the selection shortItem.  First, there will always be a top left
       SelectionRecord sr = new SelectionRecord
         (SelectionRecord.upperLeft, 0, 0);
       outputFile.write(sr);
@@ -464,7 +464,7 @@ final class SheetWriter
     }
     else
     {
-      // No frozen panes - just write out the selection record for the 
+      // No frozen panes - just write out the selection shortItem for the
       // whole sheet
       SelectionRecord sr = new SelectionRecord
         (SelectionRecord.upperLeft, 0, 0);
@@ -604,7 +604,7 @@ final class SheetWriter
   }
 
   /**
-   * Check all the merged cells for borders.  If the merge record has
+   * Check all the merged cells for borders.  If the merge shortItem has
    * borders, then we need to rejig the cell formats to take account of this.
    * This is called by the write method of the WritableWorkbookImpl, so that
    * any new XFRecords that are created may be written out with the others
@@ -929,9 +929,9 @@ final class SheetWriter
   }
 
   /**
-   * Sets the environment specific print record
+   * Sets the environment specific print shortItem
    *
-   * @param pls the print record
+   * @param pls the print shortItem
    */
   void setPLS(PLSRecord pls)
   {

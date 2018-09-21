@@ -31,7 +31,7 @@ import jxl.read.biff.Record;
 import jxl.format.Format;
 
 /**
- * A non-built format record
+ * A non-built format shortItem
  */
 public class FormatRecord extends WritableRecordData
   implements DisplayFormat, Format
@@ -62,12 +62,12 @@ public class FormatRecord extends WritableRecordData
   private String formatString;
 
   /**
-   * Indicates whether this is a date formatting record
+   * Indicates whether this is a date formatting shortItem
    */
   private boolean date;
 
   /**
-   * Indicates whether this a number formatting record
+   * Indicates whether this a number formatting shortItem
    */
   private boolean number;
 
@@ -139,7 +139,7 @@ public class FormatRecord extends WritableRecordData
 
   /**
    * Constructs this object from the raw data.  Used when reading in a
-   * format record
+   * format shortItem
    *
    * @param t the raw data
    * @param ws the workbook settings
@@ -200,7 +200,7 @@ public class FormatRecord extends WritableRecordData
   }
 
   /**
-   * Used to get the data when writing out the format record
+   * Used to get the data when writing out the format shortItem
    *
    * @return the raw data
    */
@@ -217,9 +217,9 @@ public class FormatRecord extends WritableRecordData
   }
 
   /**
-   * Gets the format index of this record
+   * Gets the format index of this shortItem
    *
-   * @return the format index of this record
+   * @return the format index of this shortItem
    */
   public int getFormatIndex()
   {
@@ -229,7 +229,7 @@ public class FormatRecord extends WritableRecordData
   /**
    * Accessor to see whether this object is initialized or not.
    *
-   * @return TRUE if this font record has been initialized, FALSE otherwise
+   * @return TRUE if this font shortItem has been initialized, FALSE otherwise
    */
   public boolean isInitialized()
   {
@@ -237,7 +237,7 @@ public class FormatRecord extends WritableRecordData
   }
 
   /**
-   * Sets the index of this record.  Called from the FormattingRecords
+   * Sets the index of this shortItem.  Called from the FormattingRecords
    *  object
    *
    * @param pos the position of this font in the workbooks font list

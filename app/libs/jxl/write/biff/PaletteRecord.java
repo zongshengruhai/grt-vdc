@@ -38,7 +38,7 @@ class PaletteRecord extends WritableRecordData
   /**
    * Constructor
    * 
-   * @param p the palette record
+   * @param p the palette shortItem
    */
   public PaletteRecord(jxl.read.biff.PaletteRecord p)
   {

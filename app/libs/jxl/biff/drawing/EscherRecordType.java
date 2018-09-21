@@ -20,7 +20,7 @@
 package jxl.biff.drawing;
 
 /**
- * Enumeration class for Escher record types
+ * Enumeration class for Escher shortItem types
  */
 final class EscherRecordType
 {
@@ -37,7 +37,7 @@ final class EscherRecordType
   /**
    * Constructor
    *
-   * @param val the escher record value
+   * @param val the escher shortItem value
    */
   private EscherRecordType(int val)
   {
@@ -50,9 +50,9 @@ final class EscherRecordType
   }
 
   /**
-   * Accessor for the escher record value
+   * Accessor for the escher shortItem value
    *
-   * @return the escher record value
+   * @return the escher shortItem value
    */
   public int getValue()
   {
@@ -62,7 +62,7 @@ final class EscherRecordType
   /**
    * Accessor to get the item from a particular value
    *
-   * @param val the escher record value
+   * @param val the escher shortItem value
    * @return the type corresponding to val, or UNKNOWN if a match could not
    * be found
    */

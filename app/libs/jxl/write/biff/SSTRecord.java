@@ -28,7 +28,7 @@ import jxl.biff.WritableRecordData;
 import jxl.biff.StringHelper;
 
 /**
- * A shared string table record. 
+ * A shared string table shortItem.
  */
 class SSTRecord extends WritableRecordData
 {
@@ -53,15 +53,15 @@ class SSTRecord extends WritableRecordData
    */
   private byte[] data;
   /**
-   * The count of bytes needed so far to contain this record
+   * The count of bytes needed so far to contain this shortItem
    */
   private int byteCount;
   /**
-   * The maximum amount of bytes available for the SST record
+   * The maximum amount of bytes available for the SST shortItem
    */
   private static int maxBytes = 8228 - // max length
                                 8 - // bytes for string count fields
-                                4; // standard biff record header
+                                4; // standard biff shortItem header
 
   /**
    * Constructor
@@ -81,9 +81,9 @@ class SSTRecord extends WritableRecordData
   }
 
   /**
-   * Adds a string to this SST record.  It returns the number of string
+   * Adds a string to this SST shortItem.  It returns the number of string
    * characters not added, due to space constraints.  In the event
-   * of this being non-zero, a continue record will be needed
+   * of this being non-zero, a continue shortItem will be needed
    *
    * @param s the string to add
    * @return the number of characters not added
@@ -122,7 +122,7 @@ class SSTRecord extends WritableRecordData
   }
 
   /**
-   * Gets the current offset into this record, excluding the header fields
+   * Gets the current offset into this shortItem, excluding the header fields
    *
    * @return the number of bytes after the header field
    */

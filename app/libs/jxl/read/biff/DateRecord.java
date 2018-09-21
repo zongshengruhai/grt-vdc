@@ -42,11 +42,11 @@ class DateRecord implements DateCell
    */
   private Date date;
   /**
-   * The row number of this cell record
+   * The row number of this cell shortItem
    */
   private int row;
   /**
-   * The column number of this cell record
+   * The column number of this cell shortItem
    */
   private int column;
 

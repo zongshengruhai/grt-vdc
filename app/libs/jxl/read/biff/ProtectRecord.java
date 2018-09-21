@@ -23,7 +23,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.RecordData;
 
 /**
- * A record detailing whether the sheet is protected
+ * A shortItem detailing whether the sheet is protected
  */
 class ProtectRecord extends RecordData
 {

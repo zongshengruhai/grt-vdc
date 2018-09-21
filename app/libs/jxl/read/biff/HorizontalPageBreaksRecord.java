@@ -64,7 +64,7 @@ class HorizontalPageBreaksRecord extends RecordData
    * Constructs the dimensions from the raw data
    *
    * @param t the raw data
-   * @param biff7 an indicator to initialise this record for biff 7 format
+   * @param biff7 an indicator to initialise this shortItem for biff 7 format
    */
   public HorizontalPageBreaksRecord(Record t, Biff7 biff7)
   {

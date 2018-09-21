@@ -1139,8 +1139,8 @@ public class Write
       ws.addCell(l2);
     }
 
-    // Frig this test record - it appears exactly on the boundary of an SST
-    // continue record
+    // Frig this test shortItem - it appears exactly on the boundary of an SST
+    // continue shortItem
 
     Label l3 = new Label(0, 61, "Common Label", wcf);
     Label l4 = new Label(1, 61, "1-1234567890", wcf);

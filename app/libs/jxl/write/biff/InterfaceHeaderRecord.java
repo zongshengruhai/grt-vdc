@@ -23,7 +23,7 @@ import jxl.biff.Type;
 import jxl.biff.WritableRecordData;
 
 /**
- * Marks the beginning of the user interface record
+ * Marks the beginning of the user interface shortItem
  */
 class InterfaceHeaderRecord extends WritableRecordData
 {

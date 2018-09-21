@@ -51,7 +51,7 @@ public class Fonts
   }
 
   /**
-   * Adds a font record to this workbook.  If the FontRecord passed in has not
+   * Adds a font shortItem to this workbook.  If the FontRecord passed in has not
    * been initialized, then its font index is determined based upon the size
    * of the fonts list.  The FontRecord's initialized method is called, and
    * it is added to the list of fonts.
@@ -119,7 +119,7 @@ public class Fonts
   IndexMapping rationalize()
   {
     IndexMapping mapping = new IndexMapping(fonts.size() + 1);
-      // allow for skipping record 4
+      // allow for skipping shortItem 4
 
     ArrayList newfonts = new ArrayList();
     FontRecord fr = null;

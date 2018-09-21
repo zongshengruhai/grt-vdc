@@ -53,7 +53,7 @@ class WriteAccessRecord extends WritableRecordData
     String astring = authorString + " v" + Workbook.getVersion();
     StringHelper.getBytes(astring, data, 0);
 
-    // Pad out the record with space characters
+    // Pad out the shortItem with space characters
     for (int i = astring.length() ; i < data.length ;i++)
     {
       data[i] = 0x20;

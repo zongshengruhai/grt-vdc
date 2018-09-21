@@ -1,10 +1,7 @@
 package com.great.grt_vdc_t4200l.Fragment;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +9,10 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 
-import com.great.grt_vdc_t4200l.ListView.fragment3Item;
-import com.great.grt_vdc_t4200l.ListView.fragment3ItemAdapter;
+import com.great.grt_vdc_t4200l.ListView.longItem;
+import com.great.grt_vdc_t4200l.ListView.longItemAdapter;
 import com.great.grt_vdc_t4200l.R;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,8 +29,8 @@ public class fragment3 extends Fragment{
 
     private Context fragment3_Context;
     private ListView fragment3_ListView;
-    private List<fragment3Item> fragment3_Data  = new LinkedList<>();
-    private fragment3ItemAdapter fragment3_RecordAdapter;
+    private List<longItem> fragment3_Data  = new LinkedList<>();
+    private longItemAdapter fragment3_RecordAdapter;
 
     //防止并发
 //    private boolean findFlag = false;
@@ -109,7 +105,7 @@ public class fragment3 extends Fragment{
                             for (Cell cell : cellList) {
                                 temp[cell.getColumn()] = cell.getContents();
                             }
-                            fragment3_Data.add(new fragment3Item(temp[0], temp[1], temp[2], temp[3]));
+                            fragment3_Data.add(new longItem(temp[0], temp[1], temp[2], temp[3]));
 //                       fragment3_ListView.setOnItemClickListener(this);
                         }
                         if (rows == 1) {
@@ -117,9 +113,9 @@ public class fragment3 extends Fragment{
                             temp[1] = "当前暂无故障记录";
                             temp[2] = "";
                             temp[3] = "";
-                            fragment3_Data.add(new fragment3Item(temp[0], temp[1], temp[2], temp[3]));
+                            fragment3_Data.add(new longItem(temp[0], temp[1], temp[2], temp[3]));
                         }
-                        fragment3_RecordAdapter = new fragment3ItemAdapter((LinkedList<fragment3Item>) fragment3_Data, fragment3_Context);
+                        fragment3_RecordAdapter = new longItemAdapter((LinkedList<longItem>) fragment3_Data, fragment3_Context);
                         fragment3_ListView.setAdapter(fragment3_RecordAdapter);
                     }
 

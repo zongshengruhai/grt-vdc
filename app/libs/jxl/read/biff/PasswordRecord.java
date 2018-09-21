@@ -24,7 +24,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.RecordData;
 
 /**
- * A password record
+ * A password shortItem
  */
 class PasswordRecord extends RecordData
 {

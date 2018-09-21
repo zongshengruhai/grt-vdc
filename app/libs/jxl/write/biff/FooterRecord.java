@@ -55,7 +55,7 @@ class FooterRecord extends WritableRecordData
   /**
    * Consructor invoked when copying a sheets
    * 
-   * @param fr the read footer record
+   * @param fr the read footer shortItem
    */
   public FooterRecord(FooterRecord fr)
   {

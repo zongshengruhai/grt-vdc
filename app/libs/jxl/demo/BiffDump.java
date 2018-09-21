@@ -99,7 +99,7 @@ public class BiffDump
   }
 
   /**
-   * Builds the hashmap of record names
+   * Builds the hashmap of shortItem names
    */
   private void buildNameHash()
   {
@@ -225,7 +225,7 @@ public class BiffDump
   }
 
   /**
-   * Writes out the biff record
+   * Writes out the biff shortItem
    * @param r
    * @exception IOException if an error occurs
    */
@@ -258,7 +258,7 @@ public class BiffDump
 
     StringBuffer buf = new StringBuffer();
 
-    // Write out the record header
+    // Write out the shortItem header
     writeSixDigitValue(pos, buf);
     buf.append(" [");
     buf.append(recordNames.get(r.getType()));

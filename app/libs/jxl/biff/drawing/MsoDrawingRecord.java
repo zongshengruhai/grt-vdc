@@ -24,7 +24,7 @@ import jxl.biff.Type;
 import jxl.read.biff.Record;
 
 /**
- * A record which merely holds the MSODRAWING data.  Used when copying files
+ * A shortItem which merely holds the MSODRAWING data.  Used when copying files
  * which contain images
  */
 public class MsoDrawingRecord extends WritableRecordData
@@ -59,7 +59,7 @@ public class MsoDrawingRecord extends WritableRecordData
   /**
    * Expose the protected function to the SheetImpl in this package
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    */
   public byte[] getData()
   {
@@ -69,7 +69,7 @@ public class MsoDrawingRecord extends WritableRecordData
   /**
    * Expose the protected function to the SheetImpl in this package
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    */
   public Record getRecord()
   {

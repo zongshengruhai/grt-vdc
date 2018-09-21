@@ -67,9 +67,9 @@ abstract class EscherRecord
   }
 
   /**
-   * Gets the entire length of the record, including the header
+   * Gets the entire length of the shortItem, including the header
    *
-   * @return the length of the record, including the header data
+   * @return the length of the shortItem, including the header data
    */
   public int getLength()
   {
@@ -87,7 +87,7 @@ abstract class EscherRecord
   }
 
   /**
-   * The position of this escher record in the stream
+   * The position of this escher shortItem in the stream
    *
    * @return the position
    */

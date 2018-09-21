@@ -99,7 +99,7 @@ public class SetupRecord extends RecordData
   /**
    * Constructor which creates this object from the binary data
    *
-   * @param t the record
+   * @param t the shortItem
    */
   SetupRecord(Record t)
   {

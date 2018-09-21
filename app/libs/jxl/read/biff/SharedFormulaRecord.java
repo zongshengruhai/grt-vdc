@@ -129,7 +129,7 @@ class SharedFormulaRecord
    * Adds this formula to the list of formulas, if it falls within
    * the bounds
    *
-   * @param fr the formula record to test for membership of this group
+   * @param fr the formula shortItem to test for membership of this group
    * @return TRUE if the formulas was added, FALSE otherwise
    */
   public boolean add(BaseSharedFormulaRecord fr)

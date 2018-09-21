@@ -35,7 +35,7 @@ import jxl.biff.formula.ExternalSheet;
 import jxl.biff.formula.FormulaException;
 
 /**
- * A number formula record, manufactured out of the Shared Formula
+ * A number formula shortItem, manufactured out of the Shared Formula
  * "optimization"
  */
 public class SharedNumberFormulaRecord extends BaseSharedFormulaRecord
@@ -132,7 +132,7 @@ public class SharedNumberFormulaRecord extends BaseSharedFormulaRecord
    * Gets the raw bytes for the formula.  This will include the
    * parsed tokens array.  Used when copying spreadsheets
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    * @exception FormulaException
    */
   public byte[] getFormulaData() throws FormulaException

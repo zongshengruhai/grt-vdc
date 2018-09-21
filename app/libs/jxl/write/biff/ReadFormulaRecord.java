@@ -35,7 +35,7 @@ import jxl.biff.formula.FormulaParser;
 import jxl.biff.formula.FormulaException;
 
 /**
- * A formula record.  This is invoked when copying a formula from a
+ * A formula shortItem.  This is invoked when copying a formula from a
  * read only spreadsheet
  * This method implements the FormulaData interface to allow the copying
  * of writable sheets
@@ -133,7 +133,7 @@ class ReadFormulaRecord extends CellValue implements FormulaData
    * Gets the raw bytes for the formula.  This will include the
    * parsed tokens array.  Used when copying spreadsheets
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    */
   public byte[] getFormulaData() throws FormulaException
   {

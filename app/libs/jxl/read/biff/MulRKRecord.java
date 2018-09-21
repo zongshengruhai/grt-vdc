@@ -40,7 +40,7 @@ class MulRKRecord extends RecordData
    */
   private int colLast;
   /**
-   * The number of rk numbers contained in this record
+   * The number of rk numbers contained in this shortItem
    */
   private int numrks;
   /**

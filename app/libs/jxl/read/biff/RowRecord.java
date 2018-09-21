@@ -23,7 +23,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.RecordData;
 
 /**
- * A row  record
+ * A row  shortItem
  */
 public class RowRecord extends RecordData
 {

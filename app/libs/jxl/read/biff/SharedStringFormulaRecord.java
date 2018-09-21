@@ -37,7 +37,7 @@ import jxl.biff.formula.ExternalSheet;
 import jxl.biff.formula.FormulaException;
 
 /**
- * A string formula record, manufactured out of the Shared Formula
+ * A string formula shortItem, manufactured out of the Shared Formula
  * "optimization"
  */
 public class SharedStringFormulaRecord extends BaseSharedFormulaRecord
@@ -61,9 +61,9 @@ public class SharedStringFormulaRecord extends BaseSharedFormulaRecord
   /**
    * Constructs this string formula
    *
-   * @param t the record
+   * @param t the shortItem
    * @param excelFile the excel file
-   * @param fr the formatting record
+   * @param fr the formatting shortItem
    * @param es the external sheet
    * @param nt the workbook
    * @param si the sheet
@@ -83,7 +83,7 @@ public class SharedStringFormulaRecord extends BaseSharedFormulaRecord
     // Save the position in the excel file
     int filepos = excelFile.getPos();
 
-    // Look for the string record in one of the records after the
+    // Look for the string shortItem in one of the records after the
     // formula.  Put a cap on it to prevent ednas
     Record nextRecord = excelFile.next();
     int count = 0;
@@ -129,7 +129,7 @@ public class SharedStringFormulaRecord extends BaseSharedFormulaRecord
     }
 
     // Restore the position in the excel file, to enable the SHRFMLA
-    // record to be picked up
+    // shortItem to be picked up
     excelFile.setPos(filepos);
   }
 
@@ -167,7 +167,7 @@ public class SharedStringFormulaRecord extends BaseSharedFormulaRecord
    * Gets the raw bytes for the formula.  This will include the
    * parsed tokens array.  Used when copying spreadsheets
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    * @exception FormulaException
    */
   public byte[] getFormulaData() throws FormulaException

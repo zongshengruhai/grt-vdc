@@ -31,7 +31,7 @@ import jxl.format.CellFormat;
  *
  * NOTE:  By default, all dates will have local timezone information added to
  * their UTC value.  If this is not desired (eg. if the date entered
- * represents an interval eg. 9.83s for the 100m world record, then use
+ * represents an interval eg. 9.83s for the 100m world shortItem, then use
  * the overloaded constructor which indicate that the date passed in was
  * created under the GMT timezone.  It is important that when the date
  * was created, an instruction like
@@ -102,7 +102,7 @@ public class DateTime extends DateRecord implements WritableCell, DateCell
   /**
    * Constructor which takes the format for the cell and an indicator
    * as to whether this cell is a full date time or purely just a time
-   * eg. if the spreadsheet is to contain the world record for 100m, then the
+   * eg. if the spreadsheet is to contain the world shortItem for 100m, then the
    * value would be 9.83s, which would be indicated as just a time
    *
    * @param c the column

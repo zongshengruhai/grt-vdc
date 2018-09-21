@@ -32,7 +32,7 @@ import jxl.read.biff.BiffException;
 import jxl.read.biff.Record;
 
 /**
- * Displays whatever generated the excel file (ie. the WriteAccess record)
+ * Displays whatever generated the excel file (ie. the WriteAccess shortItem)
  */
 class WriteAccess
 {
@@ -68,7 +68,7 @@ class WriteAccess
 
     if (!found)
     {
-      System.err.println("Warning:  could not find write access record");
+      System.err.println("Warning:  could not find write access shortItem");
       return;
     }
 

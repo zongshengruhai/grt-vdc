@@ -38,7 +38,7 @@ public abstract class BaseSharedFormulaRecord extends CellValue
   private String formulaString;
 
   /**
-   * The position of the next record in the file.  Used when looking for
+   * The position of the next shortItem in the file.  Used when looking for
    * for subsequent records eg. a string value
    */
   private int filePos;
@@ -66,12 +66,12 @@ public abstract class BaseSharedFormulaRecord extends CellValue
   /**
    * Constructs this number
    *
-   * @param t the record
+   * @param t the shortItem
    * @param fr the formatting records
    * @param es the external sheet
    * @param nt the name table
    * @param si the sheet
-   * @param pos the position of the next record in the file
+   * @param pos the position of the next shortItem in the file
    */
   public BaseSharedFormulaRecord(Record t,
                                  FormattingRecords fr,
@@ -107,7 +107,7 @@ public abstract class BaseSharedFormulaRecord extends CellValue
   }
 
   /**
-   * Called by the shared formula record to set the tokens for
+   * Called by the shared formula shortItem to set the tokens for
    * this formula
    *
    * @param t the tokens
@@ -149,9 +149,9 @@ public abstract class BaseSharedFormulaRecord extends CellValue
 
   /**
    * In case the shared formula is not added for any reason, we need
-   * to expose the raw record data , in order to try again
+   * to expose the raw shortItem data , in order to try again
    *
-   * @return the record data from the base class
+   * @return the shortItem data from the base class
    */
   public Record getRecord()
   {
@@ -159,9 +159,9 @@ public abstract class BaseSharedFormulaRecord extends CellValue
   }
 
   /**
-   * Accessor for the position of the next record
+   * Accessor for the position of the next shortItem
    *
-   * @return the position of the next record
+   * @return the position of the next shortItem
    */
   final int getFilePos()
   {

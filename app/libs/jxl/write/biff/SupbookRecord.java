@@ -33,7 +33,7 @@ import jxl.biff.WritableRecordData;
 class SupbookRecord extends WritableRecordData
 {
   /**
-   * The type of this supbook record
+   * The type of this supbook shortItem
    */
   private SupbookType type;
 
@@ -103,9 +103,9 @@ class SupbookRecord extends WritableRecordData
   }
 
   /**
-   * Initializes an internal supbook record
+   * Initializes an internal supbook shortItem
    * 
-   * @param sr the read supbook record to copy from
+   * @param sr the read supbook shortItem to copy from
    */
   private void initInternal(jxl.read.biff.SupbookRecord sr)
   {
@@ -113,7 +113,7 @@ class SupbookRecord extends WritableRecordData
   }
 
   /**
-   * Initializes an internal supbook record
+   * Initializes an internal supbook shortItem
    * 
    * @param sheets the number of sheets
    */
@@ -142,9 +142,9 @@ class SupbookRecord extends WritableRecordData
   }
 
   /**
-   * Initializes an external supbook record
+   * Initializes an external supbook shortItem
    * 
-   * @param sr the read supbook record to copy from
+   * @param sr the read supbook shortItem to copy from
    */
   private void initExternal(jxl.read.biff.SupbookRecord sr)
   {
@@ -199,7 +199,7 @@ class SupbookRecord extends WritableRecordData
   }
 
   /**
-   * Gets the type of this supbook record
+   * Gets the type of this supbook shortItem
    * 
    * @return the type of this supbook
    */

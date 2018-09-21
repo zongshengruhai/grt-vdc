@@ -39,8 +39,8 @@ import jxl.biff.Type;
 import jxl.biff.SheetRangeImpl;
 
 /**
- * A number record.  This is stored as 8 bytes, as opposed to the 
- * 4 byte RK record
+ * A number shortItem.  This is stored as 8 bytes, as opposed to the
+ * 4 byte RK shortItem
  */
 public class MergedCellsRecord extends WritableRecordData
 {
@@ -50,7 +50,7 @@ public class MergedCellsRecord extends WritableRecordData
   private ArrayList ranges;
 
   /**
-   * Constructs a merged cell record
+   * Constructs a merged cell shortItem
    *
    * @param ws the sheet containing the merged cells
    */

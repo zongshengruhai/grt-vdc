@@ -28,7 +28,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.StringHelper;
 
 /**
- * An options record in the escher stream
+ * An options shortItem in the escher stream
  */
 class Opt extends EscherAtom
 {

@@ -27,7 +27,7 @@ import jxl.biff.WritableRecordData;
 import jxl.biff.IntegerHelper;
 
 /**
- * An external sheet record, used to maintain integrity when formulas
+ * An external sheet shortItem, used to maintain integrity when formulas
  * are copied from read databases
  */
 class ExternalSheetRecord extends WritableRecordData
@@ -98,7 +98,7 @@ class ExternalSheetRecord extends WritableRecordData
   /**
    * Constructor
    * 
-   * @param esf the external sheet record to copy
+   * @param esf the external sheet shortItem to copy
    */
   public ExternalSheetRecord(jxl.read.biff.ExternalSheetRecord esf)
   {
@@ -126,7 +126,7 @@ class ExternalSheetRecord extends WritableRecordData
 
   /**
    * Gets the extern sheet index for the specified parameters, creating
-   * a new xti record if necessary
+   * a new xti shortItem if necessary
    * @param supbookind the internal supbook reference
    * @param sheetind the sheet index
    */
@@ -191,7 +191,7 @@ class ExternalSheetRecord extends WritableRecordData
   /**
    * Gets the supbook index for the specified external sheet
    * 
-   * @param the index of the supbook record
+   * @param the index of the supbook shortItem
    * @return the supbook index 
    */
   public int getSupbookIndex(int index)
@@ -202,7 +202,7 @@ class ExternalSheetRecord extends WritableRecordData
   /**
    * Gets the first tab index for the specified external sheet
    * 
-   * @param the index of the supbook record
+   * @param the index of the supbook shortItem
    * @return the first tab index
    */
   public int getFirstTabIndex(int index)
@@ -213,7 +213,7 @@ class ExternalSheetRecord extends WritableRecordData
   /**
    * Gets the last tab index for the specified external sheet
    * 
-   * @param the index of the supbook record
+   * @param the index of the supbook shortItem
    * @return the last tab index
    */
   public int getLastTabIndex(int index)

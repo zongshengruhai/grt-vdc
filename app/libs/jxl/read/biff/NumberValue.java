@@ -28,7 +28,7 @@ import jxl.format.CellFormat;
 import jxl.biff.FormattingRecords;
 
 /**
- * A numerical cell value, initialized indirectly from a multiple biff record
+ * A numerical cell value, initialized indirectly from a multiple biff shortItem
  * rather than directly from the binary data
  */
 class NumberValue implements NumberCell

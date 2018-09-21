@@ -31,7 +31,7 @@ import jxl.biff.StringHelper;
 import jxl.biff.IntegerHelper;
 
 /**
- * Holds an excel name record, and the details of the cells/ranges it refers
+ * Holds an excel name shortItem, and the details of the cells/ranges it refers
  * to
  */
 public class NameRecord extends RecordData

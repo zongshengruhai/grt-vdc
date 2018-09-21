@@ -25,7 +25,7 @@ import jxl.format.CellFormat;
 import jxl.biff.FormattingRecords;
 
 /**
- * A blank cell value, initialized indirectly from a multiple biff record
+ * A blank cell value, initialized indirectly from a multiple biff shortItem
  * rather than directly from the binary data
  */
 class MulBlankCell implements Cell

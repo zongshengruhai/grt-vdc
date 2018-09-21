@@ -33,7 +33,7 @@ public interface FormulaData extends Cell
    * parsed tokens array EXCLUDING the standard cell information
    * (row, column, xfindex)
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    * @exception FormulaException
    */
   public byte[] getFormulaData() throws FormulaException;

@@ -26,8 +26,8 @@ import jxl.biff.DoubleHelper;
 import jxl.biff.WritableRecordData;
 
 /**
- * A name record.  Simply takes the binary data from the name
- * record read in
+ * A name shortItem.  Simply takes the binary data from the name
+ * shortItem read in
  */
 class NameRecord extends WritableRecordData
 {

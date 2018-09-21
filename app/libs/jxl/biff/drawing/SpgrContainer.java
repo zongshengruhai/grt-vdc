@@ -20,7 +20,7 @@
 package jxl.biff.drawing;
 
 /**
- * An Spgr container record in an escher stream
+ * An Spgr container shortItem in an escher stream
  */
 class SpgrContainer extends EscherContainer
 {
@@ -35,7 +35,7 @@ class SpgrContainer extends EscherContainer
   /**
    * Constructor
    *
-   * @param erd the escher record data read in
+   * @param erd the escher shortItem data read in
    */
   public SpgrContainer(EscherRecordData erd)
   {

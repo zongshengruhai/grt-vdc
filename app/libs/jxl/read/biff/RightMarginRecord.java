@@ -28,7 +28,7 @@ class RightMarginRecord extends MarginRecord
 {
   /**
    * Constructor
-   * @param r the record
+   * @param r the shortItem
    */
   RightMarginRecord(Record r)
   {

@@ -42,7 +42,7 @@ class BOFRecord extends WritableRecordData
   public final static SheetBOF sheet = new SheetBOF();
 
   /**
-   * Constructor for generating a workbook globals BOF record
+   * Constructor for generating a workbook globals BOF shortItem
    *
    * @param dummy - a dummy argument for overloading purposes
    */
@@ -73,7 +73,7 @@ class BOFRecord extends WritableRecordData
   }
 
   /**
-   * Constructor for generating a sheet BOF record
+   * Constructor for generating a sheet BOF shortItem
    *
    * @param dummy - a dummy argument for overloading purposes
    */

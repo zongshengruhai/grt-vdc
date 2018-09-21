@@ -28,7 +28,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.FormattingRecords;
 
 /**
- * A blank record, which is used to contain formatting information
+ * A blank shortItem, which is used to contain formatting information
  */
 public abstract class BlankRecord extends CellValue
 {
@@ -46,7 +46,7 @@ public abstract class BlankRecord extends CellValue
 
   /**
    * Constructor used when creating a label from the API.  This is 
-   * overloaded to allow formatting information to be passed to the record
+   * overloaded to allow formatting information to be passed to the shortItem
    * 
    * @param c the column
    * @param r the row
@@ -73,7 +73,7 @@ public abstract class BlankRecord extends CellValue
    * 
    * @param c the column
    * @param r the row
-   * @param b the record to  copy
+   * @param b the shortItem to  copy
    */
   protected BlankRecord(int c, int r, BlankRecord br)
   {

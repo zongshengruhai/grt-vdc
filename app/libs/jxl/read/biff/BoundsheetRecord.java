@@ -25,7 +25,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.RecordData;
 
 /**
- * A boundsheet record, which contains the worksheet name
+ * A boundsheet shortItem, which contains the worksheet name
  */
 class BoundsheetRecord extends RecordData
 {
@@ -99,7 +99,7 @@ class BoundsheetRecord extends RecordData
    * Constructs this object from the raw data
    *
    * @param t the raw data
-   * @param biff7 a dummy value to tell the record to interpret the
+   * @param biff7 a dummy value to tell the shortItem to interpret the
    *              data as biff7
    */
   public BoundsheetRecord(Record t, Biff7 biff7)

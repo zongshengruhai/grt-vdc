@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 /**
- * An escher container.  This record may contain other escher containers or
+ * An escher container.  This shortItem may contain other escher containers or
  * atoms
  */
 class EscherContainer extends EscherRecord

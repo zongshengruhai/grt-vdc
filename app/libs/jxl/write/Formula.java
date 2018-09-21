@@ -57,7 +57,7 @@ public class Formula extends FormulaRecord implements WritableCell
    *
    * @param c the column
    * @param r the row
-   * @param f the record to  copy
+   * @param f the shortItem to  copy
    */
   protected Formula(int c, int r, Formula f)
   {

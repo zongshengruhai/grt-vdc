@@ -126,7 +126,7 @@ class SharedStrings
 
     if (charsLeft != 0 || i.hasNext())
     {
-      // Add the remainder of the string to the continue record
+      // Add the remainder of the string to the continue shortItem
       SSTContinueRecord cont = createContinueRecord(curString,
                                                     charsLeft,
                                                     outputFile);
@@ -156,13 +156,13 @@ class SharedStrings
   }
 
   /**
-   * Creates and returns a continue record using the left over bits and
+   * Creates and returns a continue shortItem using the left over bits and
    * pieces
    */
   private SSTContinueRecord createContinueRecord
     (String curString, int charsLeft, File outputFile) throws IOException
   {
-    // Set up the remainder of the string in the continue record
+    // Set up the remainder of the string in the continue shortItem
     SSTContinueRecord cont = null;
     while (charsLeft != 0)
     {

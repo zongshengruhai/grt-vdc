@@ -11,12 +11,12 @@ import com.great.grt_vdc_t4200l.R;
 
 import java.util.LinkedList;
 
-public class fragment3ItemAdapter extends BaseAdapter {
+public class longItemAdapter extends BaseAdapter {
 
-    private LinkedList<fragment3Item> mData;
+    private LinkedList<longItem> mData;
     private Context mContext;
 
-    public fragment3ItemAdapter(LinkedList<fragment3Item> mData,Context mContext){
+    public longItemAdapter(LinkedList<longItem> mData, Context mContext){
         this.mData = mData;
         this.mContext = mContext;
     }
@@ -39,7 +39,7 @@ public class fragment3ItemAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
 
-        convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment3_item_list,parent,false);
+        convertView = LayoutInflater.from(mContext).inflate(R.layout.long_item,parent,false);
 
         TextView mNumber = (TextView) convertView.findViewById(R.id.event_Number);
         TextView mContent = (TextView) convertView.findViewById(R.id.event_Content);

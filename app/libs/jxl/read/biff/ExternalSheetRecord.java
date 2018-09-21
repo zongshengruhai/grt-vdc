@@ -26,7 +26,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.RecordData;
 
 /**
- * An Externsheet record, containing the details of externally references
+ * An Externsheet shortItem, containing the details of externally references
  * workbooks
  */
 public class ExternalSheetRecord extends RecordData
@@ -137,7 +137,7 @@ public class ExternalSheetRecord extends RecordData
   /**
    * Gets the supbook index for the specified external sheet
    *
-   * @param index the index of the supbook record
+   * @param index the index of the supbook shortItem
    * @return the supbook index
    */
   public int getSupbookIndex(int index)
@@ -148,7 +148,7 @@ public class ExternalSheetRecord extends RecordData
   /**
    * Gets the first tab index for the specified external sheet
    *
-   * @param the index of the supbook record
+   * @param the index of the supbook shortItem
    * @return the first tab index
    */
   public int getFirstTabIndex(int index)
@@ -159,7 +159,7 @@ public class ExternalSheetRecord extends RecordData
   /**
    * Gets the last tab index for the specified external sheet
    *
-   * @param index the index of the supbook record
+   * @param index the index of the supbook shortItem
    * @return the last tab index
    */
   public int getLastTabIndex(int index)

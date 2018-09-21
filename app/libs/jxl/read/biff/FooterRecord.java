@@ -25,7 +25,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.RecordData;
 
 /**
- * A workbook page footer record
+ * A workbook page footer shortItem
  */
 public class FooterRecord extends RecordData
 {
@@ -43,7 +43,7 @@ public class FooterRecord extends RecordData
   /**
    * Constructs this object from the raw data
    *
-   * @param t the record data
+   * @param t the shortItem data
    * @param ws the workbook settings
    */
   FooterRecord(Record t, WorkbookSettings ws)
@@ -73,9 +73,9 @@ public class FooterRecord extends RecordData
   /**
    * Constructs this object from the raw data
    *
-   * @param t the record data
+   * @param t the shortItem data
    * @param ws the workbook settings
-   * @param dummy dummy record to indicate a biff7 document
+   * @param dummy dummy shortItem to indicate a biff7 document
    */
   FooterRecord(Record t, WorkbookSettings ws, Biff7 dummy)
   {

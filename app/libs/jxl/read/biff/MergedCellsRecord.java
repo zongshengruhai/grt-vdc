@@ -26,7 +26,7 @@ import jxl.biff.RecordData;
 import jxl.biff.SheetRangeImpl;
 
 /**
- * A merged cells record for a given sheet
+ * A merged cells shortItem for a given sheet
  */
 public class MergedCellsRecord extends RecordData
 {

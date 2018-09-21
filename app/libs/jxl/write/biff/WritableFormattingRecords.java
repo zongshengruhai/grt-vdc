@@ -38,7 +38,7 @@ import jxl.write.WritableWorkbook;
 import jxl.write.NumberFormats;
 
 /**
- * Handles the Format and XF record indexing.  The writable subclass
+ * Handles the Format and XF shortItem indexing.  The writable subclass
  * instantiates the predetermined list of XF records and formats
  * present in every Excel Workbook
  */

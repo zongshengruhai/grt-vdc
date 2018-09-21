@@ -39,12 +39,12 @@ public abstract class CellValue extends RecordData implements Cell
   private static Logger logger = Logger.getLogger(CellValue.class);
 
   /**
-   * The row number of this cell record
+   * The row number of this cell shortItem
    */
   private int row;
 
   /**
-   * The column number of this cell record
+   * The column number of this cell shortItem
    */
   private int column;
 

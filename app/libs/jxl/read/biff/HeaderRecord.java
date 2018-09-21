@@ -27,7 +27,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.RecordData;
 
 /**
- * A workbook page header record
+ * A workbook page header shortItem
  */
 public class HeaderRecord extends RecordData
 {
@@ -50,7 +50,7 @@ public class HeaderRecord extends RecordData
   /**
    * Constructs this object from the raw data
    *
-   * @param t the record data
+   * @param t the shortItem data
    * @param ws the workbook settings
    */
   HeaderRecord(Record t, WorkbookSettings ws)
@@ -80,9 +80,9 @@ public class HeaderRecord extends RecordData
   /**
    * Constructs this object from the raw data
    *
-   * @param t the record data
+   * @param t the shortItem data
    * @param ws the workbook settings
-   * @param dummy dummy record to indicate a biff7 document
+   * @param dummy dummy shortItem to indicate a biff7 document
    */
   HeaderRecord(Record t, WorkbookSettings ws, Biff7 dummy)
   {

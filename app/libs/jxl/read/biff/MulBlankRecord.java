@@ -40,7 +40,7 @@ class MulBlankRecord extends RecordData
    */
   private int colLast;
   /**
-   * The number of blank numbers contained in this record
+   * The number of blank numbers contained in this shortItem
    */
   private int numblanks;
   /**

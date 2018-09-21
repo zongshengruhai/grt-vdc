@@ -23,7 +23,7 @@ import jxl.biff.Type;
 import jxl.biff.IntegerHelper;
 
 /**
- * A container for the raw record data within a biff file
+ * A container for the raw shortItem data within a biff file
  */
 public final class Record
 {
@@ -36,7 +36,7 @@ public final class Record
    */
   private Type type;
   /**
-   * The length of this record
+   * The length of this shortItem
    */
   private int length;
   /**
@@ -48,7 +48,7 @@ public final class Record
    */
   private File file;
   /**
-   * The raw data within this record
+   * The raw data within this shortItem
    */
   private byte[] data;
 
@@ -57,7 +57,7 @@ public final class Record
    *
    * @param offset the offset in the raw file
    * @param f the excel 97 biff file
-   * @param d the data record
+   * @param d the data shortItem
    */
   Record(byte[] d, int offset, File f)
   {
@@ -81,9 +81,9 @@ public final class Record
   }
 
   /**
-   * Gets the length of the record
+   * Gets the length of the shortItem
    *
-   * @return the length of the record
+   * @return the length of the shortItem
    */
   public int getLength()
   {
@@ -91,9 +91,9 @@ public final class Record
   }
 
   /**
-   * Gets the data portion of the record
+   * Gets the data portion of the shortItem
    *
-   * @return the data portion of the record
+   * @return the data portion of the shortItem
    */
   public byte[] getData()
   {

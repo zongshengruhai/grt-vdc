@@ -59,12 +59,12 @@ public class SheetImpl implements Sheet
   private SSTRecord sharedStrings;
 
   /**
-   * A handle to the sheet BOF record, which indicates the stream type
+   * A handle to the sheet BOF shortItem, which indicates the stream type
    */
   private BOFRecord sheetBof;
 
   /**
-   * A handle to the workbook BOF record, which indicates the stream type
+   * A handle to the workbook BOF shortItem, which indicates the stream type
    */
   private BOFRecord workbookBof;
 
@@ -170,7 +170,7 @@ public class SheetImpl implements Sheet
   private boolean hidden;
 
   /**
-   * The environment specific print record
+   * The environment specific print shortItem
    */
   private PLSRecord plsRecord;
 
@@ -201,8 +201,8 @@ public class SheetImpl implements Sheet
    * @param f the excel file
    * @param sst the shared string table
    * @param fr formatting records
-   * @param sb the bof record which indicates the start of the sheet
-   * @param wb the bof record which indicates the start of the sheet
+   * @param sb the bof shortItem which indicates the start of the sheet
+   * @param wb the bof shortItem which indicates the start of the sheet
    * @param nf the 1904 flag
    * @param wp the workbook which this sheet belongs to
    * @exception BiffException
@@ -500,7 +500,7 @@ public class SheetImpl implements Sheet
   }
 
   /**
-   * Gets the column info record for the specified column.  If no
+   * Gets the column info shortItem for the specified column.  If no
    * column is specified, null is returned
    *
    * @param col the column
@@ -694,7 +694,7 @@ public class SheetImpl implements Sheet
   }
 
   /**
-   * Gets the row record.  Usually called by the cell in the specified
+   * Gets the row shortItem.  Usually called by the cell in the specified
    * row in order to determine its size
    *
    * @param r the row
@@ -904,10 +904,10 @@ public class SheetImpl implements Sheet
   }
 
   /**
-   * Accessor for the environment specific print record, invoked when
+   * Accessor for the environment specific print shortItem, invoked when
    * copying sheets
    *
-   * @return the environment specific print record
+   * @return the environment specific print shortItem
    */
   public PLSRecord getPLS()
   {

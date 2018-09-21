@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/SettingName"
+        android:layout_gravity="center"
+        android:gravity="clip_vertical|end"
+        android:text="@string/fragment4Utv"
+        android:textSize="28sp"
+        android:textColor="@color/black"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/SettingEd"
+        android:maxLength="4"
+        android:maxLines="1"
+        android:inputType="number"
+        android:textSize="28sp"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:gravity="end"
+        android:hint="@string/fragmentEdHint"
+        android:textColorHint="@color/TextInHint"
+        android:layout_margin="5dp"
+        android:layout_width="200dp"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/SettingBut"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:layout_margin="10dp"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:text="@string/fragment4btu"
+        android:textSize="26sp"
+        android:background="@drawable/txt_whiteborder"/>
+
+</LinearLayout>

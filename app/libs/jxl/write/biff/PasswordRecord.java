@@ -26,7 +26,7 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.WritableRecordData;
 
 /**
- * A password record.  Thanks to Michael Matthews for sending me the
+ * A password shortItem.  Thanks to Michael Matthews for sending me the
  * code to actually store the password for the sheet
  */
 class PasswordRecord extends WritableRecordData

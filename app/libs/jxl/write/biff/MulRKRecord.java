@@ -109,7 +109,7 @@ class MulRKRecord extends WritableRecordData
       pos+=6;
     }
 
-    // Write the number of rk numbers in this record
+    // Write the number of rk numbers in this shortItem
     IntegerHelper.getTwoBytes(colLast, data, pos);
 
     return data;

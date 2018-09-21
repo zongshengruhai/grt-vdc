@@ -25,7 +25,7 @@ import jxl.biff.StringHelper;
 import jxl.biff.WritableRecordData;
 
 /**
- * Stores the string result of a formula calculation.  This record
+ * Stores the string result of a formula calculation.  This shortItem
  * occurs immediately after the formula
  */
 class StringRecord extends WritableRecordData

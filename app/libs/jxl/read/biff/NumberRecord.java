@@ -28,8 +28,8 @@ import jxl.biff.DoubleHelper;
 import jxl.biff.FormattingRecords;
 
 /**
- * A number record.  This is stored as 8 bytes, as opposed to the
- * 4 byte RK record
+ * A number shortItem.  This is stored as 8 bytes, as opposed to the
+ * 4 byte RK shortItem
  */
 class NumberRecord extends CellValue implements NumberCell
 {

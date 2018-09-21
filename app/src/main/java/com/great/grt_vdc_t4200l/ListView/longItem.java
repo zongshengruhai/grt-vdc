@@ -1,17 +1,16 @@
 package com.great.grt_vdc_t4200l.ListView;
 
-public class fragment3Item {
+public class longItem {
 
     private String number;
     private String content;
     private String startTime;
     private String endTime;
 
-    public fragment3Item(){
-
+    public longItem(){
     }
 
-    public fragment3Item(String number,String content,String startTime,String endTime){
+    public longItem(String number, String content, String startTime, String endTime){
         this.number = number;
         this.content = content;
         this.startTime = startTime;

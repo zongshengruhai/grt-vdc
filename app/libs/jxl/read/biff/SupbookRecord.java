@@ -25,13 +25,13 @@ import jxl.biff.StringHelper;
 import jxl.biff.RecordData;
 
 /**
- * A record containing the references to the various sheets (internal and
+ * A shortItem containing the references to the various sheets (internal and
  * external) referenced by formulas in this workbook
  */
 public class SupbookRecord extends RecordData
 {
   /**
-   * The type of this supbook record
+   * The type of this supbook shortItem
    */
   private Type type;
 
@@ -175,7 +175,7 @@ public class SupbookRecord extends RecordData
   }
 
   /**
-   * Gets the type of this supbook record
+   * Gets the type of this supbook shortItem
    *
    * @return the type of this supbook
    */

@@ -27,7 +27,7 @@ import jxl.biff.Type;
 import jxl.read.biff.Record;
 
 /**
- * A record which merely holds the OBJ data.  Used when copying files which
+ * A shortItem which merely holds the OBJ data.  Used when copying files which
  * contain images
  */
 public class ObjRecord extends WritableRecordData
@@ -43,7 +43,7 @@ public class ObjRecord extends WritableRecordData
   private ObjType type;
 
   /**
-   * Indicates whether this record was read in
+   * Indicates whether this shortItem was read in
    */
   private boolean read;
 
@@ -128,7 +128,7 @@ public class ObjRecord extends WritableRecordData
   /**
    * Expose the protected function to the SheetImpl in this package
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    */
   public byte[] getData()
   {
@@ -145,10 +145,10 @@ public class ObjRecord extends WritableRecordData
     byte[] data = new byte[dataLength];
     
     // The common data
-    // record id
+    // shortItem id
     IntegerHelper.getTwoBytes(0x15, data, pos);
 
-    // record length
+    // shortItem length
     IntegerHelper.getTwoBytes(COMMON_DATA_LENGTH-4, data, pos+2);    
     
     // object type
@@ -162,10 +162,10 @@ public class ObjRecord extends WritableRecordData
     pos += COMMON_DATA_LENGTH;
     
     // The clipboard format
-    // record id
+    // shortItem id
     IntegerHelper.getTwoBytes(0x7, data, pos);
 
-    // record length
+    // shortItem length
     IntegerHelper.getTwoBytes(CLIPBOARD_FORMAT_LENGTH-4, data, pos+2);
     
     // the data
@@ -173,10 +173,10 @@ public class ObjRecord extends WritableRecordData
     pos += CLIPBOARD_FORMAT_LENGTH;
       
     // Picture option flags
-    // record id
+    // shortItem id
     IntegerHelper.getTwoBytes(0x8, data, pos);
     
-    // record length
+    // shortItem length
     IntegerHelper.getTwoBytes(PICTURE_OPTION_LENGTH-4, data, pos+2);
     
     // the data
@@ -184,10 +184,10 @@ public class ObjRecord extends WritableRecordData
     pos += CLIPBOARD_FORMAT_LENGTH;
 
     // End
-    // record id
+    // shortItem id
     IntegerHelper.getTwoBytes(0x0, data, pos);
     
-    // record length
+    // shortItem length
     IntegerHelper.getTwoBytes(END_LENGTH-4, data, pos+2);
     
     // the data
@@ -199,7 +199,7 @@ public class ObjRecord extends WritableRecordData
   /**
    * Expose the protected function to the SheetImpl in this package
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    */
   public Record getRecord()
   {

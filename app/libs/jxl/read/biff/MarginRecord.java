@@ -35,10 +35,10 @@ abstract class MarginRecord extends RecordData
   private double margin;
 
   /**
-   * Constructs this record from the raw data
+   * Constructs this shortItem from the raw data
    *
    * @param t the type
-   * @param r the record
+   * @param r the shortItem
    */
   protected MarginRecord(Type t, Record r)
   {

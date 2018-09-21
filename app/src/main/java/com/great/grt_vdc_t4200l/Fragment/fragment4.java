@@ -12,24 +12,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Bundle;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+
+import com.great.grt_vdc_t4200l.ListView.settingItem;
+import com.great.grt_vdc_t4200l.ListView.settingItemAdapter;
+import com.great.grt_vdc_t4200l.ListView.shortItem;
+import com.great.grt_vdc_t4200l.ListView.shortItemAdapter;
 import com.great.grt_vdc_t4200l.R;
 import com.great.grt_vdc_t4200l.SerialPortHelp.MyFunc;
 import com.great.grt_vdc_t4200l.SystemFunc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.great.grt_vdc_t4200l.SystemFunc.Beep;
 
 
-public class fragment4 extends Fragment implements View.OnClickListener{
+public class fragment4 extends Fragment implements AdapterView.OnItemClickListener{
 
     private static final String TAG = "fragment4";
 
-    private RelativeLayout fragment4Rlayout[];
+    private RelativeLayout[] fragment4RowLay = new RelativeLayout[2];
 
     //广播声明
     private fragment4.fragment4Broad fragment4ActivityBroad = null;
@@ -40,10 +53,16 @@ public class fragment4 extends Fragment implements View.OnClickListener{
 
     //login
     private EditText fragment4Password;
-    private Button fragment4Login;
 
-    //button
-    private Button[] but = new Button[2];
+    //ListView
+    private ListView pickList;
+    private ListView pickContent;
+
+    private List<settingItem> pickContentData = new LinkedList<>();
+    private settingItemAdapter pickContentAdapter;
+
+    private TextView fragment4SetHint;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
@@ -51,19 +70,24 @@ public class fragment4 extends Fragment implements View.OnClickListener{
 
         fragment4_Context = view.getContext();
 
-        but[0] = view.findViewById(R.id.openMiuse);
-        but[0].setOnClickListener(this);
-        but[1] = view.findViewById(R.id.closeMiuse);
-        but[1].setOnClickListener(this);
-
-        fragment4Rlayout = new RelativeLayout[2];
-        fragment4Rlayout[0] = view.findViewById(R.id.fragment4Lay1);
-        fragment4Rlayout[1] = view.findViewById(R.id.fragment4Lay2);
+        fragment4RowLay[0] = view.findViewById(R.id.fragment4Lay1);
+        fragment4RowLay[1] = view.findViewById(R.id.fragment4Lay2);
         hideFragment4Rl();
 
         fragment4Password = view.findViewById(R.id.fragment4PasswordIn);
-        fragment4Login = view.findViewById(R.id.fragment4LoginBut);
-        fragment4Login.setOnClickListener(this);
+        Button fragment4Login = view.findViewById(R.id.fragment4LoginBut);
+        fragment4Login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginClick();
+            }
+        });
+
+        fragment4SetHint = view.findViewById(R.id.SettingHint);
+        pickContent = view.findViewById(R.id.pickContent);
+
+        pickList = view.findViewById(R.id.pickSet);
+        initPickList();
 
         return view;
     }
@@ -76,7 +100,6 @@ public class fragment4 extends Fragment implements View.OnClickListener{
             fragment4ActivityBroad = new fragment4Broad();
             getActivity().registerReceiver(fragment4ActivityBroad,fragment4IntentFilter);
         }
-        mHandler.post(mRunable);
     }
 
     @Override
@@ -87,37 +110,12 @@ public class fragment4 extends Fragment implements View.OnClickListener{
             getActivity().unregisterReceiver(fragment4ActivityBroad);
             fragment4ActivityBroad = null;
         }
-        mHandler.removeCallbacks(mRunable);
     }
 
-    @Override
-    public void onClick(View v){
-        switch(v.getId()){
-//            case R.id.pickTime:
-//                break;
-            case R.id.fragment4LoginBut:
-                LoginClick();
-                break;
-            case R.id.openMiuse:
-                test1();
-                break;
-            case R.id.closeMiuse:
-                test2();
-                break;
-        }
-
-    }
-
-    private void test1(){
-        String path = "/data/data/com.great.grt_vdc_t4200l/files/fault_log/fault_record.xls";
-    }
-
-    private void test2(){
-        String s = "11：05：55";
-        Log.e(TAG, "原始："+s+",删除："+s.substring(0,s.length()-3).trim().replace("：",":") );
-    }
-
-    //登录事件
+    /**
+     * 登录
+     */
+    //登录触发
     private void LoginClick(){
 
         String passwordIn = fragment4Password.getText().toString();
@@ -141,22 +139,93 @@ public class fragment4 extends Fragment implements View.OnClickListener{
         fragment4Password.setText("");
         getActivity().sendBroadcast(fragment4Intent);
     }
-
     //隐藏设置界面
     private void hideFragment4Rl(){
-//        fragment4Rlayout[0].setVisibility(View.VISIBLE);
-//        fragment4Rlayout[1].setVisibility(View.GONE);
-        fragment4Rlayout[0].setVisibility(View.GONE);
-        fragment4Rlayout[1].setVisibility(View.VISIBLE);
+//        fragment4RowLay[0].setVisibility(View.VISIBLE);
+//        fragment4RowLay[1].setVisibility(View.GONE);
+        fragment4RowLay[0].setVisibility(View.GONE);
+        fragment4RowLay[1].setVisibility(View.VISIBLE);
     }
-
     //显示设置界面
     private void showFragment4RL(int userType){
-
         if (userType > 0){
-            fragment4Rlayout[0].setVisibility(View.GONE);
-            fragment4Rlayout[1].setVisibility(View.VISIBLE);
+            fragment4RowLay[0].setVisibility(View.GONE);
+            fragment4RowLay[1].setVisibility(View.VISIBLE);
+            ChangeSetLay(0);
         }
+    }
+
+    /**
+     * 选择设置
+     */
+    //初始化选择list
+    private void initPickList(){
+        List<shortItem> pickListData = new LinkedList<>();
+        shortItemAdapter pickListAdapter;
+
+        pickListData.add(new shortItem("","输入校准","",""));
+        pickListData.add(new shortItem("","输出校准","",""));
+        pickListData.add(new shortItem("","电容校准","",""));
+        pickListData.add(new shortItem("","数据限制","",""));
+        pickListData.add(new shortItem("","遥控设置","",""));
+        pickListData.add(new shortItem("","系统设置","",""));
+
+        pickListAdapter = new shortItemAdapter((LinkedList<shortItem>)pickListData,fragment4_Context,"SetItem");
+        pickList.setAdapter(pickListAdapter);
+        pickList.setOnItemClickListener(this);
+        ChangeSetLay(0);
+
+    }
+    //选择list点击事件
+    @Override
+    public void onItemClick(AdapterView<?> parent,View view,int position,long id){
+        ChangeSetLay(position);
+    }
+    //更新设置界面
+    private void ChangeSetLay(int id){
+        pickContentData.clear();
+        switch (id){
+            case 0:
+                fragment4SetHint.setText("输入校准");
+                pickContentData.add(new settingItem("R相输入电压:","校准"));
+                pickContentData.add(new settingItem("S相输入电压:","校准"));
+                pickContentData.add(new settingItem("T相输入电压:","校准"));
+                break;
+            case 1:
+                fragment4SetHint.setText("输出校准");
+                pickContentData.add(new settingItem("U相输出电压:","校准"));
+                pickContentData.add(new settingItem("V相输出电压:","校准"));
+                pickContentData.add(new settingItem("W相输出电压:","校准"));
+                pickContentData.add(new settingItem("U相输出电流:","校准"));
+                pickContentData.add(new settingItem("V相输出电流:","校准"));
+                pickContentData.add(new settingItem("W相输出电流:","校准"));
+                break;
+            case 2:
+                fragment4SetHint.setText("电容校准");
+                pickContentData.add(new settingItem("电容容量:","校准"));
+                break;
+            case 3:
+                fragment4SetHint.setText("数据限制");
+                pickContentData.add(new settingItem("输入电压告警上限:","设置"));
+                pickContentData.add(new settingItem("输出电压告警上限:","设置"));
+                pickContentData.add(new settingItem("输出电流告警上限:","设置"));
+                break;
+            case 4:
+                fragment4SetHint.setText("遥控设置");
+                break;
+            case 5:
+                fragment4SetHint.setText("系统设置");
+                break;
+        }
+        pickContentAdapter = new settingItemAdapter((LinkedList<settingItem>)pickContentData,fragment4_Context,"0");
+        pickContent.setAdapter(pickContentAdapter);
+//        pickContent.setOnItemClickListener(this);
+    }
+
+    /**
+     * Adapter返送
+     */
+    public void controlDispose(String type,int value){
 
     }
 
@@ -175,14 +244,6 @@ public class fragment4 extends Fragment implements View.OnClickListener{
 
         }
     }
-
-    Handler mHandler = new Handler();
-    Runnable mRunable = new Runnable() {
-        @Override
-        public void run() {
-            mHandler.postDelayed(this,500);
-        }
-    };
 
 }
 

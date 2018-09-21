@@ -29,7 +29,7 @@ class BottomMarginRecord extends MarginRecord
   /**
    * Constructor
    *
-   * @param r the record
+   * @param r the shortItem
    */
   BottomMarginRecord(Record r)
   {

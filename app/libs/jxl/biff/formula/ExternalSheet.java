@@ -71,7 +71,7 @@ public interface ExternalSheet
    * Parsing of formulas is only supported for a subset of the available
    * biff version, so we need to test to see if this version is acceptable
    *
-   * @return the BOF record, which 
+   * @return the BOF shortItem, which
    */
   public BOFRecord getWorkbookBof();
 }

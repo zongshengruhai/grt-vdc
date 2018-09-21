@@ -28,7 +28,7 @@ class TopMarginRecord extends MarginRecord
 {
   /**
    * Constructor
-   * @param r the record
+   * @param r the shortItem
    */
   TopMarginRecord(Record r)
   {

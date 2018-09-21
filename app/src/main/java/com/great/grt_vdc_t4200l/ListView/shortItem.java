@@ -1,16 +1,16 @@
 package com.great.grt_vdc_t4200l.ListView;
 
-public class record {
+public class shortItem {
 
     private String number;
     private String content;
     private String hint;
     private String url;
 
-    public record(){
+    public shortItem(){
     }
 
-    public record(String number,String content,String hint,String url){
+    public shortItem(String number, String content, String hint, String url){
         this.number = number;
         this.content = content;
         this.hint = hint;

@@ -36,29 +36,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:dividerHeight="2dp"
-                android:divider="#B8B8B8"/>
+                android:divider="@color/ListLine"/>
 
         </LinearLayout>
 
     </LinearLayout>
-
-    <!--<LinearLayout-->
-        <!--android:layout_toEndOf="@+id/showChart"-->
-        <!--android:layout_marginEnd="5dp"-->
-        <!--android:layout_marginTop="5dp"-->
-        <!--android:layout_marginBottom="5dp"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@drawable/txt_rectborder">-->
-
-        <!--<TextView-->
-            <!--android:text="@string/fragment3RealState"-->
-            <!--android:textSize="26sp"-->
-            <!--android:textColor="@color/black"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content" />-->
-
-    <!--</LinearLayout>-->
-
 
 </RelativeLayout>

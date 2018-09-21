@@ -115,7 +115,7 @@ class BooleanRecord extends CellValue implements BooleanCell
    * A special case which overrides the method in the subclass to get
    * hold of the raw data
    *
-   * @return the record
+   * @return the shortItem
    */
   public Record getRecord()
   {

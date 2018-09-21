@@ -39,8 +39,8 @@ class SCLRecord extends RecordData
   private int denominator;
 
   /**
-   * Constructs this record from the raw data
-   * @param r the record
+   * Constructs this shortItem from the raw data
+   * @param r the shortItem
    */
   protected SCLRecord(Record r)
   {

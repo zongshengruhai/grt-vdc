@@ -24,7 +24,7 @@ import jxl.biff.FontRecord;
 import jxl.format.Font;
 
 /**
- * A writable Font record.  This class intercepts any set accessor calls 
+ * A writable Font shortItem.  This class intercepts any set accessor calls
  * and throws and exception if the Font is already initialized
  */
 public class WritableFontRecord extends FontRecord

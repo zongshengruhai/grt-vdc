@@ -112,7 +112,7 @@ public final class Type
   }
 
   /**
-   * Used to create an arbitrary record type.  This method is only
+   * Used to create an arbitrary shortItem type.  This method is only
    * used during bespoke debugging process.  The creation of an
    * arbitrary type does not add it to the static list of known types
    */

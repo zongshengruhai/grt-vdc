@@ -28,7 +28,7 @@ import jxl.biff.DoubleHelper;
 import jxl.format.CellFormat;
 
 /**
- * The record which contains numerical values.  All values are stored
+ * The shortItem which contains numerical values.  All values are stored
  * as 64bit IEEE floating point values
  */
 public abstract class NumberRecord extends CellValue
@@ -82,7 +82,7 @@ public abstract class NumberRecord extends CellValue
    * 
    * @param c the column
    * @param r the row
-   * @param nr the record to copy
+   * @param nr the shortItem to copy
    */
   protected NumberRecord(int c, int r, NumberRecord nr)
   {

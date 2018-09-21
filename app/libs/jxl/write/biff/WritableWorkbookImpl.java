@@ -580,7 +580,7 @@ public class WritableWorkbookImpl extends WritableWorkbook
       outputFile.write(formatRecords.getPalette());
     }
 
-    // Write out the uses elfs record
+    // Write out the uses elfs shortItem
     UsesElfsRecord uer = new UsesElfsRecord();
     outputFile.write(uer);
     
@@ -611,7 +611,7 @@ public class WritableWorkbookImpl extends WritableWorkbook
     CountryRecord cr = new CountryRecord();
     outputFile.write(cr);
 
-    // Write out the external sheet record, if it exists
+    // Write out the external sheet shortItem, if it exists
     if (externSheet != null)
     {
       //Write out all the supbook records
@@ -653,7 +653,7 @@ public class WritableWorkbookImpl extends WritableWorkbook
     for (int i = 0; i < getNumberOfSheets(); i++)
     {
       // first go back and modify the offset we wrote out for the
-      // boundsheet record
+      // boundsheet shortItem
       outputFile.setData
         (IntegerHelper.getFourBytes(outputFile.getPos()),
          boundsheetPos[i] + 4);
@@ -673,7 +673,7 @@ public class WritableWorkbookImpl extends WritableWorkbook
   /**
    * Produces a writable copy of the workbook passed in by 
    * creating copies of each sheet in the specified workbook and adding 
-   * them to its own record
+   * them to its own shortItem
    * 
    * @param w the workbook to copy
    */
@@ -812,7 +812,7 @@ public class WritableWorkbookImpl extends WritableWorkbook
    * Parsing of formulas is only supported for a subset of the available
    * biff version, so we need to test to see if this version is acceptable
    *
-   * @return the BOF record, which 
+   * @return the BOF shortItem, which
    */
   public jxl.read.biff.BOFRecord getWorkbookBof()
   {
@@ -899,7 +899,7 @@ public class WritableWorkbookImpl extends WritableWorkbook
       return -1;
     }
 
-    // Check that the supbook record at position zero is internal and contains
+    // Check that the supbook shortItem at position zero is internal and contains
     // all the sheets
     Assert.verify(supbooks[0].getType() == SupbookRecord.INTERNAL &&
                   supbooks[0].getNumberOfSheets() == getNumberOfSheets());
@@ -946,7 +946,7 @@ public class WritableWorkbookImpl extends WritableWorkbook
       return -1;
     }
 
-    // Check that the supbook record at position zero is internal and contains
+    // Check that the supbook shortItem at position zero is internal and contains
     // all the sheets
     Assert.verify(supbooks[0].getType() == SupbookRecord.INTERNAL &&
                   supbooks[0].getNumberOfSheets() == getNumberOfSheets());
@@ -980,7 +980,7 @@ public class WritableWorkbookImpl extends WritableWorkbook
   }
 
   /**
-   * Gets the index of the name record for the name
+   * Gets the index of the name shortItem for the name
    *
    * @param name 
    * @return the index in the name table

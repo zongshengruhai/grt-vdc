@@ -27,13 +27,13 @@ import jxl.biff.IntegerHelper;
 import jxl.biff.WritableRecordData;
 
 /**
- * Indexes the first row record of the block and each individual cell.  
+ * Indexes the first row shortItem of the block and each individual cell.
  * This is invoked by the sheets write process
  */
 class DBCellRecord extends WritableRecordData
 {
   /**
-   * The file position of the first Row record in this block
+   * The file position of the first Row shortItem in this block
    */
   private int rowPos;
 
@@ -49,7 +49,7 @@ class DBCellRecord extends WritableRecordData
   private ArrayList cellRowPositions;
 
   /**
-   * The position of this record in the file.  Vital for calculating offsets
+   * The position of this shortItem in the file.  Vital for calculating offsets
    */
   private int  position;
 
@@ -66,7 +66,7 @@ class DBCellRecord extends WritableRecordData
   }
 
   /**
-   * Sets the offset of this cell record within the sheet stream
+   * Sets the offset of this cell shortItem within the sheet stream
    * 
    * @param pos the offset
    */
@@ -96,7 +96,7 @@ class DBCellRecord extends WritableRecordData
   }
 
   /**
-   * Gets the binary data for this cell record
+   * Gets the binary data for this cell shortItem
    * 
    * @return the binary data
    */

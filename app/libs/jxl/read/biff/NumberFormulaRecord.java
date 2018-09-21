@@ -79,7 +79,7 @@ class NumberFormulaRecord extends CellValue
    * Constructs this object from the raw data
    *
    * @param t the raw data
-   * @param fr the formatting record
+   * @param fr the formatting shortItem
    * @param es the external sheet
    * @param nt the name table
    * @param si the sheet
@@ -164,7 +164,7 @@ class NumberFormulaRecord extends CellValue
    * Gets the raw bytes for the formula.  This will include the
    * parsed tokens array.  Used when copying spreadsheets
    *
-   * @return the raw record data
+   * @return the raw shortItem data
    */
   public byte[] getFormulaData()
   {

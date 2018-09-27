@@ -1,6 +1,8 @@
 package com.great.grt_vdc_t4200l;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Vibrator;
 import android.util.Log;
@@ -54,6 +56,38 @@ public class SystemFunc {
         }
     }
 
+    /**
+     * 获取root权限
+     */
+    static public boolean getRoot(String pkgCodePath){
+        Process process = null;
+        DataOutputStream os = null;
+        try {
+            String cmd = "chmod 777" + pkgCodePath;
+            process = Runtime.getRuntime().exec("su");
+            os = new DataOutputStream(process.getOutputStream());
+            os.writeBytes(cmd + "\n");
+            os.writeBytes("exit\n");
+            os.flush();
+            process.waitFor();
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }finally {
+            try {
+                if (os != null){
+                    os.close();
+                }
+                process.destroy();
+            }catch (Exception e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     //系统操作类方法--------------------------------------------------------------------------------------------------------
     /**
      * getNewTime 获取当前系统时间
@@ -96,8 +130,8 @@ public class SystemFunc {
         Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator != null){
             if (flag){
-                if (!_isBeep)//防止并发
-                {
+                SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
+                if (!_isBeep && !rStateData.getBoolean("is_SystemBeep",false)) {
                     _isBeep = true;
                     vibrator.vibrate(new long[]{500,500},0);
                 }
@@ -305,7 +339,7 @@ public class SystemFunc {
     }
 
     /**
-     * 修改Excel内的单个数据
+     * 根据指定修改Excel内的单个数据
      * @param file_Name 文件绝对路径
      * @param row_index Excel行路径
      * @param col_index Excel列路径
@@ -325,7 +359,29 @@ public class SystemFunc {
         return false;
     }
 
-    /**+
+    /**
+     * 根据索引修改Excel最后一个数据
+     * @param file_Name 文件绝对路径
+     * @param num       索引
+     * @param content   修改的内容
+     * @return  true 修改成功 ，false 修改失败
+     */
+    static public boolean alterExcelData(String file_Name,String num,String content){
+        if (checkFileExist(file_Name)){
+            final List<List<Object>> old_data = readExcel(file_Name);
+            if (old_data != null) {
+                for (int i = 0; i < old_data.size(); i++) {
+                    if (old_data.get(i).get(0).equals(num.trim())){
+                        old_data.get(i).set(old_data.get(i).size()-1,content);
+                        return deleteFile(file_Name) && createExcel(file_Name, old_data);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * 修改Excel内的多个数据
      * @param file_Name 文件路径
      * @param row_index Excel行路径

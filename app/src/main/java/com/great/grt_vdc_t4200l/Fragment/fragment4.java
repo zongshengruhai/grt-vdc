@@ -5,65 +5,50 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Bundle;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-
 import com.great.grt_vdc_t4200l.ListView.settingItem;
 import com.great.grt_vdc_t4200l.ListView.settingItemAdapter;
 import com.great.grt_vdc_t4200l.ListView.shortItem;
 import com.great.grt_vdc_t4200l.ListView.shortItemAdapter;
 import com.great.grt_vdc_t4200l.R;
-import com.great.grt_vdc_t4200l.SerialPortHelp.MyFunc;
-import com.great.grt_vdc_t4200l.SystemFunc;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.great.grt_vdc_t4200l.SystemFunc.Beep;
-
-
+/**
+ * fragment4 设置
+ */
 public class fragment4 extends Fragment implements AdapterView.OnItemClickListener{
 
-    private static final String TAG = "fragment4";
-
+    //容器
+    private Context fragment4_Context;
     private RelativeLayout[] fragment4RowLay = new RelativeLayout[2];
-
     //广播声明
     private fragment4.fragment4Broad fragment4ActivityBroad = null;
     private IntentFilter fragment4IntentFilter = new IntentFilter("drc.xxx.yyy.fragment4");
     Intent fragment4Intent = new Intent("drc.xxx.yyy.baseActivity");
-
-    private Context fragment4_Context;
-
     //login
     private EditText fragment4Password;
-
     //ListView
     private ListView pickList;
     private ListView pickContent;
-
     private List<settingItem> pickContentData = new LinkedList<>();
-    private settingItemAdapter pickContentAdapter;
-
+//    private settingItemAdapter pickContentAdapter;
     private TextView fragment4SetHint;
 
-
+    /**
+     * fragment生命周期
+     */
+    //创建
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment4,container,false);
@@ -91,7 +76,7 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
 
         return view;
     }
-
+    //重载
     @Override
     public void onResume(){
         super.onResume();
@@ -101,7 +86,7 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
             getActivity().registerReceiver(fragment4ActivityBroad,fragment4IntentFilter);
         }
     }
-
+    //中止
     @Override
     public void onPause(){
         super.onPause();
@@ -122,10 +107,10 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
         int passwordSize = passwordIn.length();
         int userType = 0;
 
-        if (passwordSize < 8){
-            fragment4Intent.putExtra("fragmentToast",1);
-        }else if (passwordSize == 0){
+        if (passwordSize == 0){
             fragment4Intent.putExtra("fragmentToast",2);
+        }else if (passwordSize < 8){
+            fragment4Intent.putExtra("fragmentToast",1);
         } else if (passwordIn.equals("12345678")){
             userType = 1;
             fragment4Intent.putExtra("fragmentToast",4);
@@ -141,10 +126,10 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
     }
     //隐藏设置界面
     private void hideFragment4Rl(){
-//        fragment4RowLay[0].setVisibility(View.VISIBLE);
-//        fragment4RowLay[1].setVisibility(View.GONE);
-        fragment4RowLay[0].setVisibility(View.GONE);
-        fragment4RowLay[1].setVisibility(View.VISIBLE);
+        fragment4RowLay[0].setVisibility(View.VISIBLE);
+        fragment4RowLay[1].setVisibility(View.GONE);
+//        fragment4RowLay[0].setVisibility(View.GONE);
+//        fragment4RowLay[1].setVisibility(View.VISIBLE);
     }
     //显示设置界面
     private void showFragment4RL(int userType){
@@ -166,7 +151,7 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
         pickListData.add(new shortItem("","输入校准","",""));
         pickListData.add(new shortItem("","输出校准","",""));
         pickListData.add(new shortItem("","电容校准","",""));
-        pickListData.add(new shortItem("","数据限制","",""));
+//        pickListData.add(new shortItem("","系统时间","",""));
         pickListData.add(new shortItem("","遥控设置","",""));
         pickListData.add(new shortItem("","系统设置","",""));
 
@@ -204,36 +189,33 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
                 fragment4SetHint.setText("电容校准");
                 pickContentData.add(new settingItem("电容容量:","校准"));
                 break;
+//            case 3:
+//                fragment4SetHint.setText("系统时间");
+//                pickContentData.add(new settingItem("系统时间:","校准"));
+//                break;
             case 3:
-                fragment4SetHint.setText("数据限制");
-                pickContentData.add(new settingItem("输入电压告警上限:","设置"));
-                pickContentData.add(new settingItem("输出电压告警上限:","设置"));
-                pickContentData.add(new settingItem("输出电流告警上限:","设置"));
+                fragment4SetHint.setText("遥控设置");
+                pickContentData.add(new settingItem("系统模式:","遥控"));
+                pickContentData.add(new settingItem("补偿使能:","遥控"));
                 break;
             case 4:
-                fragment4SetHint.setText("遥控设置");
-                break;
-            case 5:
                 fragment4SetHint.setText("系统设置");
+                pickContentData.add(new settingItem("告警提示:","开关"));
+//                pickContentData.add(new settingItem("系统时间:","校准"));
                 break;
         }
+
+        settingItemAdapter pickContentAdapter;
         pickContentAdapter = new settingItemAdapter((LinkedList<settingItem>)pickContentData,fragment4_Context,"0");
         pickContent.setAdapter(pickContentAdapter);
 //        pickContent.setOnItemClickListener(this);
     }
 
     /**
-     * Adapter返送
+     * fragment4广播
+     * 接受MainActivity发来的广播
+     * 用于hide设置
      */
-    public void controlDispose(String type,int value){
-
-    }
-
-    //----- fragment4广播 -----//
-    //描述：fragment4层接收广播，用于接收BaseCourse底层广播的遥测数据
-    //方法：
-    //     1）创建方法：fragment活动Resume创建，pause销毁
-    //     2）接收Main的Lay切换消息，用于隐藏设置页面
     public class fragment4Broad extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent){
 

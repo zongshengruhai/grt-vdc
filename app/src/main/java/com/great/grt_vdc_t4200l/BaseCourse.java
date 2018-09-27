@@ -59,11 +59,11 @@ public class BaseCourse extends FragmentActivity {
     int text[] = new int[5];
     //串口声明----------------------------------------------------
     SerialControl downCom;                                      //串口
-//    private String sOutData = "7E0000000000000D";
     private byte[] bOutData = new byte[]{(byte)0x7E,0x00,0x00,0x00,0x00,0x00,0x00,(byte)0x0D};
-    //系统自检声明----------------------------------------------------
-    private boolean _isUserSet = false;
-    private String[] sUserData = new String[3];
+    //遥控遥调声明----------------------------------------------------
+    private boolean _isCorrect = false;
+    private String sCorrect = "";
+    private int[] iCorrect = new int[2];
     //数据声明----------------------------------------------------
     private int[] iTelemetry = new int[14];                     //遥测
     private boolean[] _isTelecommand = new boolean[8];          //遥信
@@ -105,32 +105,27 @@ public class BaseCourse extends FragmentActivity {
         recordPath = this.getFilesDir().getPath()+"/record_log/";
 
     }
-    //活动开始----------------------------------------------------
-    @Override
-    protected void onStart(){
-        super.onStart();
-        //Log.e(TAG,"底层开始");
-    }
-    //活动重启----------------------------------------------------
-    @Override
-    protected void onRestart(){
-        super.onRestart();
-        //Log.e(TAG,"底层重启");
-    }
     //活动重载----------------------------------------------------
     @Override
     protected void onResume(){
         super.onResume();
 
+        //隐藏虚拟键盘
         hideNavigation();
+
+        //开始定时线程
         handler.post(task);
+
+        //获取权限
+//        SystemFunc.getRoot(getPackageCodePath());
 
         //注册广播
         if (baseCourseBroad == null){
             baseCourseBroad = new MyBaseActivity_Broad();
             registerReceiver(baseCourseBroad,baseCourseIntentFilter);
-            Log.e(TAG,"baseCourse，已注册广播");
         }
+
+        //执行启动流程
         loadSOP();
     }
     //活动中止----------------------------------------------------
@@ -138,29 +133,23 @@ public class BaseCourse extends FragmentActivity {
     protected void onPause(){
         super.onPause();
 
+        //显示虚拟键盘
         showNavigation();
+
+        //停止定时线程
         handler.removeCallbacks(task);
 
         //注销广播
         if (baseCourseBroad != null){
             unregisterReceiver(baseCourseBroad);
             baseCourseBroad = null;
-//            Log.e(TAG,"baseCourse，已注销广播");
         }
 
+        //执行退出流程
         pauseSOP();
-    }
-    //活动退出----------------------------------------------------
-    @Override
-    protected void onStop(){
-        super.onStop();
-        //Log.e(TAG,"底层停止");
-    }
-    //活动注销----------------------------------------------------
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        //Log.e(TAG,"底层退出");
+
+        //重启设备
+//        SystemFunc.restart();
     }
 
     /**
@@ -170,49 +159,60 @@ public class BaseCourse extends FragmentActivity {
     public class MyBaseActivity_Broad extends BroadcastReceiver{
         public void onReceive(Context context, Intent intent){
 
-            //关闭APP广播
-            int closeAll = intent.getIntExtra("closeAll",0);
-            if (closeAll == 1){
-                //showNavigation();
-                finish();
-                System.exit(0);
-            }
+//            //关闭APP广播
+//            int closeAll = intent.getIntExtra("closeAll",0);
+//            if (closeAll == 1){
+//                //showNavigation();
+//                finish();
+//                System.exit(0);
+//            }
+//
+//
+//            //底层生命周期改变事件广播
+//            int lifeCycleFlag = intent.getIntExtra("lifeCycleChange",0);
+//            switch (lifeCycleFlag){
+//                //底层重载
+//                case 1:
+//                    Log.e(TAG,"广播接收到底层重装");
+//                    break;
+//
+//                //底层中止
+//                case 2:
+//                    //restart();
+//                    Log.e(TAG,"广播接收到底层中止");
+//                    break;
+//            }
 
-            //底层生命周期改变事件广播
-            int lifeCycleFlag = intent.getIntExtra("lifeCycleChange",0);
-            switch (lifeCycleFlag){
-                //底层重载
-                case 1:
-                    Log.e(TAG,"广播接收到底层重装");
-                    break;
+            //fragment触发Toast事件
 
-                //底层中止
-                case 2:
-                    //restart();
-                    Log.e(TAG,"广播接收到底层中止");
-                    break;
-            }
+            //重启自启动
+//            //重启自启动广播
+//            final String ACTION = "android.intent.action.BOOT_COMPLETED";
+//            if (intent.getAction() != null && intent.getAction().equals(ACTION)){
+////                Integer it = new Integer(context,MainActivity.class);
+////                Integer it = getPackageManager().getLaunchIntentForPackage(getPackageName());
+////                it
+//            }
 
-            //fragment Toast事件
+            //Toast事件
             int fragmentToast = intent.getIntExtra("fragmentToast",0);
             if (fragmentToast > 0){
                 Toast(fragmentToast);
             }
 
-            //fragment4设置触发事件
+            //遥调事件
             String[] test = intent.getStringArrayExtra("UserSet");
             if (test != null ){
-                if (test[2].equals("校准")) {
-                    _isUserSet = true;
-                    sUserData = test;
-                }else if (test[2].equals("设置")){
-
-                }
+                CorrectEvent(test);
             }
 
         }
     }
-    //Toast处理----------------------------------------------------
+
+    /**
+     * 广播事件处理
+     */
+    //Toast----------------------------------------------------
     private void Toast(int ToastType){
         switch (ToastType){
             case 1:
@@ -230,6 +230,83 @@ public class BaseCourse extends FragmentActivity {
             case 5:
                 Toast.makeText(this,"巡检员，登录成功",Toast.LENGTH_SHORT).show();
                 break;
+        }
+    }
+    //遥调事件----------------------------------------------------
+    private void CorrectEvent(String[] sData){
+        int[] iData = new int[2];
+        if (sData.length == 3){
+
+            //遥调、遥控
+            if (sData[2].equals("校准")||sData[2].equals("遥控")){
+
+                //地址转换
+                switch (sData[0]){
+                    case "U相输出电压:":
+                        iData[0] = 0;
+                        break;
+                    case "V相输出电压:":
+                        iData[0] = 1;
+                        break;
+                    case "W相输出电压:":
+                        iData[0] = 2;
+                        break;
+                    case "U相输出电流:":
+                        iData[0] = 3;
+                        break;
+                    case "V相输出电流:":
+                        iData[0] = 4;
+                        break;
+                    case "W相输出电流:":
+                        iData[0] = 5;
+                        break;
+                    case "R相输入电压:":
+                        iData[0] = 7;
+                        break;
+                    case "S相输入电压:":
+                        iData[0] = 8;
+                        break;
+                    case "T相输入电压:":
+                        iData[0] = 9;
+                        break;
+                    case "电容容量:":
+                        iData[0] = 11;
+                        break;
+                    case "系统时间:":
+                        iData[0] = 14;
+                        break;
+                    case "系统模式:":
+                        iData[0] = 18;
+                        break;
+                    case "补偿使能:":
+                        iData[0] = 19;
+                        break;
+                }
+
+                //数据填充
+                if (!sData[1].equals("")||sData[1] !=null){
+                    iData[1] =  Integer.parseInt(sData[1]);
+                }else {
+                    iData[1] = 0;
+                }
+
+                System.arraycopy(iData,0,iCorrect,0,2);
+                _isCorrect = true;
+
+            }//系统设置
+            else if (sData[2].equals("开关")){
+
+                switch (sData[0]){
+                    case "告警提示:":
+                        SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
+                        boolean flag = false;
+                        if (Integer.parseInt(sData[1]) == 0){ flag = false;}else if (Integer.parseInt(sData[1]) == 1){ flag = true;}
+                        wStateData.putBoolean("is_SystemBeep",flag);
+                        wStateData.commit();
+                        break;
+                }
+
+            }
         }
     }
 
@@ -557,10 +634,9 @@ public class BaseCourse extends FragmentActivity {
                     wStateData.commit();
                 }
 
-
 //                Log.e(TAG, "run: " + rStateData.getBoolean("is_RecordFlag",false)+ "," +rStateData.getBoolean("is_ReadRecordFlag",false));
                 //需要读录波，且没有在读录波
-                if (rStateData.getBoolean("is_RecordFlag",false) && !rStateData.getBoolean("is_ReadRecordFlag",false) && !_isUserSet){
+                if (rStateData.getBoolean("is_RecordFlag",false) && !rStateData.getBoolean("is_ReadRecordFlag",false) && !_isCorrect){
                     iReadRecordError = 0;
                     wStateData.putBoolean("is_ReadRecordFlag",true);
                     bOutData[1] = (byte)0x10;
@@ -577,7 +653,7 @@ public class BaseCourse extends FragmentActivity {
                     new ComThread().start();
 
                 }//不需要读录波，或已经在处理录波
-                else if ((!rStateData.getBoolean("is_RecordFlag",false) || rStateData.getBoolean("is_ReadRecordFlag",false))&&!_isUserSet){
+                else if ((!rStateData.getBoolean("is_RecordFlag",false) || rStateData.getBoolean("is_ReadRecordFlag",false))&&!_isCorrect){
 
                     bOutData[1] = (byte)0x03;
                     bOutData[2] = (byte)0x00;
@@ -588,26 +664,29 @@ public class BaseCourse extends FragmentActivity {
                     new ComThread().start();
 
                 }//用户触发遥控、遥调
-                else if (_isUserSet){
+                else if (_isCorrect){
 
                     bOutData[1] = (byte)0x06;
-                    //判断地址
-                    switch (sUserData[0]){
-                        case "R相输入电压:":
-                            bOutData[2] = (byte)0x00;
-                            bOutData[3] = (byte)0x07;
-                            break;
+
+                    //地址
+                    if (iCorrect[0] == 14){
+
+                    }else {
+                        bOutData[2] = MyFunc.InToByteArr(iCorrect[0])[2];
+                        bOutData[3] = MyFunc.InToByteArr(iCorrect[0])[3];
+
+                        //值
+                        bOutData[4] = MyFunc.InToByteArr(iCorrect[1])[2];
+                        bOutData[5] = MyFunc.InToByteArr(iCorrect[1])[3];
+
+                        //CRC
+                        bOutData[6] = MyFunc.addCrc(bOutData);
+                        new ComThread().start();
+
+                        //复位遥调标志
+                        _isCorrect = false;
+                        iCorrect = new int[2];
                     }
-                    //转换数据
-                    int SetData = Integer.parseInt(sUserData[1]);
-                    bOutData[4] = MyFunc.InToByteArr(SetData)[2];
-                    bOutData[5] = MyFunc.InToByteArr(SetData)[3];
-                    //CRC
-                    bOutData[6] = MyFunc.addCrc(bOutData);
-                    new ComThread().start();
-                    //服务发送标准
-                    _isUserSet = false;
-                    sUserData = new String[3];
                 }
 
                 //防止遥测录波时通讯失败

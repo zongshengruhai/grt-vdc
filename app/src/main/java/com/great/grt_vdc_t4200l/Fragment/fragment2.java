@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,44 +42,48 @@ import jxl.Sheet;
 import jxl.Workbook;
 
 
-
+/**
+ * fragment2 录波记录
+ * 控制流程：
+ *      1、初始化List
+ *      2、初始化图表
+ *      3、根据筛选的editText动态更新List
+ *      4、当List发生点击事件时，获取点击List中携带的文件路径作为句柄，查找文件夹中的excel文件，并读取数据更新到图表
+ */
 public class fragment2 extends Fragment implements AdapterView.OnItemClickListener{
 
     private static final String TAG = "fragment2";
-
+    //TextView容器
     private TextView[] fragment2TempRow = new TextView[2];
-
     private TextView fragment2_Null;
-
     //MPAndroidChart
     private fragment2LineChartManager[] fragment2ChartManager = new fragment2LineChartManager[3];
     private LineChart[] fragment2LineChart = new LineChart[3];
     private List<Integer> list = new ArrayList<>();             //数据集合
-    private List<Integer> colour = new ArrayList<>();           //折线颜色
-    private List<String> names = new ArrayList<>();             //折线名称
-
+//    private List<Integer> colour = new ArrayList<>();           //折线颜色
+//    private List<String> names = new ArrayList<>();             //折线名称
     //listView
     private Context fragment2_Context;
     private ListView fragment2_ListView;
     private List<shortItem> fragment2_Data  = new LinkedList<>();
-    private shortItemAdapter fragment2_RecordAdapter;
-
-    //筛选
+//    private shortItemAdapter fragment2_RecordAdapter;
+    //正则筛选
     private EditText Search_EditText;
     private ImageView Search_Delete;
-    private TextView Search_Inquire;
-
+//    private TextView Search_Inquire;
     //进度条
     private NumberProgressBar fragment2_Loading;            //进度条实例
     private int iProgress;                                         //进度
     private boolean _isLoadFlag = true;                     //控制进度条显示位
-
     //控制线程
-    private volatile boolean _isUpData = false;                      //控制线程
-
+//    private volatile boolean _isUpData = false;                      //控制线程
     //加载文件内容
-    private String pickFileName = null;                            //选择的文件名
+    private String pickFileName = null;                            //文件路径
 
+    /**
+     * fragment生命周期
+     */
+    //创建
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment2,container,false);
@@ -103,45 +106,46 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         //筛选实例化
         Search_EditText = view.findViewById(R.id.fragment2_search_EditText);
         Search_Delete = view.findViewById(R.id.fragment2_search_delete);
-        Search_Inquire = view.findViewById(R.id.fragment2_search_inquire);
+//        Search_Inquire = view.findViewById(R.id.fragment2_search_inquire);
 
         //进度条实例化
         fragment2_Loading = view.findViewById(R.id.f2_Progress_bar);
 
+        //未选择录波hint
         fragment2_Null = view.findViewById(R.id.f2_nullFileHint);
 
+        //初始化筛选
         initSearch();
+        //执行筛选，实际功能是更新list
         SearchListData(null);
+
+        //初始化图表
         initLineChart();
 
         return view;
     }
-
-
-    /**
-     * 重载生命周期
-     */
+    //重载
     @Override
     public void onResume(){
         super.onResume();
+        //注册定时
         f2_UiHandler.post(f2_UiRunable);
     }
-
-    /**
-     * 中止生命周期
-     */
+    //中止
     @Override
     public void onPause(){
         super.onPause();
+        //注销定时
         f2_UiHandler.removeCallbacks(f2_UiRunable);
     }
 
     /**
-     * 初始化搜索框
+     * List
      */
+    //初始化List
     private void initSearch(){
 
-        //添加输入清零事件
+        //点击X清零
         Search_Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,140 +179,20 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
         });
 
-        //搜索点击事件（准备废弃）
-        Search_Inquire.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(Search_EditText.getText().toString().trim())){
-                    Log.e("fragment2","请输入指定日期或编号的事件记录以搜索");
-                }else {
-                    Log.e("fragment2","已点击");
-                }
-            }
-        });
+        //搜索点击事件（已废弃）
+//        Search_Inquire.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (TextUtils.isEmpty(Search_EditText.getText().toString().trim())){
+//                    Log.e("fragment2","请输入指定日期或编号的事件记录以搜索");
+//                }else {
+//                    Log.e("fragment2","已点击");
+//                }
+//            }
+//        });
 
     }
-
-    /**
-     * 初始化图表
-     */
-    private void initLineChart(){
-
-//        names.add("Uv");
-//        names.add("Vv");
-//        names.add("Wv");
-//        names.add("Ua");
-//        names.add("Va");
-//        names.add("Wa");
-//        names.add("Rv");
-//        names.add("Sv");
-//        names.add("Tv");
-//
-//        colour.add(Color.YELLOW);
-//        colour.add(Color.GREEN);
-//        colour.add(Color.RED);
-//        colour.add(Color.YELLOW);
-//        colour.add(Color.GREEN);
-//        colour.add(Color.RED);
-//        colour.add(Color.YELLOW);
-//        colour.add(Color.GREEN);
-//        colour.add(Color.RED);
-
-//        fragment2ChartManager[0] = new fragment2LineChartManager(fragment2LineChart[0],names,colour);
-//        fragment2ChartManager[0].setYAxis(500,-500,10);
-
-        colour.add(Color.YELLOW);
-        colour.add(Color.GREEN);
-        colour.add(Color.RED);
-
-        names = new ArrayList<>();
-        names.add("Rv");
-        names.add("Sv");
-        names.add("Tv");
-        fragment2ChartManager[0] = new fragment2LineChartManager(fragment2LineChart[0],names,colour);
-//        fragment2ChartManager[0].setYAxis(520,-500,10);
-        fragment2ChartManager[0].setDescription("输入电压");
-        fragment2LineChart[0].setOnChartGestureListener(chartListener);
-
-        names = new ArrayList<>();
-        names.add("Uv");
-        names.add("Vv");
-        names.add("Wv");
-        fragment2ChartManager[1] = new fragment2LineChartManager(fragment2LineChart[1],names,colour);
-//        fragment2ChartManager[1].setYAxis(520,-520,10);
-        fragment2ChartManager[1].setDescription("输出电压");
-        fragment2LineChart[1].setOnChartGestureListener(chartListener);
-
-        names = new ArrayList<>();
-        names.add("Ua");
-        names.add("Va");
-        names.add("Wa");
-        fragment2ChartManager[2] = new fragment2LineChartManager(fragment2LineChart[2],names,colour);
-//        fragment2ChartManager[2].setYAxis(500,-500,10);
-        fragment2ChartManager[2].setDescription("输出电流");
-        fragment2LineChart[2].setOnChartGestureListener(chartListener);
-
-    }
-
-    /**
-     *  将所有图表设置一样的回调（暂时废弃）
-     */
-    private OnChartGestureListener chartListener = new OnChartGestureListener() {
-
-        //手势开始
-        @Override
-        public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
-//            Log.e(TAG,"手势开始");
-        }
-
-        //手势结束
-        @Override
-        public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
-//            Log.e(TAG,"手势结束");
-        }
-
-        //长按
-        @Override
-        public void onChartLongPressed(MotionEvent me) {
-//            Log.e(TAG,"长按");
-        }
-
-        //双击
-        @Override
-        public void onChartDoubleTapped(MotionEvent me) {
-//            Log.e(TAG,"双击图表");
-        }
-
-        //        单击
-        @Override
-        public void onChartSingleTapped(MotionEvent me) {
-//            Log.e(TAG,"单击图表");
-        }
-
-        @Override
-        public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
-//            Log.e(TAG,"now is onChartFling");
-        }
-
-        //缩放
-        @Override
-        public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-//            Log.e(TAG,"缩放图表, X轴："+scaleX+", Y轴："+scaleY);
-        }
-
-        //拖动
-        @Override
-        public void onChartTranslate(MotionEvent me, float dX, float dY) {
-//            Log.e(TAG,"拖动图表, X轴："+dX+", Y轴："+dY+",me:"+me);
-//            fragment2LineChart[0].setTranslationX(dX);
-//            fragment2LineChart[0].setTranslationY(dY);
-        }
-    };
-
-    /**
-     *  SearchListData
-     *  根据EditText输入数据更新ListView列表数据
-     */
+    //筛选List
     private void SearchListData(String SearchFileName){
 
         //录波记录存放路径
@@ -324,6 +208,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         if (file.exists()){
 
             File[] files = file.listFiles();
+
+            shortItemAdapter fragment2_RecordAdapter;
 
             //清空ListView
             fragment2_Data.clear();
@@ -392,10 +278,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
             }
         }
     }
-
-    /**
-     * 点击List事件
-     */
+    //List点击事件
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         TextView pickTextUrl = view.findViewById(R.id.txt_mUrl);
@@ -418,81 +301,194 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     }
 
     /**
-     * 更新图表
-     * @param fileName 文件的绝对路径
+     * 图表
      */
-    private void fillLineChart(String fileName){
+    //初始化图表
+    private void initLineChart(){
 
-        String PATH = fragment2_Context.getFilesDir().getPath() + "/record_log/";
+//        names.add("Uv");
+//        names.add("Vv");
+//        names.add("Wv");
+//        names.add("Ua");
+//        names.add("Va");
+//        names.add("Wa");
+//        names.add("Rv");
+//        names.add("Sv");
+//        names.add("Tv");
+//
+//        colour.add(Color.YELLOW);
+//        colour.add(Color.GREEN);
+//        colour.add(Color.RED);
+//        colour.add(Color.YELLOW);
+//        colour.add(Color.GREEN);
+//        colour.add(Color.RED);
+//        colour.add(Color.YELLOW);
+//        colour.add(Color.GREEN);
+//        colour.add(Color.RED);
 
-        int rows;                                                           //行数量
-        int columns;                                                        //列数量
+//        fragment2ChartManager[0] = new fragment2LineChartManager(fragment2LineChart[0],names,colour);
+//        fragment2ChartManager[0].setYAxis(500,-500,10);
 
-        if (fileName == null){
-            Log.e(TAG,"没有文件名");
-        }else {
-            //填充表头
-            String[] fillContent;
-            fillContent = (fileName.replace(".xls","")).split("_");
-            if (fillContent.length > 0){
-                fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),Integer.parseInt(fillContent[0])));
-                fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),(fillContent[4] + "_" + fillContent[5]),(Integer.parseInt(fillContent[2])),(Integer.parseInt(fillContent[3])),""));
-            }
+        List<Integer> colour = new ArrayList<>();
+        colour.add(Color.YELLOW);
+        colour.add(Color.GREEN);
+        colour.add(Color.RED);
 
-            fileName = PATH + fileName;
-            Log.e(TAG,"准备加载："+fileName);
+        List<String> names = new ArrayList<>();
+        names.add("Rv");
+        names.add("Sv");
+        names.add("Tv");
+        fragment2ChartManager[0] = new fragment2LineChartManager(fragment2LineChart[0],names,colour);
+//        fragment2ChartManager[0].setYAxis(520,-500,10);
+        fragment2ChartManager[0].setDescription("输入电压");
+        fragment2LineChart[0].setOnChartGestureListener(chartListener);
 
-            try {
+        names = new ArrayList<>();
+        names.add("Uv");
+        names.add("Vv");
+        names.add("Wv");
+        fragment2ChartManager[1] = new fragment2LineChartManager(fragment2LineChart[1],names,colour);
+//        fragment2ChartManager[1].setYAxis(520,-520,10);
+        fragment2ChartManager[1].setDescription("输出电压");
+        fragment2LineChart[1].setOnChartGestureListener(chartListener);
 
-                FileInputStream mfis = new FileInputStream(fileName);
-                Workbook mbook = Workbook.getWorkbook(mfis);
-                int msheer = mbook.getNumberOfSheets();                     //表数量
-                Sheet[] mSheetlist = mbook.getSheets();                     //表内容
+        names = new ArrayList<>();
+        names.add("Ua");
+        names.add("Va");
+        names.add("Wa");
+        fragment2ChartManager[2] = new fragment2LineChartManager(fragment2LineChart[2],names,colour);
+//        fragment2ChartManager[2].setYAxis(500,-500,10);
+        fragment2ChartManager[2].setDescription("输出电流");
+        fragment2LineChart[2].setOnChartGestureListener(chartListener);
 
-                String temp;
+    }
+    //图表手势回调（暂时弃用）
+    private OnChartGestureListener chartListener = new OnChartGestureListener() {
 
-                for (int i = 0; i < msheer; i++) {
-                    rows = mSheetlist[i].getRows();
-                    columns = mSheetlist[i].getColumns();
+        //手势开始
+        @Override
+        public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+//            Log.e(TAG,"手势开始");
+        }
 
-                    Log.e(TAG,"行数："+ rows + "列数："+columns);
-                    for (int j = 1; j < rows; j++) {
-                        int min = 0;
-                        for (int k = 0; k < 3; k++) {
-                            for (int z = min; z < min + 3 ; z++) {
-                                Cell cell = mSheetlist[i].getCell(z,j);
-                                temp =(cell.getContents()).trim();
-                                list.add(Integer.parseInt(temp));
-                            }
-                            min = min + 3;
-                            fragment2ChartManager[k].addEntry(list);
-                            list.clear();
-                        }
+        //手势结束
+        @Override
+        public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+//            Log.e(TAG,"手势结束");
+        }
 
-//                        for (int k = 0; k < 3 ; k++) {
-//                            Cell cell = mSheetlist[i].getCell(k,j);
-//                            temp =(cell.getContents()).trim();
-//                            list.add(Integer.parseInt(temp));
+        //长按
+        @Override
+        public void onChartLongPressed(MotionEvent me) {
+//            Log.e(TAG,"长按");
+        }
+
+        //双击
+        @Override
+        public void onChartDoubleTapped(MotionEvent me) {
+//            Log.e(TAG,"双击图表");
+        }
+
+        //        单击
+        @Override
+        public void onChartSingleTapped(MotionEvent me) {
+//            Log.e(TAG,"单击图表");
+        }
+
+        @Override
+        public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+//            Log.e(TAG,"now is onChartFling");
+        }
+
+        //缩放
+        @Override
+        public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+//            Log.e(TAG,"缩放图表, X轴："+scaleX+", Y轴："+scaleY);
+        }
+
+        //拖动
+        @Override
+        public void onChartTranslate(MotionEvent me, float dX, float dY) {
+//            Log.e(TAG,"拖动图表, X轴："+dX+", Y轴："+dY+",me:"+me);
+//            fragment2LineChart[0].setTranslationX(dX);
+//            fragment2LineChart[0].setTranslationY(dY);
+        }
+    };
+    /*//更新图表（弃用）*/
+//    private void fillLineChart(String fileName){
+//
+//        String PATH = fragment2_Context.getFilesDir().getPath() + "/record_log/";
+//
+//        int rows;                                                           //行数量
+//        int columns;                                                        //列数量
+//
+//        if (fileName == null){
+//            Log.e(TAG,"没有文件名");
+//        }else {
+//            //填充表头
+//            String[] fillContent;
+//            fillContent = (fileName.replace(".xls","")).split("_");
+//            if (fillContent.length > 0){
+//                fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),Integer.parseInt(fillContent[0])));
+//                fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),(fillContent[4] + "_" + fillContent[5]),(Integer.parseInt(fillContent[2])),(Integer.parseInt(fillContent[3])),""));
+//            }
+//
+//            fileName = PATH + fileName;
+//            Log.e(TAG,"准备加载："+fileName);
+//
+//            try {
+//
+//                FileInputStream mfis = new FileInputStream(fileName);
+//                Workbook mbook = Workbook.getWorkbook(mfis);
+//                int msheer = mbook.getNumberOfSheets();                     //表数量
+//                Sheet[] mSheetlist = mbook.getSheets();                     //表内容
+//
+//                String temp;
+//
+//                for (int i = 0; i < msheer; i++) {
+//                    rows = mSheetlist[i].getRows();
+//                    columns = mSheetlist[i].getColumns();
+//
+//                    Log.e(TAG,"行数："+ rows + "列数："+columns);
+//                    for (int j = 1; j < rows; j++) {
+//                        int min = 0;
+//                        for (int k = 0; k < 3; k++) {
+//                            for (int z = min; z < min + 3 ; z++) {
+//                                Cell cell = mSheetlist[i].getCell(z,j);
+//                                temp =(cell.getContents()).trim();
+//                                list.add(Integer.parseInt(temp));
+//                            }
+//                            min = min + 3;
+//                            fragment2ChartManager[k].addEntry(list);
+//                            list.clear();
 //                        }
-////                        Cell[] cellList = mSheetlist[i].getRow(j);
-////                        for (Cell cell : cellList) {
-////                            temp = (cell.getContents()).trim();
-////                            Log.e(TAG,Integer.parseInt(temp)+"");
+//
+////                        for (int k = 0; k < 3 ; k++) {
+////                            Cell cell = mSheetlist[i].getCell(k,j);
+////                            temp =(cell.getContents()).trim();
 ////                            list.add(Integer.parseInt(temp));
 ////                        }
-//                        fragment2ChartManager[0].addEntry(list);
-//                        list.clear();
-                    }
-                }
-                mbook.close();
+//////                        Cell[] cellList = mSheetlist[i].getRow(j);
+//////                        for (Cell cell : cellList) {
+//////                            temp = (cell.getContents()).trim();
+//////                            Log.e(TAG,Integer.parseInt(temp)+"");
+//////                            list.add(Integer.parseInt(temp));
+//////                        }
+////                        fragment2ChartManager[0].addEntry(list);
+////                        list.clear();
+//                    }
+//                }
+//                mbook.close();
+//
+//            }catch (Exception e){
+//                System.out.println("fragment2,Exception: " + e);
+//            }
+//        }
+//    }
 
-            }catch (Exception e){
-                System.out.println("fragment2,Exception: " + e);
-            }
-        }
-    }
-
-    //主线程
+    /**
+     * 定时线程
+     */
     Handler f2_UiHandler = new Handler();
     Runnable f2_UiRunable = new Runnable() {
         @Override
@@ -554,7 +550,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     };
 
     /**
-     * 子线程，处理耗时的加载图表
+     * 子线程
+     * 更新图表（耗时）
      */
     class LongThread extends Thread{
         public void run(){

@@ -18,6 +18,8 @@
 
     <EditText
         android:id="@+id/SettingEd"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:maxLength="4"
         android:maxLines="1"
         android:inputType="number"
@@ -28,7 +30,7 @@
         android:hint="@string/fragmentEdHint"
         android:textColorHint="@color/TextInHint"
         android:layout_margin="5dp"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="match_parent" />
 
     <Button
@@ -41,5 +43,13 @@
         android:text="@string/fragment4btu"
         android:textSize="26sp"
         android:background="@drawable/txt_whiteborder"/>
+
+    <Switch
+        android:id="@+id/SettingSwitch"
+        android:switchMinWidth="100dp"
+        android:thumb="@drawable/thumb"
+        android:track="@drawable/track"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent" />
 
 </LinearLayout>

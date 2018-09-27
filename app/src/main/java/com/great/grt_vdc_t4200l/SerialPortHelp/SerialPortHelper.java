@@ -435,7 +435,7 @@ public class SerialPortHelper {
 //                            SystemFunc.setNewTime(sSystemTime);
 
                             //处理告警
-//                            alarmHand();
+                            alarmHand(_isYx);
 
                         }else {
                             Log.e("串口信息","0x03回送帧出错，数据内容："+temp);
@@ -595,7 +595,7 @@ public class SerialPortHelper {
                         break; //通讯失败标志
                 }
             }else {
-                Log.e("串口信息","数据校验错误，数据内容："+temp);
+                Log.e("串口信息","数据校验错误，数据内容："+ temp +"CRC："+ MyFunc.addCrc(buffer));
                 _isCommFlag = false; //通讯失败标志
             }
 
@@ -617,22 +617,90 @@ public class SerialPortHelper {
     /**
      * 告警处理
      */
-    private void alarmHand(){
+    private void alarmHand(boolean[] _isYxError){
+
+        //读写SharePreferences
         SharedPreferences.Editor wAlarmData = mContext.getSharedPreferences("AlarmData",MODE_PRIVATE).edit();
         SharedPreferences rAlarmData = mContext.getSharedPreferences("AlarmData", 0);
 
-        for (int i = 0; i < 8 ; i++) {
-            if (i == 2){ continue;}
-            _isYxFlag[i] = rAlarmData.getBoolean("is_yxError"+(1+i),false);
-            if (_isYx[i] && !_isYxFlag[i]){
-                _isYxFlag[i] = true;
-            }else if (!_isYx[i] && _isYxFlag[i]){
-                _isYxFlag[i] = false;
+        //文件路径
+        String faultPath = mContext.getFilesDir().getPath()+"/fault_log/";
+        String faultName = faultPath + "fault_record.xls";
+
+//        List<List<Object>> alarmContent;
+//        List<Object> alarmRow;
+
+        //循环处理所有的遥信信号（比较耗时）
+        for (int i = 3; i < _isYxError.length; i++) {
+
+            if (_isYxError[i] && !rAlarmData.getBoolean("_isYxError_"+i,false)){
+
+                List<List<Object>> alarmContent = new ArrayList<>();
+                List<Object> alarmRow = new ArrayList<>();
+
+                alarmRow.add(rAlarmData.getInt("i_AlarmTime",0)+1);
+                switch (i){
+                    case 3:
+                        alarmRow.add("输入异常");
+                        break;
+                    case 4:
+                        alarmRow.add("输出过流");
+                        break;
+                    case 5:
+                        alarmRow.add("输出短路");
+                        break;
+                    case 6:
+                        alarmRow.add("容量失效");
+                        break;
+                    case 7:
+                        alarmRow.add("通讯异常");
+                        break;
+                }
+                alarmRow.add(SystemFunc.getNewTime());
+                alarmRow.add("N/A");
+                alarmContent.add(alarmRow);
+
+                if (SystemFunc.addExcelData(faultName,alarmContent)){
+                    wAlarmData.putBoolean("_isYxError_"+i,true);
+                    wAlarmData.putString("i_YxError_"+i+"_Num",(rAlarmData.getInt("i_AlarmTime",0)+1+""));
+                    wAlarmData.putInt("i_AlarmTime",rAlarmData.getInt("i_AlarmTime",0)+1);
+                    wAlarmData.commit();
+                }
+
+            }else if (!_isYxError[i] && rAlarmData.getBoolean("_isYxError_"+i,false)){
+
+                if (SystemFunc.alterExcelData(faultName,rAlarmData.getString("i_YxError_"+i+"_Num",""),SystemFunc.getNewTime())){
+                    wAlarmData.putBoolean("_isYxError_"+i,false);
+                    wAlarmData.putString("i_YxError_"+i+"_Num","");
+                    wAlarmData.commit();
+                }
             }
-            wAlarmData.putBoolean("is_yxError"+(1+i),_isYxFlag[i]);
+
         }
 
-        wAlarmData.commit();
+//        //输入异常
+//        if (_isYxError[3] && !rAlarmData.getBoolean("_isYxError_3",false)){
+//
+//            alarmRow.add(rAlarmData.getInt("i_AlarmTime",0) + 1);
+//            alarmRow.add("输入异常");
+//            alarmRow.add(SystemFunc.getNewTime());
+//            alarmRow.add("");
+//            alarmContent.add(alarmRow);
+//
+//            if (SystemFunc.addExcelData(faultName,alarmContent)){
+//                wAlarmData.putBoolean("_isYxError_3",true);
+//                wAlarmData.putString("i_YxError_3_Num",(rAlarmData.getInt("i_AlarmTime",0)+1+""));
+//                wAlarmData.putInt("i_AlarmTime",rAlarmData.getInt("i_AlarmTime",0)+1);
+//            }
+//
+//        }else if (!_isYxError[3] && rAlarmData.getBoolean("_isYxError_3",false)){
+//            if (SystemFunc.alterExcelData(faultName,rAlarmData.getString("i_YxError_3_Num",""),SystemFunc.getNewTime())){
+//                wAlarmData.putBoolean("_isYxError_3",false);
+//                wAlarmData.putString("i_YxError_3_Num","");
+//            }
+//        }
+//
+//        wAlarmData.commit();
     }
 
 }

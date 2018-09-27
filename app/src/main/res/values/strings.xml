@@ -25,7 +25,7 @@
 
     <string name="action_setting">setting</string>
 
-    <string name="lay1">实时数据</string>
+    <string name="lay1">实时波形</string>
     <string name="lay2">录波记录</string>
     <string name="lay3">历史告警</string>
     <string name="lay4">设置</string>
@@ -57,6 +57,10 @@
     <!-- fragment3 -->
     <string name="fragment3ContentText">故障记录</string>
     <string name="fragment3RealState">实时状态</string>
+    <string name="fragment3ListNum">编号</string>
+    <string name="fragment3ListType">事件类型</string>
+    <string name="fragment3ListStateTime">开始时间</string>
+    <string name="fragment3ListEndTime">结束时间</string>
     <!-- fragment4 -->
     <string name="fragment4btu">校准</string>
     <string name="fragment4btu2">设置</string>
@@ -77,7 +81,7 @@
     <string name="fragment4PasswordHint">请输入密码</string>
     <string name="fragmentEdHint">000</string>
     <!-- fragment5 -->
-    <string name="fragment5Cap">0%</string>
+    <string name="fragment5CapI">%1$d %%</string>
     <string name="fragment5map">状态动画</string>
     <string name="fragment5Yx_1">输入异常</string>
     <string name="fragment5Yx_2">输出过流</string>

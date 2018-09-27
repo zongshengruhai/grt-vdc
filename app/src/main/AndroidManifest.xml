@@ -3,12 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.great.grt_vdc_t4200l">
 
+    <!--监听系统广播权限-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <!--内存读写权限-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <!--要求震铃权限-->
     <uses-permission android:name="android.permission.VIBRATE"/>
-
+    
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,12 +21,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- 注册activity活动 -->
-        <!-- 底层活动 -->
+        <!--系统广播-->
+        <receiver android:name=".SystemBroadcast">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- 注册底层 -->
         <activity android:name=".BaseCourse">
         </activity>
 
-        <!-- 主界面活动 -->
+        <!-- 注册主应用层 -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,3 +42,4 @@
 
     </application>
 </manifest>
+

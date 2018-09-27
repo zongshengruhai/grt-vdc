@@ -33,7 +33,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="206dp"
-            android:text="@string/fragment5Cap"
+            android:text="@string/fragment5CapI"
             android:textColor="@color/black"
             android:textSize="30sp" />
 

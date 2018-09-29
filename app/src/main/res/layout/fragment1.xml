@@ -26,9 +26,11 @@
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/colorAccent"
             app:tabIndicatorHeight="5dp"
+            android:layout_margin="5dp"
             app:tabMode="fixed"/>
 
         <RelativeLayout
+            android:layout_margin="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -82,144 +84,168 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/oldRow"
+    <LinearLayout
         android:layout_toEndOf="@+id/newRow"
+        android:layout_margin="5dp"
+        android:background="@drawable/txt_rectborder"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/oldAlarm"
-            android:orientation="vertical"
-            android:layout_marginEnd="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/txt_rectborder"
+        <TextView
+            android:text="@string/fragment1RealData"
+            android:layout_margin="5dp"
+            android:textSize="30sp"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ListView
+            android:id="@+id/fragment1RealData"
+            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="110dp">
+            android:layout_height="match_parent"/>
 
-            <TextView
-                android:id="@+id/fragment1alarmTV"
-                android:text="@string/fragment1AlarmTime"
-                android:textSize="28sp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:textColor="@color/black"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/fragment1RecorTV"
-                android:text="@string/fragment1RecordTime"
-                android:textSize="28sp"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:layout_marginEnd="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/oldRow"-->
+        <!--android:layout_toEndOf="@+id/newRow"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/oldData"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/txt_rectborder"
-            android:layout_below="@+id/oldAlarm"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <!--
-            <Button
-                android:id="@+id/oldDataButton"
-                android:text="补偿记录"
-                android:textSize="24sp"
-                android:background="@drawable/button_style"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            -->
+        <!--<LinearLayout-->
+            <!--android:id="@+id/oldAlarm"-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_marginEnd="5dp"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:background="@drawable/txt_rectborder"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="110dp">-->
 
             <!--<TextView-->
-            <!--android:id="@+id/fragment1alarmTV"-->
-            <!--android:text="@string/fragment1AlarmTime"-->
-            <!--android:textSize="28sp"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_margin="5dp"-->
-            <!--android:textColor="@color/colorBlack"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content" />-->
+                <!--android:id="@+id/fragment1alarmTV"-->
+                <!--android:text="@string/fragment1AlarmTime"-->
+                <!--android:textSize="28sp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent" />-->
 
             <!--<TextView-->
-                <!--android:id="@+id/realAlarm"-->
-                <!--android:text="@string/fragment1RealAlarm"-->
+                <!--android:id="@+id/fragment1RecorTV"-->
+                <!--android:text="@string/fragment1RecordTime"-->
                 <!--android:textSize="28sp"-->
                 <!--android:textColor="@color/black"-->
-                <!--android:layout_margin="5dp"-->
-                <!--android:layout_width="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_marginEnd="5dp"-->
+                <!--android:layout_marginStart="5dp"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent" />-->
+
+        <!--</LinearLayout>-->
+
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/oldData"-->
+            <!--android:layout_marginEnd="5dp"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:background="@drawable/txt_rectborder"-->
+            <!--android:layout_below="@+id/oldAlarm"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+            <!--&lt;!&ndash;-->
+            <!--<Button-->
+                <!--android:id="@+id/oldDataButton"-->
+                <!--android:text="补偿记录"-->
+                <!--android:textSize="24sp"-->
+                <!--android:background="@drawable/button_style"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content" />-->
+            <!--&ndash;&gt;-->
 
-            <!--<LinearLayout-->
-                <!--android:layout_below="@+id/realAlarm"-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="fill_parent"-->
-                <!--android:orientation="vertical"-->
-                <!--android:scrollbars="vertical">-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/fragment1alarmTV"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="@string/fragment1AlarmTime"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:textSize="28sp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_alignParentStart="true"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_alignParentTop="true"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_margin="5dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:textColor="@color/colorBlack"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
 
-                <!--<ListView-->
-                    <!--android:id="@+id/fragment1_ListView"-->
-                    <!--android:layout_width="fill_parent"-->
-                    <!--android:layout_height="fill_parent"-->
-                    <!--android:dividerHeight="2dp"-->
-                    <!--android:divider="#B8B8B8" />-->
-            <!--</LinearLayout>-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/realAlarm"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="@string/fragment1RealAlarm"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textSize="28sp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textColor="@color/black"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_margin="5dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
 
-            <!--<TextView-->
-                <!--android:id="@+id/realFlag"-->
-                <!--android:text="@string/fragment1RealFlag"-->
-                <!--android:textSize="28sp"-->
-                <!--android:textColor="@color/black"-->
-                <!--android:layout_margin="5dp"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content" />-->
+            <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_below="@+id/realAlarm"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="fill_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="fill_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:orientation="vertical"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:scrollbars="vertical">&ndash;&gt;-->
 
-            <!--<LinearLayout-->
-                <!--android:layout_below="@+id/realFlag"-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="fill_parent"-->
-                <!--android:orientation="vertical"-->
-                <!--android:scrollbars="vertical">-->
+                <!--&lt;!&ndash;<ListView&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:id="@+id/fragment1_ListView"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="fill_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="fill_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:dividerHeight="2dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:divider="#B8B8B8" />&ndash;&gt;-->
+            <!--&lt;!&ndash;</LinearLayout>&ndash;&gt;-->
 
-                <!--<LinearLayout-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content">-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/realFlag"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="@string/fragment1RealFlag"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textSize="28sp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textColor="@color/black"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_margin="5dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
 
-                    <!--<TextView-->
-                        <!--android:text="充电状态"-->
-                        <!--android:textSize="24sp"-->
-                        <!--android:layout_margin="5dp"-->
-                        <!--android:textColor="@color/black"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content" />-->
+            <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_below="@+id/realFlag"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="fill_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="fill_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:orientation="vertical"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:scrollbars="vertical">&ndash;&gt;-->
 
-                    <!--<ImageView-->
-                        <!--android:layout_margin="5dp"-->
-                        <!--android:src="@mipmap/search_delete"-->
-                        <!--android:layout_width="40dp"-->
-                        <!--android:layout_height="40dp" />-->
+                <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:orientation="horizontal"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="wrap_content">&ndash;&gt;-->
 
-                <!--</LinearLayout>-->
+                    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:text="充电状态"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:textSize="24sp"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_margin="5dp"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:textColor="@color/black"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
+
+                    <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_margin="5dp"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:src="@mipmap/search_delete"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_width="40dp"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_height="40dp" />&ndash;&gt;-->
+
+                <!--&lt;!&ndash;</LinearLayout>&ndash;&gt;-->
 
 
-            <!--</LinearLayout>-->
+            <!--&lt;!&ndash;</LinearLayout>&ndash;&gt;-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
-    </RelativeLayout>
+    <!--</RelativeLayout>-->
 
 </RelativeLayout>

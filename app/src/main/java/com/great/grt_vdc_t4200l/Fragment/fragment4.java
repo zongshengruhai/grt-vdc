@@ -16,10 +16,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.great.grt_vdc_t4200l.ListView.longItem;
+import com.great.grt_vdc_t4200l.ListView.longItemAdapter;
 import com.great.grt_vdc_t4200l.ListView.settingItem;
 import com.great.grt_vdc_t4200l.ListView.settingItemAdapter;
-import com.great.grt_vdc_t4200l.ListView.shortItem;
-import com.great.grt_vdc_t4200l.ListView.shortItemAdapter;
 import com.great.grt_vdc_t4200l.R;
 import java.util.LinkedList;
 import java.util.List;
@@ -145,17 +146,17 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
      */
     //初始化选择list
     private void initPickList(){
-        List<shortItem> pickListData = new LinkedList<>();
-        shortItemAdapter pickListAdapter;
+        List<longItem> pickListData = new LinkedList<>();
+        longItemAdapter pickListAdapter;
 
-        pickListData.add(new shortItem("","输入校准","",""));
-        pickListData.add(new shortItem("","输出校准","",""));
-        pickListData.add(new shortItem("","电容校准","",""));
+        pickListData.add(new longItem("","输入校准","",""));
+        pickListData.add(new longItem("","输出校准","",""));
+        pickListData.add(new longItem("","电容校准","",""));
 //        pickListData.add(new shortItem("","系统时间","",""));
-        pickListData.add(new shortItem("","遥控设置","",""));
-        pickListData.add(new shortItem("","系统设置","",""));
+        pickListData.add(new longItem("","遥控设置","",""));
+        pickListData.add(new longItem("","系统设置","",""));
 
-        pickListAdapter = new shortItemAdapter((LinkedList<shortItem>)pickListData,fragment4_Context,"SetItem");
+        pickListAdapter = new longItemAdapter((LinkedList<longItem>)pickListData,fragment4_Context,"fragment4");
         pickList.setAdapter(pickListAdapter);
         pickList.setOnItemClickListener(this);
         ChangeSetLay(0);

@@ -1,59 +1,33 @@
 package com.great.grt_vdc_t4200l;
 
-/* ------------- BaseCourse 说明 -------------
-    主要描述：所有Activity集成父类
-    创建日期：2018年7月27日 10:02:22
-*/
-
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.database.SQLException;
 import android.os.Bundle;
-
 import android.os.Handler;
-import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
-
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ShareActionProvider;
 import android.widget.Toast;
-
-import com.github.mikephil.charting.utils.FileUtils;
 import com.great.grt_vdc_t4200l.SerialPortHelp.MyFunc;
 import com.great.grt_vdc_t4200l.SerialPortHelp.SerialPortHelper;
-import com.great.grt_vdc_t4200l.SerialPortHelp.bean.ComBean;
-
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-
-import android_serialport_api.SerialPort;
-
 import static com.great.grt_vdc_t4200l.SystemFunc.checkFileExist;
 import static com.great.grt_vdc_t4200l.SystemFunc.createExcel;
 import static com.great.grt_vdc_t4200l.SystemFunc.createFile;
-import static com.great.grt_vdc_t4200l.SystemFunc.restart;
+
 
 public class BaseCourse extends FragmentActivity {
 
     private static final String TAG = "BaseCourse";
     //广播声明----------------------------------------------------
-    //Intent lifeCycleChange = new Intent("drc.xxx.yyy.baseActivity");
-    Intent dataChange = new Intent("drc.xxx.yyy.fragment1");
     MyBaseActivity_Broad baseCourseBroad = null;
     IntentFilter baseCourseIntentFilter = new IntentFilter("drc.xxx.yyy.baseActivity");
     int text[] = new int[5];
@@ -62,20 +36,13 @@ public class BaseCourse extends FragmentActivity {
     private byte[] bOutData = new byte[]{(byte)0x7E,0x00,0x00,0x00,0x00,0x00,0x00,(byte)0x0D};
     //遥控遥调声明----------------------------------------------------
     private boolean _isCorrect = false;
-    private String sCorrect = "";
     private int[] iCorrect = new int[2];
     //数据声明----------------------------------------------------
-    private int[] iTelemetry = new int[14];                     //遥测
-    private boolean[] _isTelecommand = new boolean[8];          //遥信
-    private boolean[] _isTelecontrol = new boolean[2];          //遥控
-    private String sSystemTime;                                 //时间
     private int iCommError = 0;
     private int iReadRecordError = 0;
-    //硬件声明----------------------------------------------------
-
     //其他声明----------------------------------------------------
-    boolean globalError = false;                                //全局错误
-    private Context mContext;
+//    boolean globalError = false;                                //全局错误
+    public Context mContext;
     //系统自检声明----------------------------------------------------
     static private String faultPath ;
     static private String faultName;
@@ -117,7 +84,7 @@ public class BaseCourse extends FragmentActivity {
         handler.post(task);
 
         //获取权限
-//        SystemFunc.getRoot(getPackageCodePath());
+        SystemFunc.getRoot(getPackageCodePath());
 
         //注册广播
         if (baseCourseBroad == null){
@@ -148,14 +115,14 @@ public class BaseCourse extends FragmentActivity {
         //执行退出流程
         pauseSOP();
 
-        //重启设备
+        //重启设备（强制形，如果以任何方式退出APP就重启设备）
 //        SystemFunc.restart();
     }
 
     /**
      * 总线广播
      */
-    //广播处理----------------------------------------------------
+    //广播分类----------------------------------------------------
     public class MyBaseActivity_Broad extends BroadcastReceiver{
         public void onReceive(Context context, Intent intent){
 
@@ -208,10 +175,6 @@ public class BaseCourse extends FragmentActivity {
 
         }
     }
-
-    /**
-     * 广播事件处理
-     */
     //Toast----------------------------------------------------
     private void Toast(int ToastType){
         switch (ToastType){
@@ -504,7 +467,7 @@ public class BaseCourse extends FragmentActivity {
         }
 
         if (!checkFileExist(faultName)&&!checkFileExist(recordPath)&&!downCom.getIsOpen()){
-//            restart();//重启
+            SystemFunc.restart();//重启
         }else {
             _isSystem = true;
         }
@@ -614,9 +577,25 @@ public class BaseCourse extends FragmentActivity {
             handler.postDelayed(this,500);
             if (downCom.getIsOpen()){
 
-                //通讯错误振铃：5次定时未接受到数据、接收数据错误、校验错误、帧错误等
+                //通讯错误计次
                 boolean _isCommFlag = downCom.getisCommFlag();
-                if (!_isCommFlag){ if (iCommError < 10){iCommError ++;} }else { iCommError = 0;}
+                if (!_isCommFlag){
+                    if (iCommError < 99){iCommError ++;}
+                }else {
+                    SystemFunc.Beep(mContext,false);
+                    iCommError = 0;
+                }
+
+                //通知用户
+                if (iCommError > 40 && iCommError < 59 && ((60-iCommError)%2) == 0 ){
+                    Toast.makeText(mContext,"通讯长时间无响应，若持续异常，系统将会在"+((60-iCommError)/2)+"后重启",Toast.LENGTH_SHORT).show();
+                }
+
+                //30s无有效通讯，重启设备
+                if (iCommError > 60){
+//                    SystemFunc.restart();
+                }
+
 //                if (iCommError > 5){SystemFunc.Beep(mContext,true);}else {SystemFunc.Beep(mContext,false);}
 
                 //写入
@@ -698,6 +677,16 @@ public class BaseCourse extends FragmentActivity {
 
                 wStateData.commit();
 
+                boolean[] _isNewYX = new boolean[5];
+                for (int i = 0; i < 5 ; i++) {
+                    _isNewYX[i] = rAlarmData.getBoolean("_isYxError_"+i,false);
+                }
+
+                if (_isNewYX[0] || _isNewYX[1] || _isNewYX[2] || _isNewYX[3] || _isNewYX[4] || (iCommError >= 40 && iCommError < 59)){
+                    SystemFunc.Beep(getApplicationContext(),true);
+                }else {
+                    SystemFunc.Beep(getApplicationContext(),false);
+                }
 
                 //计数
 //                bOutData[1] = (byte)0x03;

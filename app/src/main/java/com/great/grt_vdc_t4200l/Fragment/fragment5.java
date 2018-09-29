@@ -19,8 +19,7 @@ public class fragment5 extends Fragment {
 
     //容器
     private ImageView[] fragment5Map = new ImageView[6];
-    private TextView[] fragment5Tv = new TextView[1];
-//    private DashboardView[] fragment5Dv = new DashboardView[1];
+    private TextView[] fragment5Tv = new TextView[7];
     private boolean _isType =false;
 
     /**
@@ -44,7 +43,9 @@ public class fragment5 extends Fragment {
         //电容容量
         fragment5Tv[0] = view.findViewById(R.id.fragment5_cap);
 
-//        fragment5Dv[0] = view.findViewById(R.id.fragment5_in);
+        fragment5Tv[1] = view.findViewById(R.id.fragment5AlarmTime);
+        fragment5Tv[2] = view.findViewById(R.id.fragment5RecordTime);
+        fragment5Tv[3] = view.findViewById(R.id.fragment5Hz);
 
         return view;
     }
@@ -78,6 +79,7 @@ public class fragment5 extends Fragment {
 
             if (layPage == 0){
                 SharedPreferences rRealData = getActivity().getSharedPreferences("RealData", 0);
+                SharedPreferences rAlarmData = getActivity().getSharedPreferences("AlarmData", 0);
 
                 boolean[] _isYx = new boolean[8];
                 _isYx[0] = rRealData.getBoolean("is_RechargeFlag",false);           //充电状态
@@ -104,7 +106,7 @@ public class fragment5 extends Fragment {
                     }
                 }
                 _isType = !_isType;
-                fragment5Tv[0].setText(String.format(getResources().getString(R.string.fragment5CapI), rRealData.getInt("i_Capv", 0)));
+                fragment5Tv[0].setText(String.format(getResources().getString(R.string.fragment5CapI), rRealData.getInt("i_CapAh", 0)));
 
                 //遥信
                 _isYx[2] = rRealData.getBoolean("is_InAlarm",false);                //输入异常
@@ -120,7 +122,11 @@ public class fragment5 extends Fragment {
                     }
                 }
 
-//                fragment5Dv[0].setPercent((int)(Math.random()*100));
+                //R/S/T
+                fragment5Tv[1].setText(String.format(getResources().getString(R.string.fragment5_Time),rAlarmData.getInt("i_AlarmTime",0)));
+                fragment5Tv[2].setText(String.format(getResources().getString(R.string.fragment5_Time),rAlarmData.getInt("i_RecordTime",0)));
+                fragment5Tv[3].setText(String.format(getResources().getString(R.string.fragment5_Hz),rRealData.getInt("i_Hz",0)));
+
 
 
             }

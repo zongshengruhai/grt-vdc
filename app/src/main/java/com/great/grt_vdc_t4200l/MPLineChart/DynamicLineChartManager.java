@@ -173,7 +173,7 @@ public class DynamicLineChartManager {
             lineData.addEntry(entry, i);
             lineData.notifyDataChanged();
             lineChart.notifyDataSetChanged();
-            lineChart.setVisibleXRangeMaximum(7);
+            lineChart.setVisibleXRangeMaximum(10);
             //lineChart.setVisibleXRangeMaximum(150);                                                   //X轴最大显示条目数
             lineChart.moveViewToX(lineData.getEntryCount() - 5);
         }

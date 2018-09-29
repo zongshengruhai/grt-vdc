@@ -131,7 +131,7 @@ public class SystemFunc {
         if (vibrator != null){
             if (flag){
                 SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
-                if (!_isBeep && !rStateData.getBoolean("is_SystemBeep",false)) {
+                if (!_isBeep && rStateData.getBoolean("is_SystemBeep",false)) {
                     _isBeep = true;
                     vibrator.vibrate(new long[]{500,500},0);
                 }

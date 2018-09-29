@@ -17,14 +17,15 @@ import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
-import com.great.grt_vdc_t4200l.ListView.shortItem;
-import com.great.grt_vdc_t4200l.ListView.shortItemAdapter;
+import com.great.grt_vdc_t4200l.ListView.longItem;
+import com.great.grt_vdc_t4200l.ListView.longItemAdapter;
 import com.great.grt_vdc_t4200l.MPLineChart.fragment2LineChartManager;
 import com.great.grt_vdc_t4200l.R;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,37 +54,37 @@ import jxl.Workbook;
 public class fragment2 extends Fragment implements AdapterView.OnItemClickListener{
 
     private static final String TAG = "fragment2";
-    //TextView容器
+    //TextView容器----------------------------------------------------
     private TextView[] fragment2TempRow = new TextView[2];
     private TextView fragment2_Null;
-    //MPAndroidChart
+    //MPAndroidChart----------------------------------------------------
     private fragment2LineChartManager[] fragment2ChartManager = new fragment2LineChartManager[3];
     private LineChart[] fragment2LineChart = new LineChart[3];
     private List<Integer> list = new ArrayList<>();             //数据集合
-//    private List<Integer> colour = new ArrayList<>();           //折线颜色
-//    private List<String> names = new ArrayList<>();             //折线名称
-    //listView
+    //listView----------------------------------------------------
     private Context fragment2_Context;
     private ListView fragment2_ListView;
-    private List<shortItem> fragment2_Data  = new LinkedList<>();
+    private List<longItem> fragment2_Data  = new LinkedList<>();
 //    private shortItemAdapter fragment2_RecordAdapter;
-    //正则筛选
+    //正则筛选----------------------------------------------------
     private EditText Search_EditText;
     private ImageView Search_Delete;
 //    private TextView Search_Inquire;
-    //进度条
+    //进度条----------------------------------------------------
     private NumberProgressBar fragment2_Loading;            //进度条实例
     private int iProgress;                                         //进度
     private boolean _isLoadFlag = true;                     //控制进度条显示位
-    //控制线程
+    //控制线程----------------------------------------------------
 //    private volatile boolean _isUpData = false;                      //控制线程
-    //加载文件内容
+    //加载文件内容----------------------------------------------------
     private String pickFileName = null;                            //文件路径
+    private int fileTime = 0;                                      //文件数量，当变化时才进行刷新
+//    private boolean ListFlushFlag = false;                         //防止并行
 
     /**
      * fragment生命周期
      */
-    //创建
+    //创建----------------------------------------------------
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment2,container,false);
@@ -117,21 +118,21 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         //初始化筛选
         initSearch();
         //执行筛选，实际功能是更新list
-        SearchListData(null);
+        SearchListData(null,"jog");
 
         //初始化图表
         initLineChart();
 
         return view;
     }
-    //重载
+    //重载----------------------------------------------------
     @Override
     public void onResume(){
         super.onResume();
         //注册定时
         f2_UiHandler.post(f2_UiRunable);
     }
-    //中止
+    //中止----------------------------------------------------
     @Override
     public void onPause(){
         super.onPause();
@@ -142,7 +143,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     /**
      * List
      */
-    //初始化List
+    //初始化List----------------------------------------------------
     private void initSearch(){
 
         //点击X清零
@@ -170,7 +171,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                 }else {
                     Search_Delete.setVisibility(View.VISIBLE);          //显示X
                 }
-                SearchListData(Search_EditText.getText().toString());
+                SearchListData(Search_EditText.getText().toString(),"jog");
+//                Log.e(TAG, "onTextChanged: " );
             }
 
             //文本改变后
@@ -192,8 +194,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 //        });
 
     }
-    //筛选List
-    private void SearchListData(String SearchFileName){
+    //筛选List----------------------------------------------------
+    private void SearchListData(String SearchFileName,String Type){
 
         //录波记录存放路径
         String PATH = fragment2_Context.getFilesDir().getPath() + "/record_log/";
@@ -208,19 +210,28 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         if (file.exists()){
 
             File[] files = file.listFiles();
+            longItemAdapter fragment2_RecordAdapter;
 
-            shortItemAdapter fragment2_RecordAdapter;
+            //防止List不断更新
+            if (files.length == fileTime && files.length != 0 && Type.equals("auto")){
+                return;
+            }else {
+                fileTime = files.length;
+                if (files.length == 0){
+                    fileTime = 0;
+                }
+            }
 
             //清空ListView
             fragment2_Data.clear();
-            fragment2_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment2_Data,fragment2_Context,"");
-            fragment2_ListView.setAdapter(fragment2_RecordAdapter);
 
             //路径中没有文件
             if (files.length <= 0){
 
-                fragment2_Data.add(new shortItem("","当前暂无录波记录","",""));
-                fragment2_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment2_Data,fragment2_Context,"");
+                fragment2_Data.clear();
+
+                fragment2_Data.add(new longItem("","当前暂无录波记录","",""));
+                fragment2_RecordAdapter = new longItemAdapter((LinkedList<longItem>) fragment2_Data,fragment2_Context,"fragment2");
                 fragment2_ListView.setAdapter(fragment2_RecordAdapter);
                 fragment2_ListView.setOnItemClickListener(this);
 
@@ -269,19 +280,21 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                     }
 
                     //更新ListView
-                    fragment2_Data.add(new shortItem(temp[0], temp[1], "", str));
-                    fragment2_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment2_Data, fragment2_Context,"");
-                    fragment2_ListView.setAdapter(fragment2_RecordAdapter);
-                    fragment2_ListView.setOnItemClickListener(this);
+                    fragment2_Data.add(new longItem(temp[0], temp[1], "", str));
 
                 }
+                //旋转List
+                Collections.reverse(fragment2_Data);
+                fragment2_RecordAdapter = new longItemAdapter((LinkedList<longItem>) fragment2_Data, fragment2_Context,"fragment2");
+                fragment2_ListView.setAdapter(fragment2_RecordAdapter);
+                fragment2_ListView.setOnItemClickListener(this);
             }
         }
     }
-    //List点击事件
+    //List点击事件----------------------------------------------------
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TextView pickTextUrl = view.findViewById(R.id.txt_mUrl);
+        TextView pickTextUrl = view.findViewById(R.id.event_end_time);
         String pickName = pickTextUrl.getText().toString();
 
         if (pickName.contains(".xls")){
@@ -303,7 +316,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     /**
      * 图表
      */
-    //初始化图表
+    //初始化图表----------------------------------------------------
     private void initLineChart(){
 
 //        names.add("Uv");
@@ -498,7 +511,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
             SharedPreferences rStateData = getActivity().getSharedPreferences("StateData", 0);
             if (rStateData.getInt("layPage",0) == 2) {
 
-                SearchListData(Search_EditText.getText().toString());
+                SearchListData(Search_EditText.getText().toString(),"auto");
 
                 if (!_isLoadFlag) {
                     //隐藏图表，显示进度条

@@ -16,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.great.grt_vdc_t4200l.ListView.longItem;
+import com.great.grt_vdc_t4200l.ListView.longItemAdapter;
 import com.great.grt_vdc_t4200l.ListView.shortItem;
 import com.great.grt_vdc_t4200l.ListView.shortItemAdapter;
 import com.great.grt_vdc_t4200l.MPLineChart.DynamicLineChartManager;
@@ -42,41 +44,40 @@ import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 
-public class fragment1 extends Fragment implements AdapterView.OnItemClickListener{
-
+//public class fragment1 extends Fragment implements AdapterView.OnItemClickListener{
+public class fragment1 extends Fragment{
     private static final String TAG = "fragment1";
 
-    //TabLayout
-    private static final String[] sTitle = new String[]{"输出电流","输出电压","输入电压","其他数据"};
+    //TabLayout----------------------------------------------------
+//    private static final String[] sTitle = new String[]{"输出电流","输出电压","输入电压","其他数据"};
+    private static final String[] sTitle = new String[]{"输出电流","输出电压","输入电压"};
     private TabLayout tl;
 
     private TextView[] fragment1TempRow = new TextView[5];
 
-    //MPAndroidChart
+    //MPAndroidChart----------------------------------------------------
     private LineChart fragment1Lc;
     private DynamicLineChartManager dynamicLineChartManager;
     private List<Integer> list = new ArrayList<>(); //数据集合
     private List<String> names = new ArrayList<>(); //折线名字集合
     private List<Integer> colour = new ArrayList<>();//折线颜色集合
 
-    //广播声明
+    //广播声明----------------------------------------------------
     //Intent dataChange = new Intent("drc.xxx.yyy.fragment1");
-    private fragment1Broad fragment1ActivityBroad = null;
-    private IntentFilter fragment1IntentFilter = new IntentFilter("drc.xxx.yyy.fragment1");
+//    private fragment1Broad fragment1ActivityBroad = null;
+//    private IntentFilter fragment1IntentFilter = new IntentFilter("drc.xxx.yyy.fragment1");
 
-    //更新UI
+    //更新UI----------------------------------------------------
     private String selectTabType="输出电流";
 
-    //listView
+    //listView----------------------------------------------------
     private Context fragment1_Context;
     private ListView fragment1_ListView;
 
-
-    @Override
-    public void onCreate(Bundle saveInstanceState){
-        super.onCreate(saveInstanceState);
-    }
-
+    /**
+     * 生命周期
+     */
+    //创建----------------------------------------------------
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment1,container,false);
@@ -88,14 +89,15 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
         fragment1TempRow[0] = view.findViewById(R.id.dataA);
         fragment1TempRow[1] = view.findViewById(R.id.dataB);
         fragment1TempRow[2] = view.findViewById(R.id.dataC);
-        fragment1TempRow[3] = view.findViewById(R.id.fragment1alarmTV);
-        fragment1TempRow[4] = view.findViewById(R.id.fragment1RecorTV);
+//        fragment1TempRow[3] = view.findViewById(R.id.fragment1alarmTV);
+//        fragment1TempRow[4] = view.findViewById(R.id.fragment1RecorTV);
 
-        fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime),0));
-        fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime),0));
+//        fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime),0));
+//        fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime),0));
 
         fragment1_Context = view.getContext();
 //        fragment1_ListView = view.findViewById(R.id.fragment1_ListView);
+        fragment1_ListView = view.findViewById(R.id.fragment1RealData);
 
         initTabLayout();
         initLineChart();
@@ -103,110 +105,78 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
 
         return view;
     }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
-//        Log.e(TAG, "碎片1，已完成初始化");
-    }
-
-    @Override
-    public void onStart(){
-        super.onStart();
-//        Log.e(TAG, "碎片1，启动");
-    }
-
-    //重载
+    //重载----------------------------------------------------
     @Override
     public void onResume(){
         super.onResume();
 
-        //注册广播
-        if (fragment1ActivityBroad == null){
-            fragment1ActivityBroad = new fragment1Broad();
-            getActivity().registerReceiver(fragment1ActivityBroad,fragment1IntentFilter);
-//            Log.e(TAG,"fragment1，已注册广播");
-        }
+//        //注册广播
+//        if (fragment1ActivityBroad == null){
+//            fragment1ActivityBroad = new fragment1Broad();
+//            getActivity().registerReceiver(fragment1ActivityBroad,fragment1IntentFilter);
+////            Log.e(TAG,"fragment1，已注册广播");
+//        }
 
         //开始Handler
         fragment1Handler.post(fragment1Runnable);
 
     }
-    //中止
+    //中止----------------------------------------------------
     @Override
     public void onPause(){
         super.onPause();
 
-        //注销广播
-        if (fragment1ActivityBroad != null){
-            getActivity().unregisterReceiver(fragment1ActivityBroad);
-            fragment1ActivityBroad = null;
-            //Log.e(TAG,"fragment1,已注销广播");
-        }
+//        //注销广播
+//        if (fragment1ActivityBroad != null){
+//            getActivity().unregisterReceiver(fragment1ActivityBroad);
+//            fragment1ActivityBroad = null;
+//            //Log.e(TAG,"fragment1,已注销广播");
+//        }
 
         //注销Handler
         fragment1Handler.removeCallbacks(fragment1Runnable);
 
     }
-    @Override
-    public void onStop(){
-        super.onStop();
-        //Log.e(TAG, "碎片1，停止");
-    }
-    @Override
-    public void onDestroyView(){
-        super.onDestroyView();
-        //Log.e(TAG, "碎片1，销毁视图");
-    }
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        //Log.e(TAG, "碎片1，销毁");
-    }
-    @Override
-    public void onDetach(){
-        super.onDetach();
-        // Log.e(TAG, "碎片1，解除活动绑定");
-    }
-
-    /**fragment1广播
-     * 描述：fragment1层接收广播，用于接收BaseCourse底层广播的遥测数据
-     * 方法：
-     *      1）创建方法：fragment活动Resume创建，pause销毁
-     **/
-    public class fragment1Broad extends BroadcastReceiver {
-        public void onReceive(Context context, Intent intent){
-            //接收到广播
-            //Log.e(TAG,"接收到广播");
-            /*
-            int dataChange = intent.getExtras().getInt("dataChange");
-            //Log.e(TAG,""+dataChange);
-            if (changeUIflag == 0){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),dataChange));
-                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),dataChange));
-            }else if (changeUIflag == 1){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),dataChange));
-                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),dataChange));
-            }else if (changeUIflag == 2){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),dataChange));
-                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),dataChange));
-            }else if (changeUIflag == 3){
-                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),dataChange));
-                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),dataChange));
-                fragment1TempRow[2].setText("");
-            }
-            */
-        }
-    }
-
-    //初始化TabLayout
+//    /**fragment1广播
+//     * 描述：fragment1层接收广播，用于接收BaseCourse底层广播的遥测数据
+//     * 方法：
+//     *      1）创建方法：fragment活动Resume创建，pause销毁
+//     **/
+//    public class fragment1Broad extends BroadcastReceiver {
+//        public void onReceive(Context context, Intent intent){
+//            //接收到广播
+//            //Log.e(TAG,"接收到广播");
+//            /*
+//            int dataChange = intent.getExtras().getInt("dataChange");
+//            //Log.e(TAG,""+dataChange);
+//            if (changeUIflag == 0){
+//                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv),dataChange));
+//                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Vv),dataChange));
+//                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wv),dataChange));
+//            }else if (changeUIflag == 1){
+//                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Ua),dataChange));
+//                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Va),dataChange));
+//                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Wa),dataChange));
+//            }else if (changeUIflag == 2){
+//                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv),dataChange));
+//                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1Sv),dataChange));
+//                fragment1TempRow[2].setText(String.format(getResources().getString(R.string.fragment1Tv),dataChange));
+//            }else if (changeUIflag == 3){
+//                fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv),dataChange));
+//                fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz),dataChange));
+//                fragment1TempRow[2].setText("");
+//            }
+//            */
+//        }
+//    }
+    /**
+     * 初始化
+     */
+    //初始化TabLayout----------------------------------------------------
     private void initTabLayout() {
 
         //更新tl
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             tl.addTab(tl.newTab().setText(sTitle[i]));
         }
 
@@ -236,7 +206,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
             }
         });
     }
-    //初始化LineChart
+    //初始化LineChart----------------------------------------------------
     private void initLineChart(){
 
         names.add("U相（R相、电容电压） ");
@@ -258,10 +228,10 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
 
         //dynamicLineChartManager.setLowLimitLine(0,"0");
     }
-    //清除画布
+    //清除画布----------------------------------------------------
     private void clearChart(){
 //        dynamicLineChartManager.clear();
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 11; i++) {
             list.add(0);
             list.add(0);
             list.add(0);
@@ -270,91 +240,93 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
         }
     }
 
-    //ListView点击事件
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.e(TAG,"you pick :"+ position + "项");
-    }
-    //初始化ListView
-    private void initListView(){
-
-        String PATH = fragment1_Context.getFilesDir().getPath() + "/fault_log/";
-        String pathFileName = fragment1_Context.getFilesDir().getPath() + "/fault_log/fault_record.xls";
-
-        File file = new File(PATH);
-        if (file.exists()){
-            Log.e(TAG, "initListView: 文件夹存在" );
-            File[] files = file.listFiles();
-            if (files != null){
-//                for (int i = 0; i < files.length; i++) {
-//                    pathFileName = files[i].getAbsolutePath();
-                for (File i : files){
-                    pathFileName = i.getAbsolutePath();
-//                    Log.e(TAG, "initListView: "+pathFileName);
-                    if (pathFileName.equals(fragment1_Context.getFilesDir().getPath() + "/fault_log/fault_record.xls")){
-                        loadListData(pathFileName,true);
-                    }
-                }
-            }else {
-                Log.e(TAG, "initListView: 文件不存在");
-                loadListData(pathFileName,false);
-            }
-        }else {
-            loadListData(pathFileName,false);
-            Log.e(TAG, "initListView: 文件夹不存在" );
-        }
-    }
-    //载入ListDat
-    private void loadListData(String fileName,boolean type){
-        int rows;                                                           //行数量
-        String[] temp = new String[3];
-        List<shortItem> fragment1_Data;
-        shortItemAdapter fragment1_RecordAdapter;
-        fragment1_Data = new LinkedList<>();
-
-        fragment1_Data.clear();
-        fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
-        fragment1_ListView.setAdapter(fragment1_RecordAdapter);
-
-        if (fileName != null && type){
-            try {
-                FileInputStream mfis = new FileInputStream(fileName);
-                Workbook mbook = Workbook.getWorkbook(mfis);
-                int msheer = mbook.getNumberOfSheets();                     //表数量
-                Sheet[] mSheetlist = mbook.getSheets();                     //表内容
-
-                for (int i = 0; i < msheer; i++) {
-                    rows = mSheetlist[i].getRows();
-                    for (int j  = 0; j < rows; j++) {
-                        Cell[] cellList = mSheetlist[i].getRow(j);
-                        for (Cell cell : cellList) {
-                            temp[cell.getColumn()] = cell.getContents();
-                        }
-                        fragment1_Data.add(new shortItem(temp[0],temp[1],temp[2],""));
-                        fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
-                        fragment1_ListView.setAdapter(fragment1_RecordAdapter);
-                        fragment1_ListView.setOnItemClickListener(this);
-                    }
-                }
-                mbook.close();
-            } catch (Exception e) {
-                System.out.println("fragment1,Exception:  " + e);
-
-                fragment1_Data.add(new shortItem("","最近没有故障记录","",""));
-                fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
-                fragment1_ListView.setAdapter(fragment1_RecordAdapter);
-                fragment1_ListView.setOnItemClickListener(this);
-            }
-        } else {
-
-            fragment1_Data.add(new shortItem("","最近没有故障记录","",""));
-            fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
-            fragment1_ListView.setAdapter(fragment1_RecordAdapter);
-            fragment1_ListView.setOnItemClickListener(this);
-        }
-    }
-
-    //fragment1定时时间
+    /**
+     * List（弃用）
+     */
+//    //ListView点击事件----------------------------------------------------
+//    @Override
+//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//        Log.e(TAG,"you pick :"+ position + "项");
+//    }
+//    //初始化ListView----------------------------------------------------
+//    private void initListView(){
+//
+//        String PATH = fragment1_Context.getFilesDir().getPath() + "/fault_log/";
+//        String pathFileName = fragment1_Context.getFilesDir().getPath() + "/fault_log/fault_record.xls";
+//
+//        File file = new File(PATH);
+//        if (file.exists()){
+//            Log.e(TAG, "initListView: 文件夹存在" );
+//            File[] files = file.listFiles();
+//            if (files != null){
+////                for (int i = 0; i < files.length; i++) {
+////                    pathFileName = files[i].getAbsolutePath();
+//                for (File i : files){
+//                    pathFileName = i.getAbsolutePath();
+////                    Log.e(TAG, "initListView: "+pathFileName);
+//                    if (pathFileName.equals(fragment1_Context.getFilesDir().getPath() + "/fault_log/fault_record.xls")){
+//                        loadListData(pathFileName,true);
+//                    }
+//                }
+//            }else {
+//                Log.e(TAG, "initListView: 文件不存在");
+//                loadListData(pathFileName,false);
+//            }
+//        }else {
+//            loadListData(pathFileName,false);
+//            Log.e(TAG, "initListView: 文件夹不存在" );
+//        }
+//    }
+//    //载入ListDat----------------------------------------------------
+//    private void loadListData(String fileName,boolean type){
+//        int rows;                                                           //行数量
+//        String[] temp = new String[3];
+//        List<shortItem> fragment1_Data;
+//        shortItemAdapter fragment1_RecordAdapter;
+//        fragment1_Data = new LinkedList<>();
+//
+//        fragment1_Data.clear();
+//        fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
+//        fragment1_ListView.setAdapter(fragment1_RecordAdapter);
+//
+//        if (fileName != null && type){
+//            try {
+//                FileInputStream mfis = new FileInputStream(fileName);
+//                Workbook mbook = Workbook.getWorkbook(mfis);
+//                int msheer = mbook.getNumberOfSheets();                     //表数量
+//                Sheet[] mSheetlist = mbook.getSheets();                     //表内容
+//
+//                for (int i = 0; i < msheer; i++) {
+//                    rows = mSheetlist[i].getRows();
+//                    for (int j  = 0; j < rows; j++) {
+//                        Cell[] cellList = mSheetlist[i].getRow(j);
+//                        for (Cell cell : cellList) {
+//                            temp[cell.getColumn()] = cell.getContents();
+//                        }
+//                        fragment1_Data.add(new shortItem(temp[0],temp[1],temp[2],""));
+//                        fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
+//                        fragment1_ListView.setAdapter(fragment1_RecordAdapter);
+//                        fragment1_ListView.setOnItemClickListener(this);
+//                    }
+//                }
+//                mbook.close();
+//            } catch (Exception e) {
+//                System.out.println("fragment1,Exception:  " + e);
+//
+//                fragment1_Data.add(new shortItem("","最近没有故障记录","",""));
+//                fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
+//                fragment1_ListView.setAdapter(fragment1_RecordAdapter);
+//                fragment1_ListView.setOnItemClickListener(this);
+//            }
+//        } else {
+//
+//            fragment1_Data.add(new shortItem("","最近没有故障记录","",""));
+//            fragment1_RecordAdapter = new shortItemAdapter((LinkedList<shortItem>) fragment1_Data,fragment1_Context,"");
+//            fragment1_ListView.setAdapter(fragment1_RecordAdapter);
+//            fragment1_ListView.setOnItemClickListener(this);
+//        }
+//    }
+    //fragment1定时事件
     Handler fragment1Handler = new Handler();
     Runnable fragment1Runnable = new Runnable() {
         @Override
@@ -369,7 +341,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
 //                if (rStateData.getBoolean("is_CommFlag",false)) {
 
                     SharedPreferences rRealData = getActivity().getSharedPreferences("RealData", 0);
-                    SharedPreferences rAlarmData = getActivity().getSharedPreferences("AlarmData",0);
+//                    SharedPreferences rAlarmData = getActivity().getSharedPreferences("AlarmData",0);
 
                     switch (selectTabType) {
                         case "输出电流":
@@ -379,6 +351,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                             list.add(rRealData.getInt("i_Ua", 0));
                             list.add(rRealData.getInt("i_Va", 0));
                             list.add(rRealData.getInt("i_Wa", 0));
+                            dynamicLineChartManager.setYAxis(300,0,10);
                             break;
                         case "输出电压":
                             fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Uv), rRealData.getInt("i_Uv", 0)));
@@ -387,6 +360,7 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                             list.add(rRealData.getInt("i_Uv", 0));
                             list.add(rRealData.getInt("i_Vv", 0));
                             list.add(rRealData.getInt("i_Wv", 0));
+                            dynamicLineChartManager.setYAxis(500,0,5);
                             break;
                         case "输入电压":
                             fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Rv), rRealData.getInt("i_Rv", 0)));
@@ -395,22 +369,37 @@ public class fragment1 extends Fragment implements AdapterView.OnItemClickListen
                             list.add(rRealData.getInt("i_Rv", 0));
                             list.add(rRealData.getInt("i_Sv", 0));
                             list.add(rRealData.getInt("i_Tv", 0));
+                            dynamicLineChartManager.setYAxis(500,0,5);
                             break;
-                        case "其他数据":
-                            fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv), rRealData.getInt("i_Capv", 0)));
-                            fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz), rRealData.getInt("i_Hz", 0)));
-                            fragment1TempRow[2].setText("");
-                            list.add(rRealData.getInt("i_Capv", 0));
-                            list.add(0);
-                            list.add(0);
-                            break;
+//                        case "其他数据":
+//                            fragment1TempRow[0].setText(String.format(getResources().getString(R.string.fragment1Capv), rRealData.getInt("i_Capv", 0)));
+//                            fragment1TempRow[1].setText(String.format(getResources().getString(R.string.fragment1hz), rRealData.getInt("i_Hz", 0)));
+//                            fragment1TempRow[2].setText("");
+//                            list.add(rRealData.getInt("i_Capv", 0));
+//                            list.add(0);
+//                            list.add(0);
+//                            break;
                     }
 
                     dynamicLineChartManager.addEntry(list);
                     list.clear();
 
-                    fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime), rAlarmData.getInt("i_AlarmTime", 0)));
-                    fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime), rAlarmData.getInt("i_RecordTime", 0)));
+                    List<longItem> fragment1_Data = new LinkedList<>();
+                    fragment1_Data.add(new longItem("","","R相电压",rRealData.getInt("i_Rv", 0)+" V"));
+                    fragment1_Data.add(new longItem("","","S相电压",rRealData.getInt("i_Sv", 0)+" V"));
+                    fragment1_Data.add(new longItem("","","T相电压",rRealData.getInt("i_Tv", 0)+" V"));
+                    fragment1_Data.add(new longItem("","","U相电压",rRealData.getInt("i_Uv", 0)+" V"));
+                    fragment1_Data.add(new longItem("","","V相电压",rRealData.getInt("i_Vv", 0)+" V"));
+                    fragment1_Data.add(new longItem("","","W相电压",rRealData.getInt("i_Wv", 0)+" V"));
+                    fragment1_Data.add(new longItem("","","U相电流",rRealData.getInt("i_Ua", 0)+" A"));
+                    fragment1_Data.add(new longItem("","","V相电流",rRealData.getInt("i_Va", 0)+" A"));
+                    fragment1_Data.add(new longItem("","","W相电流",rRealData.getInt("i_Wa", 0)+" A"));
+
+                    longItemAdapter fragment1_RecordAdapter = new longItemAdapter((LinkedList<longItem>) fragment1_Data,fragment1_Context,"fragment1");
+                    fragment1_ListView.setAdapter(fragment1_RecordAdapter);
+
+//                    fragment1TempRow[3].setText(String.format(getResources().getString(R.string.fragment1AlarmTime), rAlarmData.getInt("i_AlarmTime", 0)));
+//                    fragment1TempRow[4].setText(String.format(getResources().getString(R.string.fragment1RecordTime), rAlarmData.getInt("i_RecordTime", 0)));
 //                }
             }
         }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.ListView;
 import com.great.grt_vdc_t4200l.ListView.longItem;
 import com.great.grt_vdc_t4200l.ListView.longItemAdapter;
 import com.great.grt_vdc_t4200l.R;
+import com.great.grt_vdc_t4200l.SystemFunc;
+
 import java.io.FileInputStream;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -38,7 +41,7 @@ public class fragment3 extends Fragment{
     private List<longItem> fragment3_Data  = new LinkedList<>();
 //    private longItemAdapter fragment3_RecordAdapter;
     //更新List依据
-    private boolean[] _isOldYx = new boolean[8];
+    private boolean[] _isOldYx = new boolean[5];
     //防止并发
 //    private boolean findFlag = false;
 
@@ -139,7 +142,7 @@ public class fragment3 extends Fragment{
                         Collections.reverse(fragment3_Data);
 
                         //填充
-                        fragment3_RecordAdapter = new longItemAdapter((LinkedList<longItem>) fragment3_Data, fragment3_Context);
+                        fragment3_RecordAdapter = new longItemAdapter((LinkedList<longItem>) fragment3_Data, fragment3_Context,"fragment3");
                         fragment3_ListView.setAdapter(fragment3_RecordAdapter);
 
                     }
@@ -167,24 +170,30 @@ public class fragment3 extends Fragment{
         public void run() {
             f3_UiHandler.postDelayed(this,500);
 
-            SharedPreferences rStateData = getActivity().getSharedPreferences("StateData", 0);
+//            SharedPreferences rStateData = getActivity().getSharedPreferences("StateData", 0);
             SharedPreferences rAlarmData = getActivity().getSharedPreferences("AlarmData", 0);
 
             //周期更新
-            if(rStateData.getInt("layPage",0) == 3){
+//            if(rStateData.getInt("layPage",0) == 3){
 
-                boolean[] _isNewYX = new boolean[8];
-                for (int i = 0; i < 8 ; i++) {
+                boolean[] _isNewYX = new boolean[5];
+                for (int i = 0; i < 5 ; i++) {
                     _isNewYX[i] = rAlarmData.getBoolean("_isYxError_"+i,false);
                 }
 
                 //判断Alarm内的Bool值，若发生变化便执行更新
-                if (_isOldYx[0] != _isNewYX[0] || _isOldYx[1] != _isNewYX[1] || _isOldYx[2] != _isNewYX[2] || _isOldYx[3] != _isNewYX[3] || _isOldYx[4] != _isNewYX[4] || _isOldYx[5] != _isNewYX[5] || _isOldYx[6] != _isNewYX[6] || _isOldYx[7] != _isNewYX[7]){
+                if (_isOldYx[0] != _isNewYX[0] || _isOldYx[1] != _isNewYX[1] || _isOldYx[2] != _isNewYX[2] || _isOldYx[3] != _isNewYX[3] || _isOldYx[4] != _isNewYX[4] ){
                     findEventTime();
                     _isOldYx = _isNewYX;
                 }
 
-            }
+//                if (_isNewYX[0] || _isNewYX[1] || _isNewYX[2] || _isNewYX[3] || _isNewYX[4]){
+//                    SystemFunc.Beep(fragment3_Context,true);
+//                }else {
+//                    SystemFunc.Beep(fragment3_Context,false);
+//                }
+
+//            }
         }
     };
 

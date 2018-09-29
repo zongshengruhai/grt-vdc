@@ -46,7 +46,6 @@ public class SerialPortHelper {
     //数据地址--------------------------------------------------------
     private int[] iYc = new int[14];
     private boolean[] _isYx = new boolean[8];
-    private boolean[] _isYxFlag = new boolean[8];
     private boolean[] _isYk = new boolean[2];
     private String sSystemTime;
     private boolean _isCommFlag = false;
@@ -255,6 +254,7 @@ public class SerialPortHelper {
                 }
                 bBuffer = new byte[0];
                 mOutputStream.write(bOutArray);
+                _isCommFlag = false;
                 Log.e("串口消息", "发送数据：" + MyFunc.ByteArrToHex(bOutArray));
             }
         }catch (IOException e){
@@ -338,6 +338,8 @@ public class SerialPortHelper {
                         }else {
                             Log.e("串口消息","环境未来准备好");
                         }
+                    }else {
+                        _isCommFlag = false;
                     }
 //                    try {
 //                        Thread.sleep(300);
@@ -374,7 +376,9 @@ public class SerialPortHelper {
             //匹配CRC
             if (MyFunc.addCrc(buffer) == buffer[size - 2]){
 
-                _isCommFlag = true;//通讯成功标志
+                if (!_isCommFlag){
+                    _isCommFlag = true;//通讯成功标志
+                }
 
                 //根据功能码分类处理接受包
                 switch (buffer[1]){
@@ -415,20 +419,21 @@ public class SerialPortHelper {
                             wRealData.putInt("i_Tv",iYc[9]);                             //T相电压
                             wRealData.putInt("i_SagTime",iYc[10]);                       //录波次数
                             wRealData.putInt("i_Capv",iYc[11]);                          //电容电压
-                            wRealData.putInt("i_CapAh",(((iYc[11]-232)/142)));           //电容容量
+                            wRealData.putInt("i_CapAh",(((iYc[11]-232)/142)*100));           //电容容量
                             wRealData.putInt("i_NewSagSite",iYc[12]);                    //当前录波位置
                             wRealData.putInt("i_SagSum",iYc[13]);                        //录波总数
                             //遥信
-                            wRealData.putBoolean("is_RechargeFlag",_isYx[0]);          //充电状态
-                            wRealData.putBoolean("is_CompensateFlag",_isYx[1]);        //补偿状态
-                            wRealData.putBoolean("is_InAlarm",_isYx[3]);               //输入异常
-                            wRealData.putBoolean("is_OutOC",_isYx[4]);                 //输出过流
-                            wRealData.putBoolean("is_OutRl",_isYx[5]);                 //输出短路
-                            wRealData.putBoolean("is_AhLose",_isYx[6]);                //容量失效
-                            wRealData.putBoolean("is_ComError",_isYx[7]);              //通讯异常
+                            wRealData.putBoolean("is_RechargeFlag",_isYx[7]);          //充电状态
+                            wRealData.putBoolean("is_CompensateFlag",_isYx[6]);        //补偿状态
+                            wRealData.putBoolean("is_InAlarm",_isYx[4]);               //输入异常
+                            wRealData.putBoolean("is_OutOC",_isYx[3]);                 //输出过流
+                            wRealData.putBoolean("is_OutRl",_isYx[2]);                 //输出短路
+                            wRealData.putBoolean("is_AhLose",_isYx[1]);                //容量失效
+                            wRealData.putBoolean("is_ComError",_isYx[0]);              //通讯异常
                             //遥控
                             wRealData.putBoolean("is_SystemMode",_isYk[0]);            //系统模式
                             wRealData.putBoolean("is_CompensateEnabled",_isYk[1]);     //补偿使能
+
 
                             //系统时间
 //                            wRealData.putString("s_SystemTime",sSystemTime);                    //下位机系统时间
@@ -631,7 +636,7 @@ public class SerialPortHelper {
 //        List<Object> alarmRow;
 
         //循环处理所有的遥信信号（比较耗时）
-        for (int i = 3; i < _isYxError.length; i++) {
+        for (int i = 0; i < 5; i++) {
 
             if (_isYxError[i] && !rAlarmData.getBoolean("_isYxError_"+i,false)){
 
@@ -640,19 +645,19 @@ public class SerialPortHelper {
 
                 alarmRow.add(rAlarmData.getInt("i_AlarmTime",0)+1);
                 switch (i){
-                    case 3:
+                    case 4:
                         alarmRow.add("输入异常");
                         break;
-                    case 4:
+                    case 3:
                         alarmRow.add("输出过流");
                         break;
-                    case 5:
+                    case 2:
                         alarmRow.add("输出短路");
                         break;
-                    case 6:
+                    case 1:
                         alarmRow.add("容量失效");
                         break;
-                    case 7:
+                    case 0:
                         alarmRow.add("通讯异常");
                         break;
                 }

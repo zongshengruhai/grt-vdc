@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="57dp"
+            android:layout_marginTop="72dp"
             android:contentDescription="@string/fragment5map"
             android:src="@mipmap/state_1" />
 
@@ -32,33 +32,286 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="206dp"
+            android:layout_marginBottom="190dp"
             android:text="@string/fragment5CapI"
             android:textColor="@color/black"
             android:textSize="30sp" />
 
-        <!--<com.anderson.dashboardview.view.DashboardView-->
-            <!--android:id="@+id/fragment5_in"-->
-            <!--android:layout_width="250dp"-->
-            <!--android:layout_height="250dp"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_marginStart="17dp"-->
-            <!--android:layout_marginTop="35dp"-->
-            <!--android:text="@string/fragment5Dash"-->
-            <!--app:startNumber="0"-->
-            <!--app:maxNumber="500"-->
-            <!--app:progressStrokeWidth="12dp"-->
-            <!--app:startProgressColor="@color/colorAccent"-->
-            <!--app:endProgressColor="@color/colorPrimaryDark"-->
-            <!--app:textColor="@color/black"-->
-            <!--app:tikeStrColor="@color/colorAccent"-->
-            <!--app:tikeStrSize="24dp"-->
-            <!--app:tikeStrArray="@array/meter"-->
-            <!--app:centerCircleColor="@color/colorPrimary"-->
-            <!--app:unit="v" />-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="120dp"
+            android:layout_marginEnd="60dp"
+            android:orientation="vertical">
+
+            <!--故障次数-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/fragment5AlarmTime"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/txt_value"
+                    android:gravity="center"
+                    android:text="@string/fragment5_Time"
+                    android:textColor="@color/black"
+                    android:textSize="36sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:text="@string/fragment5AlarmTime"
+                    android:textColor="@color/black"
+                    android:textSize="28sp" />
+            </LinearLayout>
+            <!--录波次数-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/fragment5RecordTime"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/txt_value"
+                    android:gravity="center"
+                    android:text="@string/fragment5_Time"
+                    android:textColor="@color/black"
+                    android:textSize="36sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:text="@string/fragment5RecordTime"
+                    android:textColor="@color/black"
+                    android:textSize="28sp" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="120dp"
+            android:layout_marginStart="60dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/fragment5Hz"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/txt_value"
+                android:gravity="center"
+                android:text="@string/fragment5_Hz"
+                android:textColor="@color/black"
+                android:textSize="36sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:text="@string/fragment5RealHz"
+                android:textColor="@color/black"
+                android:textSize="28sp" />
+        </LinearLayout>
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/fragment5_outV"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignTop="@+id/fragment5_map"-->
+            <!--android:layout_marginEnd="57dp"-->
+            <!--android:orientation="vertical">-->
+
+            <!--&lt;!&ndash;Uv相&ndash;&gt;-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/fragment5Uv"-->
+                    <!--android:layout_width="150dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/txt_value"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/fragment5_v"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="40sp" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="2dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/fragment4Utv"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="24sp" />-->
+            <!--</LinearLayout>-->
+            <!--&lt;!&ndash;Vv相&ndash;&gt;-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/fragment5Vv"-->
+                    <!--android:layout_width="150dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/txt_value"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/fragment5_v"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="40sp" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="2dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/fragment4Vtv"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="24sp" />-->
+            <!--</LinearLayout>-->
+            <!--&lt;!&ndash;Wv相&ndash;&gt;-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/fragment5Wv"-->
+                    <!--android:layout_width="150dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/txt_value"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/fragment5_v"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="40sp" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="2dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/fragment4Wtv"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="24sp" />-->
+            <!--</LinearLayout>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/fragment5_outI"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignEnd="@+id/fragment5_led"-->
+            <!--android:layout_alignTop="@+id/fragment5_map"-->
+            <!--android:orientation="vertical">-->
+
+            <!--&lt;!&ndash;Uv相&ndash;&gt;-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="150dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/txt_value"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="380 V"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="40sp" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="2dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/fragment4Utv"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="24sp" />-->
+            <!--</LinearLayout>-->
+            <!--&lt;!&ndash;Vv相&ndash;&gt;-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="150dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/txt_value"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="380 V"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="40sp" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="2dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/fragment4Vtv"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="24sp" />-->
+            <!--</LinearLayout>-->
+            <!--&lt;!&ndash;Wv相&ndash;&gt;-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="150dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/txt_value"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="380 V"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="40sp" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="2dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/fragment4Wtv"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="24sp" />-->
+            <!--</LinearLayout>-->
+
+        <!--</LinearLayout>-->
+
+
+        <LinearLayout
+            android:id="@+id/fragment5_led"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

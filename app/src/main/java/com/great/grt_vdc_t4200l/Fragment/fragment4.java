@@ -22,6 +22,8 @@ import com.great.grt_vdc_t4200l.ListView.longItemAdapter;
 import com.great.grt_vdc_t4200l.ListView.settingItem;
 import com.great.grt_vdc_t4200l.ListView.settingItemAdapter;
 import com.great.grt_vdc_t4200l.R;
+import com.great.grt_vdc_t4200l.SystemFunc;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,16 +32,23 @@ import java.util.List;
  */
 public class fragment4 extends Fragment implements AdapterView.OnItemClickListener{
 
-    //容器
+    //define
+    private int USER_TYPE = 0;    //log in user type
+
+    //define row
     private Context fragment4_Context;
+    private View fragment4_View;
     private RelativeLayout[] fragment4RowLay = new RelativeLayout[2];
-    //广播声明
+
+    //define broadcast
     private fragment4.fragment4Broad fragment4ActivityBroad = null;
     private IntentFilter fragment4IntentFilter = new IntentFilter("drc.xxx.yyy.fragment4");
     Intent fragment4Intent = new Intent("drc.xxx.yyy.baseActivity");
-    //login
+
+    //define login
     private EditText fragment4Password;
-    //ListView
+
+    //define ListView
     private ListView pickList;
     private ListView pickContent;
     private List<settingItem> pickContentData = new LinkedList<>();
@@ -47,13 +56,13 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
     private TextView fragment4SetHint;
 
     /**
-     * fragment生命周期
+     * Fragment Life Cycle
+     * dispose life flow
      */
-    //创建
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment4,container,false);
-
+        fragment4_View = view;
         fragment4_Context = view.getContext();
 
         fragment4RowLay[0] = view.findViewById(R.id.fragment4Lay1);
@@ -77,7 +86,6 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
 
         return view;
     }
-    //重载
     @Override
     public void onResume(){
         super.onResume();
@@ -87,7 +95,6 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
             getActivity().registerReceiver(fragment4ActivityBroad,fragment4IntentFilter);
         }
     }
-    //中止
     @Override
     public void onPause(){
         super.onPause();
@@ -99,41 +106,43 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
     }
 
     /**
-     * 登录
+     * login event
      */
-    //登录触发
-    private void LoginClick(){
-
+    private void LoginClick()// login click event
+    {
         String passwordIn = fragment4Password.getText().toString();
         int passwordSize = passwordIn.length();
-        int userType = 0;
 
         if (passwordSize == 0){
             fragment4Intent.putExtra("fragmentToast",2);
         }else if (passwordSize < 8){
             fragment4Intent.putExtra("fragmentToast",1);
         } else if (passwordIn.equals("12345678")){
-            userType = 1;
+            USER_TYPE = 1;
             fragment4Intent.putExtra("fragmentToast",4);
         }else if (passwordIn.equals("99999999")){
-            userType = 2;
+            USER_TYPE = 2;
             fragment4Intent.putExtra("fragmentToast",5);
         } else {
             fragment4Intent.putExtra("fragmentToast",3);
         }
-        showFragment4RL(userType);
+
+        SystemFunc.changeKeyboardView(fragment4_Context,fragment4_View,"hide");
+        showFragment4RL(USER_TYPE);
         fragment4Password.setText("");
         getActivity().sendBroadcast(fragment4Intent);
+
     }
-    //隐藏设置界面
-    private void hideFragment4Rl(){
+    private void hideFragment4Rl()// hide set view
+    {
+        SystemFunc.changeKeyboardView(fragment4_Context,fragment4_View,"hide");
         fragment4RowLay[0].setVisibility(View.VISIBLE);
         fragment4RowLay[1].setVisibility(View.GONE);
 //        fragment4RowLay[0].setVisibility(View.GONE);
 //        fragment4RowLay[1].setVisibility(View.VISIBLE);
     }
-    //显示设置界面
-    private void showFragment4RL(int userType){
+    private void showFragment4RL(int userType)// show set view
+    {
         if (userType > 0){
             fragment4RowLay[0].setVisibility(View.GONE);
             fragment4RowLay[1].setVisibility(View.VISIBLE);
@@ -142,10 +151,10 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
     }
 
     /**
-     * 选择设置
+     * list event
      */
-    //初始化选择list
-    private void initPickList(){
+    private void initPickList() // init right list
+    {
         List<longItem> pickListData = new LinkedList<>();
         longItemAdapter pickListAdapter;
 
@@ -160,16 +169,15 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
         pickList.setAdapter(pickListAdapter);
         pickList.setOnItemClickListener(this);
         ChangeSetLay(0);
-
     }
-    //选择list点击事件
-    @Override
-    public void onItemClick(AdapterView<?> parent,View view,int position,long id){
+    @Override public void onItemClick(AdapterView<?> parent,View view,int position,long id) // select list event
+    {
         ChangeSetLay(position);
     }
-    //更新设置界面
-    private void ChangeSetLay(int id){
+    private void ChangeSetLay(int id) // change set list
+    {
         pickContentData.clear();
+
         switch (id){
             case 0:
                 fragment4SetHint.setText("输入校准");
@@ -202,12 +210,17 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
             case 4:
                 fragment4SetHint.setText("系统设置");
                 pickContentData.add(new settingItem("告警提示:","开关"));
+                if (USER_TYPE == 1){
+                    pickContentData.add(new settingItem("调试模式:","开关"));
+                    pickContentData.add(new settingItem("Loge输出:","开关"));
+                    pickContentData.add(new settingItem("初始化系统:","开关"));
+                }
 //                pickContentData.add(new settingItem("系统时间:","校准"));
                 break;
         }
 
         settingItemAdapter pickContentAdapter;
-        pickContentAdapter = new settingItemAdapter((LinkedList<settingItem>)pickContentData,fragment4_Context,"0");
+        pickContentAdapter = new settingItemAdapter((LinkedList<settingItem>)pickContentData,fragment4_Context,fragment4_View);
         pickContent.setAdapter(pickContentAdapter);
 //        pickContent.setOnItemClickListener(this);
     }

@@ -1,7 +1,9 @@
 package com.great.grt_vdc_t4200l;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -19,89 +21,191 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
-import static com.great.grt_vdc_t4200l.SystemFunc.checkFileExist;
-import static com.great.grt_vdc_t4200l.SystemFunc.createExcel;
-import static com.great.grt_vdc_t4200l.SystemFunc.createFile;
 
 
+/**
+ * BaseCourse , System base tier
+ *
+ * @author zongshengruhai
+ *
+ * @version 1.0
+ *
+ * 这是系统层，所有通信都将交给这一层处理;
+ * 如果您想处理或增加要下发的通信内容，可以在这个{@link #task}主线程中处理;
+ * 如果您想配置通讯层或通讯配置，请到{@link SerialPortHelper}配置，
+ * 该层只创建一个新的{@link SerialPortHelper}类。
+ *
+ * date：2018年11月29日 15:17:19
+ */
 public class BaseCourse extends FragmentActivity {
 
-    private static final String TAG = "BaseCourse";
-    //广播声明----------------------------------------------------
-    MyBaseActivity_Broad baseCourseBroad = null;
-    IntentFilter baseCourseIntentFilter = new IntentFilter("drc.xxx.yyy.baseActivity");
-    int text[] = new int[5];
-    //串口声明----------------------------------------------------
-    SerialControl downCom;                                      //串口
-    private byte[] bOutData = new byte[]{(byte)0x7E,0x00,0x00,0x00,0x00,0x00,0x00,(byte)0x0D};
-    //遥控遥调声明----------------------------------------------------
-    private boolean _isCorrect = false;
-    private int[] iCorrect = new int[2];
-    //数据声明----------------------------------------------------
-    private int iCommError = 0;
-    private int iReadRecordError = 0;
-    //其他声明----------------------------------------------------
-//    boolean globalError = false;                                //全局错误
+    /** 这是这个层的 context */
     public Context mContext;
-    //系统自检声明----------------------------------------------------
-    static private String faultPath ;
-    static private String faultName;
-    static private String recordPath;
+
+    /** 用于输出此层 log 的 tag */
+    private static final String TAG = "BaseCourse";
+
+    /** 系统正常标志 */
     public boolean _isSystem = false;
 
     /**
-     * 活动生命周期
+     * 此层的广播
+     * 用于  {@link MyBaseActivity_Broad} 这个方法 , 用于接收其他层无法处理的工作、或是其他层触发的通讯请求
      */
-    //活动创建----------------------------------------------------
+    MyBaseActivity_Broad baseCourseBroad = null;
+    IntentFilter baseCourseIntentFilter = new IntentFilter("drc.xxx.yyy.baseActivity");
+//    int text[] = new int[5];
+
+    /**
+     * 创建实例化这个系统的串口
+     * 用于 {@link SerialPortHelper} 这个方法
+     */
+    SerialControl downCom;
+    /** 存储通讯下发的数组 */
+    private byte[] bOutData = new byte[]{(byte)0x7E,0x00,0x00,0x00,0x00,0x00,0x00,(byte)0x0D};
+
+    /**
+     * 用户触发遥调事件标志
+     * 用户将会在 @Fragment/fragment4.java 这个类中触发一些遥调事件
+     * 在 @Fragment/fragment4.java 不允许直接处理下发通讯，因此将会以广播的形式发送给本类
+     * 由{@link MyBaseActivity_Broad} 广播接收到后交给{@link #CorrectEvent(String[])}进行分类，最后在{@link #task}中按级处理
+     * Param _isCorrect 是否有遥调事件标志
+     * Param iCorrect[] 用户触发遥调时的相关参数
+     */
+    private boolean _isCorrect = false;
+    private int[] iCorrect = new int[2];
+
+    /** 通讯失败次数 */
+    private int iCommError = 0;
+
+    /** 遥测故障录波数据失败次数 */
+    private int iReadRecordError = 0;
+
+    /** 系统存储数据相关的路径申明 */
+    static private String systemPath;
+    static private String faultPath ;
+    static private String faultName;
+    static private String recordPath;
+    static private String sharedPrefsPath;
+
+
+    /** 创建层，初始化一些数据*/
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
         mContext = getBaseContext();
 
-        //串口
-        downCom = new SerialControl();
-        downCom.setmContext(mContext);
-
         //全屏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        //申明路径
-        faultPath = this.getFilesDir().getPath()+"/fault_log/";
+        //实例化串口
+        downCom = new SerialControl();
+        downCom.setmContext(mContext);
+
+        //初始化存储相关路径
+        systemPath = this.getFilesDir().getPath();
+        faultPath = systemPath + "/fault_log/";
         faultName = faultPath + "fault_record.xls";
-        recordPath = this.getFilesDir().getPath()+"/record_log/";
+        recordPath = systemPath + "/record_log/";
+        sharedPrefsPath = systemPath.trim().replace("/files","/shared_prefs");
+//        faultPath = this.getFilesDir().getPath()+"/fault_log/";
+//        faultName = faultPath + "fault_record.xls";
+//        recordPath = this.getFilesDir().getPath()+"/record_log/";
+//        sharedPrefsPath = this.getFilesDir().toString().trim().replace("/files","/shared_prefs/");
 
     }
-    //活动重载----------------------------------------------------
+
+    /** 层重载，执行{@link #loadSOP()} 登录流程 */
     @Override
     protected void onResume(){
         super.onResume();
+        loadSOP();
+    }
+
+    /** 层中止，执行{@link #pauseSOP()} 中止流程 */
+    @Override
+    protected void onPause(){
+        super.onPause();
+        pauseSOP();
+
+    }
+
+    /**
+     * 登录流程
+     * 以下是登录流程顺序
+     * 1、关闭虚拟导航键盘，并全屏
+     * 2、获取系统的最高权限
+     * 3、检查、创建系统所需文件、文件夹
+     * 4、打开串口
+     * 5、注册广播、开始定时主线程
+     */
+    private void loadSOP(){
 
         //隐藏虚拟键盘
         hideNavigation();
 
-        //开始定时线程
-        handler.post(task);
-
         //获取权限
         SystemFunc.getRoot(getPackageCodePath());
 
-        //注册广播
-        if (baseCourseBroad == null){
-            baseCourseBroad = new MyBaseActivity_Broad();
-            registerReceiver(baseCourseBroad,baseCourseIntentFilter);
+        for (int i = 0; i < 3; i++) {
+            //检测创建系统文件夹
+            if (!SystemFunc.checkFileExist(systemPath)){ SystemFunc.createFile(systemPath); }
+            //检测创建故障文件夹
+            if (!SystemFunc.checkFileExist(faultPath)){ SystemFunc.createFile(faultPath); }
+            //检测创建故障文件
+            if (!SystemFunc.checkFileExist(faultName)){
+                List<List<Object>> mList = new ArrayList<>();
+                List<Object> mRow = new ArrayList<>();
+                mRow.add("编号");
+                mRow.add("事件类型");
+                mRow.add("开始时间");
+                mRow.add("结束时间");
+                mList.add(mRow);
+                SystemFunc.createExcel(faultName,mList);
+            }
+            //录波文件夹
+            if (!SystemFunc.checkFileExist(recordPath)){SystemFunc.createFile(recordPath);}
+
+            //串口
+            if (!downCom.getIsOpen()){ openCom(downCom); }
+
+            if(!SystemFunc.checkFileExist(faultName)&&!SystemFunc.checkFileExist(recordPath)&&!downCom.getIsOpen()){
+                break;
+            }
+
         }
 
-        //执行启动流程
-        loadSOP();
-    }
-    //活动中止----------------------------------------------------
-    @Override
-    protected void onPause(){
-        super.onPause();
+        if (!SystemFunc.checkFileExist(faultName)&&!SystemFunc.checkFileExist(recordPath)&&!downCom.getIsOpen()){
 
-        //显示虚拟键盘
-        showNavigation();
+            Toast.makeText(this,"系统初始化失败，设备即将重启",Toast.LENGTH_SHORT).show();
+            SystemFunc.restart(mContext);
+
+        }else {
+
+            //注册广播
+            if (baseCourseBroad == null){
+                baseCourseBroad = new MyBaseActivity_Broad();
+                registerReceiver(baseCourseBroad,baseCourseIntentFilter);
+            }
+
+            _isSystem = true;
+
+            //开始定时线程
+            handler.post(task);
+        }
+
+    }
+
+    /**
+     * 中止流程
+     * 以下是中止流程顺序
+     * 1、停止主线程
+     * 2、注销广播
+     * 3、关闭串口
+     * 4、重启设备
+     */
+    private void pauseSOP(){
 
         //停止定时线程
         handler.removeCallbacks(task);
@@ -112,12 +216,79 @@ public class BaseCourse extends FragmentActivity {
             baseCourseBroad = null;
         }
 
-        //执行退出流程
-        pauseSOP();
+        _isSystem = false;
 
-        //重启设备（强制形，如果以任何方式退出APP就重启设备）
-//        SystemFunc.restart();
+        //重启
+        closeCom(downCom);
+//        if (!downCom.getIsOpen()){ Log.e(TAG,"SOP,串口关闭成功");}else{ Log.e(TAG,"SOP,串口关闭失败");}
+
+        //重启
+        Toast.makeText(this,"系统发生中止，即将重启",Toast.LENGTH_SHORT).show();
+        SystemFunc.restart(mContext);
+
     }
+
+    /**
+     * 初始化系统流程
+     * 以下是初始化系统流程顺序
+     * 1、等待用户确认初始化
+     * 2、删除所有相关存储文件
+     * 3、重启设备
+     */
+    private void initSystemSOP(){
+        new AlertDialog.Builder(this).setTitle("初始化系统，系统内的数据将会被全部删除，确认执行初始化？")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() //初始化
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        pauseSOP();
+
+                        // delete this data
+                        if (SystemFunc.checkFileExist(systemPath)) {
+                            SystemFunc.deleteFile(systemPath);
+                        }
+
+                        // delete SharedPreferences
+                        if (SystemFunc.checkFileExist(sharedPrefsPath)){
+                            SystemFunc.deleteFile(sharedPrefsPath);
+                        }
+
+                        // restart device
+                        Toast.makeText(mContext,"系统初始化，即将重启",Toast.LENGTH_SHORT).show();
+                        SystemFunc.restart(mContext);
+                    }
+                })
+                .setNegativeButton("返回", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.e("init System","取消");
+                    }
+                }).show();
+    }
+
+//    //SOP启动错误处理---------------------------------------------
+//    private void errorSOP(int type){
+////        switch (type){
+////            case 1:
+////                Toast.makeText(this,"串口打开失败！",Toast.LENGTH_SHORT).show();
+////                break;
+////            case 10:
+////                Toast.makeText(this,"录波记录文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
+////                break;
+////            case 11:
+////                Toast.makeText(this,"故障记录文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
+////                break;
+////            case 12:
+////                Toast.makeText(this,"实时采样文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
+////                break;
+////            case 15:
+////                Toast.makeText(this,"故障记录文件不存在或创建失败！",Toast.LENGTH_SHORT).show();
+////                break;
+////        }
+////        Toast.makeText(this,"初始化失败，即将重启！",Toast.LENGTH_SHORT).show();
+//    }
+
 
     /**
      * 总线广播
@@ -125,41 +296,6 @@ public class BaseCourse extends FragmentActivity {
     //广播分类----------------------------------------------------
     public class MyBaseActivity_Broad extends BroadcastReceiver{
         public void onReceive(Context context, Intent intent){
-
-//            //关闭APP广播
-//            int closeAll = intent.getIntExtra("closeAll",0);
-//            if (closeAll == 1){
-//                //showNavigation();
-//                finish();
-//                System.exit(0);
-//            }
-//
-//
-//            //底层生命周期改变事件广播
-//            int lifeCycleFlag = intent.getIntExtra("lifeCycleChange",0);
-//            switch (lifeCycleFlag){
-//                //底层重载
-//                case 1:
-//                    Log.e(TAG,"广播接收到底层重装");
-//                    break;
-//
-//                //底层中止
-//                case 2:
-//                    //restart();
-//                    Log.e(TAG,"广播接收到底层中止");
-//                    break;
-//            }
-
-            //fragment触发Toast事件
-
-            //重启自启动
-//            //重启自启动广播
-//            final String ACTION = "android.intent.action.BOOT_COMPLETED";
-//            if (intent.getAction() != null && intent.getAction().equals(ACTION)){
-////                Integer it = new Integer(context,MainActivity.class);
-////                Integer it = getPackageManager().getLaunchIntentForPackage(getPackageName());
-////                it
-//            }
 
             //Toast事件
             int fragmentToast = intent.getIntExtra("fragmentToast",0);
@@ -247,7 +383,7 @@ public class BaseCourse extends FragmentActivity {
                 }
 
                 //数据填充
-                if (!sData[1].equals("")||sData[1] !=null){
+                if (!sData[1].equals("")){
                     iData[1] =  Integer.parseInt(sData[1]);
                 }else {
                     iData[1] = 0;
@@ -258,15 +394,34 @@ public class BaseCourse extends FragmentActivity {
 
             }//系统设置
             else if (sData[2].equals("开关")){
+                SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
+                boolean eventFlag = false;
+                boolean valueFlag = false;
 
                 switch (sData[0]){
                     case "告警提示:":
-                        SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
-                        boolean flag = false;
-                        if (Integer.parseInt(sData[1]) == 0){ flag = false;}else if (Integer.parseInt(sData[1]) == 1){ flag = true;}
-                        wStateData.putBoolean("is_SystemBeep",flag);
-                        wStateData.commit();
+                        if (Integer.parseInt(sData[1]) == 1){ valueFlag = true;}
+                        wStateData.putBoolean("is_SystemBeep",valueFlag);
+                        eventFlag = true;
                         break;
+                    case "调试模式:":
+                        if (Integer.parseInt(sData[1]) == 1){ valueFlag = true;}
+                        wStateData.putBoolean("is_SystemDebug",valueFlag);
+                        eventFlag = true;
+                        break;
+                    case "Loge输出:":
+                        if (Integer.parseInt(sData[1]) == 1){ valueFlag = true;}
+                        wStateData.putBoolean("is_SystemOutLoge",valueFlag);
+                        eventFlag = true;
+                        break;
+                    case "初始化系统:":
+//                        Toast.makeText(this,"will be init this system,delete this system all data!",Toast.LENGTH_SHORT).show();
+                        if (Integer.parseInt(sData[1]) == 1){ initSystemSOP();}
+                        break;
+                }
+
+                if (eventFlag){
+                    wStateData.commit();
                 }
 
             }
@@ -321,60 +476,6 @@ public class BaseCourse extends FragmentActivity {
         getWindow().getDecorView().setSystemUiVisibility(uiFlags);
 
     }
-    //显示虚拟按键----------------------------------------------------
-    private void showNavigation(){
-
-//        try {
-//            String command;
-//            command = "LD_LIBRARY_PATH=/vendor/lib:/system/lib am startservice -n com.android.systemui/.SystemUIService";
-//            Process proc = Runtime.getRuntime().exec(new String[] { "su", " -c", command } );
-//            proc.waitFor();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-    }
-//    //重启设备----------------------------------------------------
-//    private void restart(){
-//        Toast.makeText(this,"即将重启！",Toast.LENGTH_SHORT).show();
-//        try {
-//            Log.v(TAG, "root Runtime->reboot");
-//            Process proc =Runtime.getRuntime().exec(new String[]{"su","-c","reboot "});
-//            proc.waitFor();
-//        }catch (Exception ex){
-//            ex.printStackTrace();
-//        }
-//    }
-//    //提示音----------------------------------------------------
-//    private void Beep(){
-//        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-//        if (vibrator != null){
-//            if (globalError){
-//                vibrator.vibrate(new long[]{500,500},0);
-//            }else {
-//                vibrator.cancel();
-//            }
-//        }
-//    }
-//    //设置系统时间----------------------------------------------------
-//    private void setSystemTime(String sTime){
-//        if (sTime.length() == 15){
-//            try {
-//                Process process = Runtime.getRuntime().exec("su");
-//                DataOutputStream os = new DataOutputStream(process.getOutputStream());
-//                os.writeBytes("setprop persist.sys.timezone GMT\n");
-//                os.writeBytes("/system/bin/date -s" + sTime + "\n");
-//                os.writeBytes("clock -w\n");
-//                os.writeBytes("exit\n");
-//                os.flush();
-//            }catch (IOException e){
-//                Log.e(TAG, "setSystemTime: loser" );
-//                e.printStackTrace();
-//            }
-//        }else {
-//            Log.e(TAG, "setSystemTime: loser ,length is error" );
-//        }
-//
-//    }
 
     /**
      * 串口通讯方法
@@ -402,7 +503,7 @@ public class BaseCourse extends FragmentActivity {
         }
     }
     //关闭com----------------------------------------------------
-    private void colseCom(SerialPortHelper ComPort){
+    private void closeCom(SerialPortHelper ComPort){
 //        try {
 //            mOutput.close();
 ////            mInput.close();
@@ -434,140 +535,9 @@ public class BaseCourse extends FragmentActivity {
     }
     //继承串口工具----------------------------------------------------
     private class SerialControl extends SerialPortHelper{
-        public SerialControl(){
+        private SerialControl(){
         }
     }
-
-    /**
-     *  软件流程方法
-     */
-    //重载流程----------------------------------------------------
-    private void loadSOP(){
-
-        for (int i = 0; i < 3; i++) {
-
-            //故障文件夹
-            if (!checkFileExist(faultPath)){ createFile(faultPath); }
-            //故障文件
-            if (!checkFileExist(faultName)){
-                List<List<Object>> mList = new ArrayList<>();
-                List<Object> mRow = new ArrayList<>();
-                mRow.add("编号");
-                mRow.add("事件类型");
-                mRow.add("开始时间");
-                mRow.add("结束时间");
-                mList.add(mRow);
-                createExcel(faultName,mList);
-            }
-            //录波文件夹
-            if (!checkFileExist(recordPath)){createFile(recordPath);}
-
-            //串口
-            if (!downCom.getIsOpen()){ openCom(downCom); }
-        }
-
-        if (!checkFileExist(faultName)&&!checkFileExist(recordPath)&&!downCom.getIsOpen()){
-            SystemFunc.restart();//重启
-        }else {
-            _isSystem = true;
-        }
-
-//        String fileName;
-//        boolean _fileExists;
-//
-//        //1、检测root权限
-//
-//        //2、打开串口
-//        for (int i = 0; i < 3 ; i++) {
-//            if (!downCom.getIsOpen()){ openCom(downCom); }
-//        }
-//
-//        //3.1、检测录波记录文件夹
-////        fileName = this.getFilesDir().getPath()+"/record_log/";
-////        if (!checkFileExist(fileName)){
-////            createFile(fileName);
-////        }
-//
-//
-//        //3.2、检测故障记录文件
-//        fileName = "/fault_log/";
-//        _fileExists = checkFile(fileName);
-//        if (!_fileExists){
-////            Log.e(TAG,"SOP, "+fileNaem+" 文件夹不存在");
-//        }else {
-////            Log.e(TAG,"SOP, "+fileNaem+" 文件夹存在");
-//        }
-//
-////        fileNaem = "/fault_log/fault_record.xls";
-////        _fileExists = checkFile(fileNaem);
-////        if (!_fileExists){
-//////            Log.e(TAG,"SOP, "+fileNaem+" 文件不存在");
-////        }else {
-//////            Log.e(TAG,"SOP, "+fileNaem+" 文件存在");
-////        }
-
-    }
-
-//    //SOP启动错误处理----------------------------------------------------
-//    private void errorSOP(int type){
-//        switch (type){
-//            case 1:
-//                Toast.makeText(this,"串口打开失败！",Toast.LENGTH_SHORT).show();
-//                break;
-//            case 10:
-//                Toast.makeText(this,"录波记录文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
-//                break;
-//            case 11:
-//                Toast.makeText(this,"故障记录文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
-//                break;
-//            case 12:
-//                Toast.makeText(this,"实时采样文件夹不存在或创建失败！",Toast.LENGTH_SHORT).show();
-//                break;
-//            case 15:
-//                Toast.makeText(this,"故障记录文件不存在或创建失败！",Toast.LENGTH_SHORT).show();
-//                break;
-//        }
-//        Toast.makeText(this,"初始化失败，即将重启！",Toast.LENGTH_SHORT).show();
-//    }
-
-    //中止流程----------------------------------------------------
-    private void pauseSOP(){
-        _isSystem = false;
-        colseCom(downCom);
-        if (!downCom.getIsOpen()){ Log.e(TAG,"SOP,串口关闭成功");}else{ Log.e(TAG,"SOP,串口关闭失败");}
-    }
-
-
-//    //检测文件----------------------------------------------------
-//    private boolean checkFile(String fileName){
-//        String PATH = this.getFilesDir().getPath()+fileName;
-//        try {
-//            File file = new File(PATH);
-//            if (!file.exists()){
-//                if (fileName.contains(".")){
-//                    Log.e(TAG,"文件不存在,开始创建");
-//                    return createFile(fileName);
-////                    file.createNewFile();
-//                }else{
-//                    Log.e(TAG,"文件夹不存在,开始创建");
-//                    file.mkdir();
-//                }
-//            }
-//        }catch (Exception e){ return false; }
-//        return true;
-//    }
-//    //创建文件----------------------------------------------------
-//    private boolean createFile(String fileName){
-//        String PATH = this.getFilesDir().getPath()+fileName;
-//        try {
-//            File file = new File(PATH);
-//            if (!file.exists()){
-//                file.createNewFile();
-//            }
-//        }catch (Exception e){ return false; }
-//        return true;
-//    }
-//
 
     //定时主线程----------------------------------------------------
     Handler handler = new Handler();
@@ -593,10 +563,11 @@ public class BaseCourse extends FragmentActivity {
 
                 //30s无有效通讯，重启设备
                 if (iCommError > 60){
-//                    SystemFunc.restart();
+                    SystemFunc.restart(mContext);
+                    Log.e(TAG, "run: system can't connect ,so will be restart" );
                 }
 
-//                if (iCommError > 5){SystemFunc.Beep(mContext,true);}else {SystemFunc.Beep(mContext,false);}
+//                if (iCommError > 5){Beep(mContext,true);}else {Beep(mContext,false);}
 
                 //写入
                 SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
@@ -649,7 +620,8 @@ public class BaseCourse extends FragmentActivity {
 
                     //地址
                     if (iCorrect[0] == 14){
-
+                        //this in set system date code
+                        Log.e(TAG, "" );
                     }else {
                         bOutData[2] = MyFunc.InToByteArr(iCorrect[0])[2];
                         bOutData[3] = MyFunc.InToByteArr(iCorrect[0])[3];

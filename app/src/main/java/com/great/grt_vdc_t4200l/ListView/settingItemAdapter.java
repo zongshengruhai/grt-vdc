@@ -1,19 +1,10 @@
 package com.great.grt_vdc_t4200l.ListView;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Fragment;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.speech.RecognitionService;
-import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +12,7 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -34,16 +23,17 @@ import java.util.LinkedList;
 
 public class settingItemAdapter extends BaseAdapter{
 
+    //define
     private LinkedList<settingItem> mData;
     private Context mContext;
-    private String mType;
-
+    private View mView;
     private Intent fragment4List = new Intent("drc.xxx.yyy.baseActivity");
 
-    public settingItemAdapter(LinkedList<settingItem> mData,Context mContext,String mType){
+    // create
+    public settingItemAdapter(LinkedList<settingItem> mData,Context mContext,View mView){
         this.mData = mData;
         this.mContext = mContext;
-        this.mType = mType;
+        this.mView = mView;
     }
 
     @Override
@@ -80,11 +70,12 @@ public class settingItemAdapter extends BaseAdapter{
 //        holder.txt_But.setText(mData.get(position).getmBtName());
 
         convertView = LayoutInflater.from(mContext).inflate(R.layout.setting_item, parent, false);
+
         //基础关联
         final TextView txt_Name = convertView.findViewById(R.id.SettingName);
         final EditText txt_Value = convertView.findViewById(R.id.SettingEd);
         final Button txt_But = convertView.findViewById(R.id.SettingBut);
-        final Switch txt_Swtich =convertView.findViewById(R.id.SettingSwitch);
+        final Switch txt_Switch =convertView.findViewById(R.id.SettingSwitch);
 
         //遥调
         if (mData.get(position).getmBtName().equals("校准")|| mData.get(position).getmName().equals("设置")) {
@@ -98,6 +89,7 @@ public class settingItemAdapter extends BaseAdapter{
                     data[2] = txt_But.getText().toString();
                     fragment4List.putExtra("UserSet", data);
                     mContext.sendBroadcast(fragment4List);
+                    SystemFunc.changeKeyboardView(mContext,mView,"hide");
                 }
             });
 
@@ -108,7 +100,7 @@ public class settingItemAdapter extends BaseAdapter{
             txt_Name.setVisibility(View.VISIBLE);
             txt_Value.setVisibility(View.VISIBLE);
             txt_But.setVisibility(View.VISIBLE);
-            txt_Swtich.setVisibility(View.GONE);
+            txt_Switch.setVisibility(View.GONE);
 
             if (txt_Name.getText().toString().equals("系统时间:")){
                 txt_Value.setInputType(4);
@@ -127,31 +119,45 @@ public class settingItemAdapter extends BaseAdapter{
             switch (mData.get(position).getmName()){
                 case "系统模式:":
 //                    boolean flag = rRealData.getBoolean("is_SystemMode",false);
-                    txt_Swtich.setChecked((rRealData.getBoolean("is_SystemMode",false)));
-                    txt_Swtich.setTextOff("手动");
-                    txt_Swtich.setTextOn("自动");
+                    txt_Switch.setChecked((rRealData.getBoolean("is_SystemMode",false)));
+                    txt_Switch.setTextOff("手动");
+                    txt_Switch.setTextOn("自动");
                     break;
                 case "补偿使能:":
-                    txt_Swtich.setChecked((rRealData.getBoolean("is_CompensateEnabled",false)));
-                    txt_Swtich.setTextOff("禁止");
-                    txt_Swtich.setTextOn("使能");
+                    txt_Switch.setChecked((rRealData.getBoolean("is_CompensateEnabled",false)));
+                    txt_Switch.setTextOff("禁止");
+                    txt_Switch.setTextOn("使能");
                     break;
                 case "告警提示:":
-                    txt_Swtich.setChecked((rStateData.getBoolean("is_SystemBeep",false)));
-                    txt_Swtich.setTextOff("关闭");
-                    txt_Swtich.setTextOn("打开");
+                    txt_Switch.setChecked((rStateData.getBoolean("is_SystemBeep",false)));
+                    txt_Switch.setTextOff("关闭");
+                    txt_Switch.setTextOn("打开");
+                    break;
+                case "调试模式:":
+                    txt_Switch.setChecked((rStateData.getBoolean("is_SystemDebug",false)));
+                    txt_Switch.setTextOff("关闭");
+                    txt_Switch.setTextOn("打开");
+                    break;
+                case "Loge输出:":
+                    txt_Switch.setChecked((rStateData.getBoolean("is_SystemOutLoge",false)));
+                    txt_Switch.setTextOff("关闭");
+                    txt_Switch.setTextOn("打开");
+                    break;
+                case "初始化系统:":
+                    txt_Switch.setTextOff("off");
+                    txt_Switch.setTextOn("on");
                     break;
             }
 
             //设置switchUi
-            if (txt_Swtich.isChecked()){
-                txt_Swtich.setSwitchTextAppearance(mContext,R.style.s_true);
+            if (txt_Switch.isChecked()){
+                txt_Switch.setSwitchTextAppearance(mContext,R.style.s_true);
             }else {
-                txt_Swtich.setSwitchTextAppearance(mContext,R.style.s_false);
+                txt_Switch.setSwitchTextAppearance(mContext,R.style.s_false);
             }
 
             //switch监听
-            txt_Swtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            txt_Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
@@ -167,6 +173,10 @@ public class settingItemAdapter extends BaseAdapter{
                     data[2] = txt_But.getText().toString();
                     fragment4List.putExtra("UserSet", data);
                     mContext.sendBroadcast(fragment4List);
+                    if ( data[0].equals("初始化系统:")){
+                        txt_Value.setText("0");
+                        txt_Switch.setChecked(false);
+                    }
                 }
             });
 
@@ -177,7 +187,7 @@ public class settingItemAdapter extends BaseAdapter{
             txt_Name.setVisibility(View.VISIBLE);
             txt_Value.setVisibility(View.GONE);
             txt_But.setVisibility(View.GONE);
-            txt_Swtich.setVisibility(View.VISIBLE);
+            txt_Switch.setVisibility(View.VISIBLE);
         }
 
         //设置List高度和宽度
@@ -187,9 +197,9 @@ public class settingItemAdapter extends BaseAdapter{
         return convertView;
     }
 
-    static class ViewContentHolder{
-        TextView txt_Name;
-        EditText txt_Value;
-        Button txt_But;
-    }
+//    static class ViewContentHolder{
+//        TextView txt_Name;
+//        EditText txt_Value;
+//        Button txt_But;
+//    }
 }

@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -34,7 +38,7 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 
 /**
- * 系统级公共方法
+ * 系统公共方法
  * @author zongshengruhai
  * @version 1.0
  */
@@ -47,12 +51,16 @@ public class SystemFunc {
     /**
      * restart 重启设备
      */
-    static public void restart(){
-        try {
-            Process mRestart =Runtime.getRuntime().exec(new String[]{"su","-c","reboot "});
-            mRestart.waitFor();
-        }catch (Exception e){
-            e.printStackTrace();
+    static public void restart(Context mContext){
+        SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
+        if (!rStateData.getBoolean("is_SystemDebug",false)) //调试模式下不重启
+        {
+            try {
+                Process mRestart = Runtime.getRuntime().exec(new String[]{"su", "-c", "reboot "});
+                mRestart.waitFor();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -141,6 +149,29 @@ public class SystemFunc {
             }
         }
     }
+
+    /**
+     * changeKeyboardView改变键盘
+     * @param context in context
+     * @param view in view
+     * @param type change view state type
+     */
+    static public void changeKeyboardView(Context context, View view,String type){
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (type.equals("hide"))// hide
+        {
+            if (imm != null && view != null){
+                imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+        else if (type.equals("show"))// show
+        {
+            if (imm != null && view != null){
+                imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }
+    }
+
 
     //文件操作类方法--------------------------------------------------------------------------------------------------------
     /**

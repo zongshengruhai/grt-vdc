@@ -114,17 +114,17 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
         int passwordSize = passwordIn.length();
 
         if (passwordSize == 0){
-            fragment4Intent.putExtra("fragmentToast",2);
+            fragment4Intent.putExtra("fragmentToast","请输入密码");
         }else if (passwordSize < 8){
-            fragment4Intent.putExtra("fragmentToast",1);
+            fragment4Intent.putExtra("fragmentToast","输入的密码长度不足，请输入8位数字密码");
         } else if (passwordIn.equals("12345678")){
             USER_TYPE = 1;
-            fragment4Intent.putExtra("fragmentToast",4);
+            fragment4Intent.putExtra("fragmentToast","管理员,登录成功");
         }else if (passwordIn.equals("99999999")){
             USER_TYPE = 2;
-            fragment4Intent.putExtra("fragmentToast",5);
+            fragment4Intent.putExtra("fragmentToast","登录成功");
         } else {
-            fragment4Intent.putExtra("fragmentToast",3);
+            fragment4Intent.putExtra("fragmentToast","输入密码错误，请重新输入");
         }
 
         SystemFunc.changeKeyboardView(fragment4_Context,fragment4_View,"hide");
@@ -135,6 +135,7 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
     }
     private void hideFragment4Rl()// hide set view
     {
+        USER_TYPE = 0;
         SystemFunc.changeKeyboardView(fragment4_Context,fragment4_View,"hide");
         fragment4RowLay[0].setVisibility(View.VISIBLE);
         fragment4RowLay[1].setVisibility(View.GONE);
@@ -212,7 +213,7 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
                 pickContentData.add(new settingItem("告警提示:","开关"));
                 if (USER_TYPE == 1){
                     pickContentData.add(new settingItem("调试模式:","开关"));
-                    pickContentData.add(new settingItem("Loge输出:","开关"));
+//                    pickContentData.add(new settingItem("Loge输出:","开关"));
                     pickContentData.add(new settingItem("初始化系统:","开关"));
                 }
 //                pickContentData.add(new settingItem("系统时间:","校准"));

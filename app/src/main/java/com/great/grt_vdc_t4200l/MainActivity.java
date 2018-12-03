@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +18,7 @@ import android.widget.Toast;
 public class MainActivity extends BaseCourse{
 
     //容器----------------------------------------------------
-    private static Context mContext;
+    private Context mContext;
     public static Fragment[] fragments;
     public static LinearLayout[] linearLayouts;
     public static TextView[] textViews;
@@ -181,7 +180,9 @@ public class MainActivity extends BaseCourse{
 
         SharedPreferences.Editor wStateData = getSharedPreferences("StateData",MODE_PRIVATE).edit();
         wStateData.putInt("layPage",MARK);
-        wStateData.commit();
+        if (!wStateData.commit()){
+            wStateData.commit();
+        }
 
         fragment4Intent.putExtra("layChange",MARK);
         sendBroadcast(fragment4Intent);

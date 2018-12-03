@@ -243,19 +243,33 @@ public class BaseCourse extends FragmentActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         pauseSOP();
 
-                        // delete this data
+                        if (SystemFunc.checkFileExist(faultPath)) {
+                            SystemFunc.deleteFile(faultPath);
+                        }
+
+                        if (SystemFunc.checkFileExist(recordPath)) {
+                            SystemFunc.deleteFile(recordPath);
+                        }
+
                         if (SystemFunc.checkFileExist(systemPath)) {
                             SystemFunc.deleteFile(systemPath);
                         }
 
-                        // delete SharedPreferences
                         if (SystemFunc.checkFileExist(sharedPrefsPath)){
                             SystemFunc.deleteFile(sharedPrefsPath);
                         }
 
-                        // restart device
                         Toast.makeText(mContext,"系统初始化，即将重启",Toast.LENGTH_SHORT).show();
+
+                        SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
+                        wStateData.putBoolean("is_SystemBeep",true);
+                        wStateData.putBoolean("is_SystemDebug",false);
+                        if (wStateData.commit()){
+                            wStateData.commit();
+                        }
+
                         SystemFunc.restart(mContext);
+
                     }
                 })
                 .setNegativeButton("返回", new DialogInterface.OnClickListener()
@@ -291,16 +305,17 @@ public class BaseCourse extends FragmentActivity {
 
 
     /**
-     * 总线广播
+     * 底层广播
+     * 接收其他层无法处理的事件，如有些类无法持有 context 则通过发送广播的方式交由此层 来处理 {@link Toast}
+     * 处理其他层触发的通讯事件，本系统不允许其他层持有 {@link SerialPortHelper},所以若其他类需要通讯，都以广播的方式通此层处理
      */
-    //广播分类----------------------------------------------------
     public class MyBaseActivity_Broad extends BroadcastReceiver{
         public void onReceive(Context context, Intent intent){
 
             //Toast事件
-            int fragmentToast = intent.getIntExtra("fragmentToast",0);
-            if (fragmentToast > 0){
-                Toast(fragmentToast);
+            String fragmentToast = intent.getStringExtra("fragmentToast");
+            if (fragmentToast != null){
+                Toast.makeText(mContext,fragmentToast,Toast.LENGTH_SHORT).show();
             }
 
             //遥调事件
@@ -311,27 +326,13 @@ public class BaseCourse extends FragmentActivity {
 
         }
     }
-    //Toast----------------------------------------------------
-    private void Toast(int ToastType){
-        switch (ToastType){
-            case 1:
-                Toast.makeText(this,"输入的密码长度不足，请输入8位数字密码",Toast.LENGTH_SHORT).show();
-                break;
-            case 2:
-                Toast.makeText(this,"请输入密码",Toast.LENGTH_SHORT).show();
-                break;
-            case 3:
-                Toast.makeText(this,"输入密码错误，请重新输入",Toast.LENGTH_SHORT).show();
-                break;
-            case 4:
-                Toast.makeText(this,"管理员,登录成功",Toast.LENGTH_SHORT).show();
-                break;
-            case 5:
-                Toast.makeText(this,"巡检员，登录成功",Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
-    //遥调事件----------------------------------------------------
+
+    /**
+     * 遥调事件处理
+     * 其他类无法处理的遥调，从{@link MyBaseActivity_Broad}接收到后，在这里进行分类处理
+     * 最后将通讯内容填充到 {@link #iCorrect {寄存器地址 ， 值}} ，并置位 {@link #_isCorrect} ,程序将会在 {@link #task} 线程内处理
+     * @param sData { 名称 ， 值 ， 类型}
+     */
     private void CorrectEvent(String[] sData){
         int[] iData = new int[2];
         if (sData.length == 3){
@@ -409,11 +410,11 @@ public class BaseCourse extends FragmentActivity {
                         wStateData.putBoolean("is_SystemDebug",valueFlag);
                         eventFlag = true;
                         break;
-                    case "Loge输出:":
-                        if (Integer.parseInt(sData[1]) == 1){ valueFlag = true;}
-                        wStateData.putBoolean("is_SystemOutLoge",valueFlag);
-                        eventFlag = true;
-                        break;
+//                    case "Loge输出:":
+//                        if (Integer.parseInt(sData[1]) == 1){ valueFlag = true;}
+//                        wStateData.putBoolean("is_SystemOutLoge",valueFlag);
+//                        eventFlag = true;
+//                        break;
                     case "初始化系统:":
 //                        Toast.makeText(this,"will be init this system,delete this system all data!",Toast.LENGTH_SHORT).show();
                         if (Integer.parseInt(sData[1]) == 1){ initSystemSOP();}
@@ -421,17 +422,16 @@ public class BaseCourse extends FragmentActivity {
                 }
 
                 if (eventFlag){
-                    wStateData.commit();
+                    if (!wStateData.commit()){
+                        wStateData.commit();
+                    }
                 }
 
             }
         }
     }
 
-    /**
-     * 硬件服务方法
-     */
-    //隐藏虚拟按键----------------------------------------------------
+    /** 隐藏下边栏虚拟按键 */
     private void hideNavigation(){
 
 //        View v = getWindow().getDecorView();
@@ -477,10 +477,7 @@ public class BaseCourse extends FragmentActivity {
 
     }
 
-    /**
-     * 串口通讯方法
-     */
-    //打开com----------------------------------------------------
+    /** 打开串口 */
     private void openCom(SerialPortHelper ComPort){
         /*
         //尝试打开串口
@@ -502,7 +499,8 @@ public class BaseCourse extends FragmentActivity {
             Toast.makeText(this,"打开串口失败，参数错误",Toast.LENGTH_SHORT).show();
         }
     }
-    //关闭com----------------------------------------------------
+
+    /** 关闭串口 */
     private void closeCom(SerialPortHelper ComPort){
 //        try {
 //            mOutput.close();
@@ -517,29 +515,37 @@ public class BaseCourse extends FragmentActivity {
             ComPort.close();
         }
     }
-    //发送数据----------------------------------------------------
-    private void sendPortData(SerialPortHelper ComPort,String type){
+
+    /** 发送数据 */
+    private void sendPortData(SerialPortHelper ComPort /*String type*/ ){
         if (ComPort != null && ComPort.getIsOpen()){
-            switch (type){
-                case "Hex":
-//                    ComPort.sendHex(sOutData);
-                    break;
-                case "Txt":
-//                    ComPort.sendTxt(sOutData);
-                    break;
-                case "bArr":
-                    ComPort.send(bOutData);
-                    break;
-            }
+//            switch (type){
+//                case "Hex":
+////                    ComPort.sendHex(sOutData);
+//                    break;
+//                case "Txt":
+////                    ComPort.sendTxt(sOutData);
+//                    break;
+//                case "bArr":
+//                    ComPort.send(bOutData);
+//                    break;
+//            }
+            ComPort.send(bOutData);
         }
     }
-    //继承串口工具----------------------------------------------------
+
+    /** 实例化串口工具 */
     private class SerialControl extends SerialPortHelper{
         private SerialControl(){
         }
     }
 
-    //定时主线程----------------------------------------------------
+    /**
+     * 底层主线程
+     * 定时处理下位机通讯
+     * 本系统无论什么层触发通讯后，最终都会传递到这里，按队列依次进行通讯
+     * 这里只是处理一些标准位和一些状态字，最后实际下发通讯都是交由 {@link SerialPortHelper} 类处理
+     */
     Handler handler = new Handler();
     Runnable task = new Runnable() {
         @Override
@@ -581,7 +587,9 @@ public class BaseCourse extends FragmentActivity {
                 //判断是否需要读取录波
                 if ((rRealData.getInt("i_NewSagSite",0) != rStateData.getInt("i_OldSagSite",0)) && !rStateData.getBoolean("is_RecordFlag",false)){
                     wStateData.putBoolean("is_RecordFlag",true);       //开始录波标志
-                    wStateData.commit();
+                    if (!wStateData.commit()){
+                        wStateData.commit();
+                    }
                 }
 
 //                Log.e(TAG, "run: " + rStateData.getBoolean("is_RecordFlag",false)+ "," +rStateData.getBoolean("is_ReadRecordFlag",false));
@@ -695,7 +703,8 @@ public class BaseCourse extends FragmentActivity {
     //定时通讯子线程
     class ComThread extends Thread{
         public void run(){
-            sendPortData(downCom,"bArr");
+//            sendPortData(downCom,"bArr");
+            sendPortData(downCom);
         }
     }
 

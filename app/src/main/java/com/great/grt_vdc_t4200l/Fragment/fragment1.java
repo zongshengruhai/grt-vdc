@@ -1,52 +1,28 @@
 package com.great.grt_vdc_t4200l.Fragment;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Bundle;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.great.grt_vdc_t4200l.ListView.longItem;
 import com.great.grt_vdc_t4200l.ListView.longItemAdapter;
-import com.great.grt_vdc_t4200l.ListView.shortItem;
-import com.great.grt_vdc_t4200l.ListView.shortItemAdapter;
 import com.great.grt_vdc_t4200l.MPLineChart.DynamicLineChartManager;
 import com.great.grt_vdc_t4200l.R;
-
-//
 import android.graphics.Color;
-
-//tablayout
 import android.support.design.widget.TabLayout;
-
-//import android.widget.Toolbar;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.github.mikephil.charting.charts.LineChart;
-
-import java.io.FileInputStream;
 import java.util.LinkedList;
-
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
 
 //public class fragment1 extends Fragment implements AdapterView.OnItemClickListener{
 public class fragment1 extends Fragment{
-    private static final String TAG = "fragment1";
 
     //TabLayout----------------------------------------------------
 //    private static final String[] sTitle = new String[]{"输出电流","输出电压","输入电压","其他数据"};

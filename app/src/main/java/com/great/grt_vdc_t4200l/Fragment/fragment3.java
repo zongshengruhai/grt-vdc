@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import android.widget.ListView;
 import com.great.grt_vdc_t4200l.ListView.longItem;
 import com.great.grt_vdc_t4200l.ListView.longItemAdapter;
 import com.great.grt_vdc_t4200l.R;
-import com.great.grt_vdc_t4200l.SystemFunc;
-
 import java.io.FileInputStream;
 import java.util.Collections;
 import java.util.LinkedList;

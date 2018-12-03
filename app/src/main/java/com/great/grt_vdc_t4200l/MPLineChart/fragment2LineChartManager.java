@@ -131,7 +131,7 @@ public class fragment2LineChartManager {
 
             lineDataSet = new LineDataSet(null, names.get(i));                               //线条名称
             lineDataSet.setDrawCircles(false);                                                      //线上的点
-            lineDataSet.setDrawValues(true);                                                        //线上的值
+            lineDataSet.setDrawValues(false);                                                        //线上的值
             lineDataSet.setLineWidth(2f);                                                           //线条宽度
             lineDataSet.setColor(colors.get(i));                                                    //线条颜色
             lineDataSet.setCircleColor(colors.get(i));                                              //曲线颜色

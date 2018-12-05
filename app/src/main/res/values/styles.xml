@@ -17,7 +17,7 @@
         <item name="android:textSize">@dimen/textsizi</item>
     </style>
 
-    <style name="Linearlayout_Style">
+    <style name="LinearLayout_Style">
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
         <item name="android:clickable">true</item>

@@ -42,7 +42,7 @@
         android:layout_height="match_parent"
         android:text="@string/fragment4btu"
         android:textSize="26sp"
-        android:background="@drawable/txt_whiteborder"/>
+        android:background="@drawable/button_style"/>
 
     <Switch
         android:id="@+id/SettingSwitch"

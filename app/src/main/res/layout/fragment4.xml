@@ -52,7 +52,7 @@
                 android:id="@+id/fragment4LoginBut"
                 android:text="@string/fragment44LoginBtu"
                 android:textSize="28sp"
-                android:background="@drawable/txt_whiteborder"
+                android:background="@drawable/button_style"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:layout_width="100dp"

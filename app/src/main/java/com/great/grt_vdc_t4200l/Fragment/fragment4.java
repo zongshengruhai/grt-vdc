@@ -1,6 +1,5 @@
 package com.great.grt_vdc_t4200l.Fragment;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +21,6 @@ import com.great.grt_vdc_t4200l.ListView.longItemAdapter;
 import com.great.grt_vdc_t4200l.ListView.settingItem;
 import com.great.grt_vdc_t4200l.ListView.settingItemAdapter;
 import com.great.grt_vdc_t4200l.R;
-import com.great.grt_vdc_t4200l.SystemFunc;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -111,6 +109,8 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
     private void LoginClick()// login click event
     {
         String passwordIn = fragment4Password.getText().toString();
+//        SharedPreferences rStateData = fragment4_Context.getSharedPreferences("StateData", 0);
+
         int passwordSize = passwordIn.length();
 
         if (passwordSize == 0){
@@ -120,6 +120,7 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
         } else if (passwordIn.equals("12345678")){
             USER_TYPE = 1;
             fragment4Intent.putExtra("fragmentToast","管理员,登录成功");
+//        }else if (passwordIn.equals(rStateData.getString("i_UserPassword", "999999999"))){
         }else if (passwordIn.equals("99999999")){
             USER_TYPE = 2;
             fragment4Intent.putExtra("fragmentToast","登录成功");
@@ -127,21 +128,23 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
             fragment4Intent.putExtra("fragmentToast","输入密码错误，请重新输入");
         }
 
-        SystemFunc.changeKeyboardView(fragment4_Context,fragment4_View,"hide");
+//        SystemFunc.changeKeyboardView(fragment4_Context,fragment4_View,"hide");
         showFragment4RL(USER_TYPE);
         fragment4Password.setText("");
         getActivity().sendBroadcast(fragment4Intent);
 
     }
+
     private void hideFragment4Rl()// hide set view
     {
         USER_TYPE = 0;
-        SystemFunc.changeKeyboardView(fragment4_Context,fragment4_View,"hide");
+//        SystemFunc.changeKeyboardView(fragment4_Context,fragment4_View,"hide");
         fragment4RowLay[0].setVisibility(View.VISIBLE);
         fragment4RowLay[1].setVisibility(View.GONE);
 //        fragment4RowLay[0].setVisibility(View.GONE);
 //        fragment4RowLay[1].setVisibility(View.VISIBLE);
     }
+
     private void showFragment4RL(int userType)// show set view
     {
         if (userType > 0){
@@ -161,6 +164,7 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
 
         pickListData.add(new longItem("","输入校准","",""));
         pickListData.add(new longItem("","输出校准","",""));
+        pickListData.add(new longItem("","电流校准","",""));
         pickListData.add(new longItem("","电容校准","",""));
 //        pickListData.add(new shortItem("","系统时间","",""));
         pickListData.add(new longItem("","遥控设置","",""));
@@ -171,10 +175,13 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
         pickList.setOnItemClickListener(this);
         ChangeSetLay(0);
     }
-    @Override public void onItemClick(AdapterView<?> parent,View view,int position,long id) // select list event
+
+    @Override
+    public void onItemClick(AdapterView<?> parent,View view,int position,long id) // select list event
     {
         ChangeSetLay(position);
     }
+
     private void ChangeSetLay(int id) // change set list
     {
         pickContentData.clear();
@@ -191,11 +198,13 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
                 pickContentData.add(new settingItem("U相输出电压:","校准"));
                 pickContentData.add(new settingItem("V相输出电压:","校准"));
                 pickContentData.add(new settingItem("W相输出电压:","校准"));
+                break;
+            case 2:
                 pickContentData.add(new settingItem("U相输出电流:","校准"));
                 pickContentData.add(new settingItem("V相输出电流:","校准"));
                 pickContentData.add(new settingItem("W相输出电流:","校准"));
                 break;
-            case 2:
+            case 3:
                 fragment4SetHint.setText("电容校准");
                 pickContentData.add(new settingItem("电容容量:","校准"));
                 break;
@@ -203,19 +212,24 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
 //                fragment4SetHint.setText("系统时间");
 //                pickContentData.add(new settingItem("系统时间:","校准"));
 //                break;
-            case 3:
+            case 4:
                 fragment4SetHint.setText("遥控设置");
                 pickContentData.add(new settingItem("系统模式:","遥控"));
                 pickContentData.add(new settingItem("补偿使能:","遥控"));
                 break;
-            case 4:
+            case 5:
                 fragment4SetHint.setText("系统设置");
                 pickContentData.add(new settingItem("告警提示:","开关"));
                 if (USER_TYPE == 1){
                     pickContentData.add(new settingItem("调试模式:","开关"));
 //                    pickContentData.add(new settingItem("Loge输出:","开关"));
                     pickContentData.add(new settingItem("初始化系统:","开关"));
+                    pickContentData.add(new settingItem("退出程序:","开关"));
+//                    pickContentData.add(new settingItem("用户密码:","更改"));
                 }
+//                else if (USER_TYPE == 2){
+//                    pickContentData.add(new settingItem("用户密码:","更改"));
+//                }
 //                pickContentData.add(new settingItem("系统时间:","校准"));
                 break;
         }
@@ -241,6 +255,8 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
 
         }
     }
+
+
 
 }
 

@@ -9,12 +9,17 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
+
 import com.great.grt_vdc_t4200l.SerialPortHelp.MyFunc;
 import com.great.grt_vdc_t4200l.SerialPortHelp.SerialPortHelper;
 import java.io.IOException;
@@ -88,6 +93,9 @@ public class BaseCourse extends FragmentActivity {
     static private String recordPath;
     static private String sharedPrefsPath;
 
+    /** 无操作计时 */
+    public int iNotAction;
+    private boolean _isActionFlag = false;
 
     /** 创建层，初始化一些数据*/
     protected void onCreate(Bundle savedInstanceState){
@@ -131,6 +139,7 @@ public class BaseCourse extends FragmentActivity {
 
     }
 
+
     /**
      * 登录流程
      * 以下是登录流程顺序
@@ -142,8 +151,15 @@ public class BaseCourse extends FragmentActivity {
      */
     private void loadSOP(){
 
-        //隐藏虚拟键盘
+        //隐藏虚拟按键
         hideNavigation();
+
+//        SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
+//        if (rStateData.getBoolean("is_SystemDebug",false)){
+//            SystemFunc.setStatusBar(mContext,DISABLE_NONE);
+//        }else {
+//            SystemFunc.setStatusBar(mContext,DISABLE_EXPAND);
+//        }
 
         //获取权限
         SystemFunc.getRoot(getPackageCodePath());
@@ -419,6 +435,11 @@ public class BaseCourse extends FragmentActivity {
 //                        Toast.makeText(this,"will be init this system,delete this system all data!",Toast.LENGTH_SHORT).show();
                         if (Integer.parseInt(sData[1]) == 1){ initSystemSOP();}
                         break;
+                    case "退出程序:":
+                        if (Integer.parseInt(sData[1]) == 1 ){
+                            System.exit(0);
+                        }
+                        break;
                 }
 
                 if (eventFlag){
@@ -476,6 +497,7 @@ public class BaseCourse extends FragmentActivity {
         getWindow().getDecorView().setSystemUiVisibility(uiFlags);
 
     }
+
 
     /** 打开串口 */
     private void openCom(SerialPortHelper ComPort){
@@ -541,6 +563,60 @@ public class BaseCourse extends FragmentActivity {
     }
 
     /**
+     * 监听用户操作触摸屏
+     * 1、标志用户是否有操作
+     * 2、点击空白处时执行隐藏键盘
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event){
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+
+                //用户操作计时
+                _isActionFlag = true;
+                iNotAction = 0;
+
+                //隐藏虚拟键盘
+                View view = getCurrentFocus();
+                if (isShouldHideKeyboard(view,event)) hideKeyBoard(view.getWindowToken());
+
+                break;
+            case MotionEvent.ACTION_UP:
+                _isActionFlag = false;
+                break;
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
+    /**
+     * 判断用户点击位置是否处在EditText内
+     * @return true 不在EditText内 ，false 在EditText内
+     */
+    private boolean isShouldHideKeyboard(View v,MotionEvent event){
+        if (v instanceof EditText){
+            int[] l = {0,0};
+            v.getLocationInWindow(l);
+            int left = l[0],
+                    right = left + v.getWidth(),
+                    top = l[1],
+                    bottom = top + v.getHeight();
+            return  !(event.getX() > left && event.getX() < right && event.getY() > top && event.getY() < bottom);
+        }
+        return false;
+    }
+
+    /**
+     * 隐藏虚拟键盘
+     */
+    private void hideKeyBoard(IBinder token){
+        if (token != null){
+            InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (im !=null) im.hideSoftInputFromWindow(token,InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+
+    /**
      * 底层主线程
      * 定时处理下位机通讯
      * 本系统无论什么层触发通讯后，最终都会传递到这里，按队列依次进行通讯
@@ -557,10 +633,14 @@ public class BaseCourse extends FragmentActivity {
                 boolean _isCommFlag = downCom.getisCommFlag();
                 if (!_isCommFlag){
                     if (iCommError < 99){iCommError ++;}
+                    downCom.deleteErrRealData();
                 }else {
                     SystemFunc.Beep(mContext,false);
                     iCommError = 0;
                 }
+
+                //无操作计时
+                if (!_isActionFlag && iNotAction < 9999) iNotAction ++;
 
                 //通知用户
                 if (iCommError > 40 && iCommError < 59 && ((60-iCommError)%2) == 0 ){
@@ -570,7 +650,6 @@ public class BaseCourse extends FragmentActivity {
                 //30s无有效通讯，重启设备
                 if (iCommError > 60){
                     SystemFunc.restart(mContext);
-                    Log.e(TAG, "run: system can't connect ,so will be restart" );
                 }
 
 //                if (iCommError > 5){Beep(mContext,true);}else {Beep(mContext,false);}

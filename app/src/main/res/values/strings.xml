@@ -49,7 +49,7 @@
     <string name="fragment1RecordTime">录波记录：%1$d 条</string>
     <string name="fragment1RealAlarm">实时告警</string>
     <string name="fragment1RealFlag">实时遥信</string>
-    <string name="fragment1RealData">实时数据</string>
+    <string name="fragment1RealData">实 时 数 据</string>
     <!-- fragment2 -->
     <string name="fragment2RecordTime">当前为第 %1$d 条暂降补偿记录</string>
     <string name="fragment2RecordContent">发生于 %1$S，跌落到 %2$d V，跌落时长 %3$d ms %4$s</string>
@@ -84,7 +84,7 @@
     <string name="fragmentEdHint">000</string>
     <!-- fragment5 -->
     <string name="fragment5_v">%1$d V</string>
-    <string name="fragment5_Time">%1$d 次</string>
+    <string name="fragment5_Time">%1$d </string>
     <string name="fragment5_Hz">%1$d Hz</string>
     <string name="fragment5CapI">%1$d %%</string>
     <string name="fragment5map">状态动画</string>

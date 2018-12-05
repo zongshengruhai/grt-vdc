@@ -1,5 +1,6 @@
 package com.great.grt_vdc_t4200l.ListView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,8 @@ import com.great.grt_vdc_t4200l.SystemFunc;
 
 import java.util.LinkedList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class settingItemAdapter extends BaseAdapter{
 
     //define
@@ -30,7 +33,7 @@ public class settingItemAdapter extends BaseAdapter{
     private Intent fragment4List = new Intent("drc.xxx.yyy.baseActivity");
 
     // create
-    public settingItemAdapter(LinkedList<settingItem> mData,Context mContext,View mView){
+    public settingItemAdapter(LinkedList<settingItem> mData, Context mContext, View mView){
         this.mData = mData;
         this.mContext = mContext;
         this.mView = mView;
@@ -80,6 +83,41 @@ public class settingItemAdapter extends BaseAdapter{
         //遥调
         if (mData.get(position).getmBtName().equals("校准")|| mData.get(position).getmName().equals("设置")) {
 
+            //创建list时关联实时的数据
+            SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
+            switch (txt_Name.getText().toString()){
+                case "R相输入电压:":
+                    txt_Value.setText(rRealData.getInt("i_Rv", 0));
+                    break;
+                case "S相输入电压:":
+                    txt_Value.setText(rRealData.getInt("i_Sv", 0));
+                    break;
+                case "T相输入电压:":
+                    txt_Value.setText(rRealData.getInt("i_Tv", 0));
+                    break;
+                case "U相输出电压:":
+                    txt_Value.setText(rRealData.getInt("i_Uv", 0));
+                    break;
+                case "V相输出电压:":
+                    txt_Value.setText(rRealData.getInt("i_Vv", 0));
+                    break;
+                case "W相输出电压:":
+                    txt_Value.setText(rRealData.getInt("i_Wv", 0));
+                    break;
+                case "U相输出电流:":
+                    txt_Value.setText(rRealData.getInt("i_Ua", 0));
+                    break;
+                case "V相输出电流:":
+                    txt_Value.setText(rRealData.getInt("i_Va", 0));
+                    break;
+                case "W相输出电流:":
+                    txt_Value.setText(rRealData.getInt("i_Wa", 0));
+                    break;
+                case "电容容量:":
+                    txt_Value.setText(rRealData.getInt("i_Capv", 0));
+                    break;
+            }
+
             txt_But.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -89,7 +127,9 @@ public class settingItemAdapter extends BaseAdapter{
                     data[2] = txt_But.getText().toString();
                     fragment4List.putExtra("UserSet", data);
                     mContext.sendBroadcast(fragment4List);
-                    SystemFunc.changeKeyboardView(mContext,mView,"hide");
+//                    SystemFunc.changeKeyboardView(mContext,mView,"hide");
+                    //ui
+                    SystemFunc.Beep(mContext);
                 }
             });
 
@@ -110,8 +150,45 @@ public class settingItemAdapter extends BaseAdapter{
                 txt_Value.setHint(SystemFunc.getNewTime());
             }
 
-        }//遥控
-        else{
+//        }else if (mData.get(position).getmBtName().equals("更改")) {
+//
+//            SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
+//            txt_Value.setText(rStateData.getString("i_UserPassword", "99999999"));
+//
+//            txt_Name.setText(mData.get(position).getmName());
+//            txt_But.setText(mData.get(position).getmBtName());
+//
+//
+//            txt_Name.setVisibility(View.VISIBLE);
+//            txt_Value.setVisibility(View.VISIBLE);
+//            txt_But.setVisibility(View.VISIBLE);
+//            txt_Switch.setVisibility(View.GONE);
+//
+//            txt_Name.setText("");
+//
+//            txt_But.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    String userPassword = txt_Value.getText().toString();
+//                    if (userPassword.length() == 0){
+//                        fragment4List.putExtra("fragmentToast","没有输入新密码");
+//                    }else if (userPassword.length() < 8){
+//                        fragment4List.putExtra("fragmentToast","新密码的长度不足8位");
+//                    }else if (userPassword.equals("12345678")){
+//                        fragment4List.putExtra("fragmentToast","密码过于简单");
+//                    }else {
+//                        fragment4List.putExtra("fragmentToast","修改用户密码成功");
+//                        SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
+//                        wStateData.putString("i_UserPassword",txt_Value.getText().toString());
+//                        if (wStateData.commit())wStateData.commit();
+//                    }
+//                    mContext.sendBroadcast(fragment4List);
+//                    SystemFunc.changeKeyboardView(mContext,mView,"hide");
+//                }
+//            });
+
+
+        }else {
 
             //获取当前的设置状态
             SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
@@ -147,6 +224,10 @@ public class settingItemAdapter extends BaseAdapter{
                     txt_Switch.setTextOff("off");
                     txt_Switch.setTextOn("on");
                     break;
+                case "退出程序:":
+                    txt_Switch.setTextOff("off");
+                    txt_Switch.setTextOn("on");
+                    break;
             }
 
             //设置switchUi
@@ -173,10 +254,15 @@ public class settingItemAdapter extends BaseAdapter{
                     data[2] = txt_But.getText().toString();
                     fragment4List.putExtra("UserSet", data);
                     mContext.sendBroadcast(fragment4List);
-                    if ( data[0].equals("初始化系统:")){
+
+                    //ui
+                    SystemFunc.Beep(mContext);
+
+                    if ( data[0].equals("初始化系统:") || data[0].equals("退出程序:")){
                         txt_Value.setText("0");
                         txt_Switch.setChecked(false);
                     }
+
                 }
             });
 

@@ -117,6 +117,7 @@ public class DynamicLineChartManager {
             lineDataSet.setDrawFilled(false);                                                       //曲线填充
             lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
             lineDataSet.setValueTextSize(16f);                                                      //曲线标注文字大小
+            lineDataSet.setDrawValues(false);                                                        //线上的值
             lineDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);                                //设置曲线模式 弯曲程度
             //lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
             lineDataSets.add(lineDataSet);

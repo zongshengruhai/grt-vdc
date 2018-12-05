@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -370,6 +371,7 @@ public class fragment1 extends Fragment{
                     fragment1_Data.add(new longItem("","","U相电流",rRealData.getInt("i_Ua", 0)+" A"));
                     fragment1_Data.add(new longItem("","","V相电流",rRealData.getInt("i_Va", 0)+" A"));
                     fragment1_Data.add(new longItem("","","W相电流",rRealData.getInt("i_Wa", 0)+" A"));
+                    fragment1_Data.add(new longItem("","","电容电压",rRealData.getInt("i_Capv", 0)+" A"));
 
                     longItemAdapter fragment1_RecordAdapter = new longItemAdapter((LinkedList<longItem>) fragment1_Data,fragment1_Context,"fragment1");
                     fragment1_ListView.setAdapter(fragment1_RecordAdapter);

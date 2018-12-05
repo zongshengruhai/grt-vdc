@@ -367,7 +367,7 @@ public class SerialPortHelper {
 
         //读取Shared Preferences
         SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
-        SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
+//        SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
         SharedPreferences rAlarmData = mContext.getSharedPreferences("AlarmData",0);
 
         //第一次筛选接收包
@@ -419,7 +419,7 @@ public class SerialPortHelper {
                             wRealData.putInt("i_Tv",iYc[9]);                             //T相电压
                             wRealData.putInt("i_SagTime",iYc[10]);                       //录波次数
                             wRealData.putInt("i_Capv",iYc[11]);                          //电容电压
-                            wRealData.putInt("i_CapAh",(((iYc[11]-232)/142)*100));           //电容容量
+                            wRealData.putInt("i_CapAh",(((iYc[11]*100)-23200)/142));           //电容容量
                             wRealData.putInt("i_NewSagSite",iYc[12]);                    //当前录波位置
                             wRealData.putInt("i_SagSum",iYc[13]);                        //录波总数
                             //遥信
@@ -610,13 +610,20 @@ public class SerialPortHelper {
 
         }
 
+        //03功能码通讯是失败时复位一些实时数据
+        if(buffer[1] == 0x03 && !_isCommFlag){
+            deleteErrRealData();
+        }
+
         //写入通讯标志
         wStateData.putBoolean("is_CommFlag",_isCommFlag);
 
         //统一提交Shared Preferences
-        wRealData.commit();
-        wStateData.commit();
-        wAlarmData.commit();
+        if (!wRealData.commit() & !wStateData.commit() & !wAlarmData.commit()){
+            wRealData.commit();
+            wStateData.commit();
+            wAlarmData.commit();
+        }
     }
 
     /**
@@ -669,7 +676,7 @@ public class SerialPortHelper {
                     wAlarmData.putBoolean("_isYxError_"+i,true);
                     wAlarmData.putString("i_YxError_"+i+"_Num",(rAlarmData.getInt("i_AlarmTime",0)+1+""));
                     wAlarmData.putInt("i_AlarmTime",rAlarmData.getInt("i_AlarmTime",0)+1);
-                    wAlarmData.commit();
+                    if (!wAlarmData.commit())wAlarmData.commit();
                 }
 
             }else if (!_isYxError[i] && rAlarmData.getBoolean("_isYxError_"+i,false)){
@@ -706,6 +713,29 @@ public class SerialPortHelper {
 //        }
 //
 //        wAlarmData.commit();
+    }
+
+    public void deleteErrRealData(){
+
+        SharedPreferences.Editor wRealData = mContext.getSharedPreferences("RealData",MODE_PRIVATE).edit();
+
+        wRealData.putInt("i_Uv",iYc[0]);                             //U相电压
+        wRealData.putInt("i_Vv",iYc[1]);                             //V相电压
+        wRealData.putInt("i_Wv",iYc[2]);                             //W相电压
+        wRealData.putInt("i_Ua",iYc[3]);                             //U相电流
+        wRealData.putInt("i_Va",iYc[4]);                             //V相电流
+        wRealData.putInt("i_Wa",iYc[5]);                             //W相电流
+        wRealData.putInt("i_Hz",iYc[6]);                             //频率
+        wRealData.putInt("i_Rv",iYc[7]);                             //R相电压
+        wRealData.putInt("i_Sv",iYc[8]);                             //S相电压
+        wRealData.putInt("i_Tv",iYc[9]);                             //T相电压
+        wRealData.putInt("i_Capv",iYc[11]);                          //电容电压
+        wRealData.putInt("i_CapAh",0);           //电容容量
+
+        //统一提交Shared Preferences
+        if (!wRealData.commit()) wRealData.commit();
+
+
     }
 
 }

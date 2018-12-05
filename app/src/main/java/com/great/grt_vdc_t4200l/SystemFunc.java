@@ -1,10 +1,14 @@
 package com.great.grt_vdc_t4200l;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Vibrator;
+import android.provider.Settings;
+import android.service.notification.StatusBarNotification;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -25,9 +29,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +53,7 @@ public class SystemFunc {
 
     final static private String TAG = "SystemMethod";
     static private boolean _isBeep = false;             //防止振铃并发
+
 
     //系统监控机制类方法--------------------------------------------------------------------------------------------------------
     /**
@@ -95,6 +103,55 @@ public class SystemFunc {
         return true;
     }
 
+//    /**
+//     * 分射机制设置状态栏是否可下拉
+//     */
+//    static public void setStatusBar(Context mContext,int flag){
+//
+////        try {
+////            Object service = mContext.getSystemService("STATUSBAR");
+////            if (service != null){
+////                Method method = service.getClass().getMethod("DISABLE");
+////                method.invoke(service);
+////            }
+////        }catch (Exception e){
+////            e.printStackTrace();
+////        }
+////
+//
+//        Method methodDisable = null;
+//        Object statusBarManagerService = null;
+//
+//        try {
+//
+//            Class classStatusBarManager = Class.forName("android.app.StatusBarManager");
+//            Context appContext = mContext.getApplicationContext();
+//            if (appContext != null){
+//                statusBarManagerService = appContext.getSystemService("statusbar");
+//                methodDisable = classStatusBarManager.getMethod("disable",int.class);
+//            }
+//        }catch (ClassNotFoundException e){
+//            Log.e(TAG, "get StatusBarManager error ：" + e );
+//            e.printStackTrace();
+//        }catch (NoSuchMethodException e){
+//            e.printStackTrace();
+//        }
+//
+//        Log.e(TAG, "setStatusBar: " + statusBarManagerService );
+//        Log.e(TAG, "setStatusBar: " + methodDisable );
+//
+//        try {
+//            methodDisable.invoke(statusBarManagerService,flag);
+//        }catch (IllegalAccessException e){
+//            e.printStackTrace();
+//        }catch (InvocationTargetException e){
+//            e.printStackTrace();
+//        }
+//
+//        Log.e(TAG, "setStatusBar: fine" );
+//
+//    }
+
 
     //系统操作类方法--------------------------------------------------------------------------------------------------------
     /**
@@ -130,16 +187,16 @@ public class SystemFunc {
     }
 
     /**
-     *  Beep 振铃
-     *  @param mContext 执行活动的上下文
+     *  Beep 一直震动振铃
+     *  @param mContext context
      *  @param flag true振铃 false取消振铃
      */
     static public void Beep(Context mContext,boolean flag){
         Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
         if (vibrator != null){
-            if (flag){
-                SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
-                if (!_isBeep && rStateData.getBoolean("is_SystemBeep",false)) {
+            if (flag && rStateData.getBoolean("is_SystemBeep",false)){
+                if (!_isBeep) {
                     _isBeep = true;
                     vibrator.vibrate(new long[]{500,500},0);
                 }
@@ -151,27 +208,47 @@ public class SystemFunc {
     }
 
     /**
-     * changeKeyboardView改变键盘
-     * @param context in context
-     * @param view in view
-     * @param type change view state type
+     * Beep 单次数振铃
+     * @param mContext context
      */
-    static public void changeKeyboardView(Context context, View view,String type){
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (type.equals("hide"))// hide
-        {
-            if (imm != null && view != null){
-                imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-        }
-        else if (type.equals("show"))// show
-        {
-            if (imm != null && view != null){
-                imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+    static public void Beep(Context mContext){
+        Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator != null){
+            SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
+            if (rStateData.getBoolean("is_SystemBeep",false)){
+                vibrator.vibrate(new long[]{0,50},1);
+                try {
+                    Thread.sleep(50);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                vibrator.cancel();
             }
         }
     }
 
+//    /**
+//     * changeKeyboardView改变键盘
+//     * @param context in context
+//     * @param view in view
+//     * @param type change view state type
+//     * 启用 交由base层处理
+//     */
+//    static public void changeKeyboardView(Context context, View view,String type){
+//        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//        if (type.equals("hide"))// hide
+//        {
+//            if (imm != null && view != null){
+//                imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//            }
+//        }
+//        else if (type.equals("show"))// show
+//        {
+//            if (imm != null && view != null){
+//                imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+//            }
+//        }
+//    }
 
     //文件操作类方法--------------------------------------------------------------------------------------------------------
     /**

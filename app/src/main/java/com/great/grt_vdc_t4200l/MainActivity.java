@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +28,7 @@ public class MainActivity extends BaseCourse{
 //    public static GestureDetector detector;
 //    final int DISTANT=50;                             /滑动距离
     //当前页面----------------------------------------------------
-    public int MARK=0;
+    public int MARK = 0;
     //广播----------------------------------------------------
     private Intent fragment4Intent = new Intent("drc.xxx.yyy.fragment4");
 //    private Intent dataChange = new Intent("drc.xxx.yyy.MainActivity");
@@ -50,6 +52,7 @@ public class MainActivity extends BaseCourse{
         }
 
         mContext = getBaseContext();
+//        mActivity = mActivity.getA();
 
         SharedPreferences rAlarmData = mContext.getSharedPreferences("AlarmData", 0);
         iOldRecord = rAlarmData.getInt("i_RecordTime",0);
@@ -80,12 +83,44 @@ public class MainActivity extends BaseCourse{
         MainHandler.removeCallbacks(MainRunnable);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        //getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
+//    /**
+//     * 获取当前屏幕亮度
+//     * @return 0~255 表示当前屏幕亮度值
+//     */
+//    private int getSystemBrightness(){
+//        int systemBrightness = 0;
+//        try {
+//            systemBrightness = Settings.System.getInt(getContentResolver(),Settings.System.SCREEN_BRIGHTNESS);
+//        }catch (Settings.SettingNotFoundException e){
+//            e.printStackTrace();
+//        }
+//        return systemBrightness;
 //    }
+
+    /**
+     * 获取当前屏幕亮度
+     * @return 0~1 当前屏幕亮度值
+     */
+    private float getActivityBrightness(){
+        Window window = this.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        return lp.screenBrightness;
+    }
+
+    /**
+     * 设置当前屏幕亮度
+     * @param brightness 0~255 当前屏幕亮度值
+     */
+    private void setActivityBrightness(int brightness){
+        Window window = this.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        if (brightness == -1){
+            lp.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
+        }else {
+            lp.screenBrightness = (brightness <= 0 ? 1 : brightness ) / 255f;
+        }
+        window.setAttributes(lp);
+    }
 
     /**
      * 初始化
@@ -120,7 +155,7 @@ public class MainActivity extends BaseCourse{
         textViews[2] = findViewById(R.id.fratext2);
         textViews[3] = findViewById(R.id.fratext3);
         textViews[4] = findViewById(R.id.fratext4);
-        resetlaybg();
+        resetLaybg();
         textViews[0].setTextColor(getResources().getColor(R.color.lightseagreen));
         linearLayouts[0].setBackgroundColor(getResources().getColor(R.color.lay_select_bg));
     }
@@ -130,7 +165,9 @@ public class MainActivity extends BaseCourse{
      */
     //底部导航栏点击事件切换fragment----------------------------------------------------
     public void LayoutOnclick(View v) {
-        resetlaybg();//每次点击都重置linearLayouts的背景、textViews字体颜色
+
+        resetLaybg();//每次点击都重置linearLayouts的背景、textViews字体颜色
+
         switch (v.getId()) {
             case R.id.lay5:
                 getSupportFragmentManager().beginTransaction().hide(fragments[0]).hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4]).show(fragments[0]).commit();
@@ -172,6 +209,7 @@ public class MainActivity extends BaseCourse{
             default:
                 break;
         }
+
         //写数据
         readLayType();
     }
@@ -180,16 +218,14 @@ public class MainActivity extends BaseCourse{
 
         SharedPreferences.Editor wStateData = getSharedPreferences("StateData",MODE_PRIVATE).edit();
         wStateData.putInt("layPage",MARK);
-        if (!wStateData.commit()){
-            wStateData.commit();
-        }
+        if (!wStateData.commit()) wStateData.commit();
 
         fragment4Intent.putExtra("layChange",MARK);
         sendBroadcast(fragment4Intent);
 
     }
     //复位导航栏样式----------------------------------------------------
-    public void resetlaybg() {
+    public void resetLaybg() {
         for(int i=0;i<5;i++)
         {
             linearLayouts[i].setBackgroundColor(getResources().getColor(R.color.lay_select_lose));
@@ -198,6 +234,9 @@ public class MainActivity extends BaseCourse{
         }
 
     }
+
+
+
     /*滑动切换fragment（已弃用）*/
 //
 //    @Override
@@ -323,20 +362,6 @@ public class MainActivity extends BaseCourse{
 //        return false;
 //    }
 
-//    /**
-//     * 主线程
-//     */
-//    Handler handler = new Handler();
-//    Runnable task = new Runnable() {
-//        @Override
-//        public void run() {
-//            handler.postDelayed(this,1000);
-//            int text = (int) (Math.random() * 100);
-//            //Log.e(TAG,""+text);
-//            dataChange.putExtra("dataChange",text);
-//            sendBroadcast(dataChange);
-//        }
-//    };
 
 
     /**
@@ -349,8 +374,18 @@ public class MainActivity extends BaseCourse{
         public void run() {
             MainHandler.postDelayed(this,100);
 
-            SharedPreferences rAlarmData = mContext.getSharedPreferences("AlarmData", 0);
+            //5分钟无操作时，回到主页面并降低屏幕亮度
+            if (iNotAction > 600 ){
+                if ( MARK != 0) linearLayouts[0].callOnClick();
+                if ( Math.round(getActivityBrightness()) > 0){
+                    setActivityBrightness(0);
+                }
+            }else if ( iNotAction < 600 && Math.round( getActivityBrightness() ) < 1){
+                setActivityBrightness(255);
+            }
 
+            //仿微信朋友圈红点
+            SharedPreferences rAlarmData = mContext.getSharedPreferences("AlarmData", 0);
             //lay2
             if (rAlarmData.getInt("i_RecordTime",0) != iOldRecord && MARK != 2){
                 redDor[0].setVisibility(View.VISIBLE);
@@ -359,8 +394,6 @@ public class MainActivity extends BaseCourse{
             if (MARK == 2){
                 iOldRecord = rAlarmData.getInt("i_RecordTime",0);
             }
-
-
             //lay3
             if (rAlarmData.getInt("i_AlarmTime",0) != iOldAlarm && MARK != 3){
                 redDor[1].setVisibility(View.VISIBLE);

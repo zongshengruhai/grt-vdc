@@ -125,7 +125,7 @@ public class fragment5 extends Fragment {
                 //R/S/T
                 fragment5Tv[1].setText(String.format(getResources().getString(R.string.fragment5_Time),rAlarmData.getInt("i_AlarmTime",0)));
                 fragment5Tv[2].setText(String.format(getResources().getString(R.string.fragment5_Time),rAlarmData.getInt("i_RecordTime",0)));
-                fragment5Tv[3].setText(String.format(getResources().getString(R.string.fragment5_Hz),rRealData.getInt("i_Hz",0)));
+                fragment5Tv[3].setText(String.format(getResources().getString(R.string.fragment5_Hz),rRealData.getInt("i_Hz",0)/10));
 
 
 

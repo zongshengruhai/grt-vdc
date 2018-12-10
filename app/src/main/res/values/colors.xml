@@ -12,7 +12,7 @@
     <color name="green">#4a00ff2f</color>
 
     <color name="lay_select_bg">#0d9ed9</color>
-    <color name="lay_select_lose">#87CEEB</color>
+    <color name="lay_select_lose">#87ceeb</color>
 
     <color name="Reached">#0071fa</color>
     <color name="Unreached">#9c0071fa</color>

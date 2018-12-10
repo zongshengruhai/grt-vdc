@@ -413,15 +413,27 @@ public class SerialPortHelper {
                             wRealData.putInt("i_Ua",iYc[3]);                             //U相电流
                             wRealData.putInt("i_Va",iYc[4]);                             //V相电流
                             wRealData.putInt("i_Wa",iYc[5]);                             //W相电流
-                            wRealData.putInt("i_Hz",iYc[6]);                             //频率
+
+                            //频率
+                            float fHz = (float)iYc[6]/10;
+                            wRealData.putInt("i_Hz",iYc[6]);
+                            Log.e("readData: ","int:" + iYc[6] +",float:" + fHz );
+                            wRealData.putFloat("f_Hz",fHz);
+
                             wRealData.putInt("i_Rv",iYc[7]);                             //R相电压
                             wRealData.putInt("i_Sv",iYc[8]);                             //S相电压
                             wRealData.putInt("i_Tv",iYc[9]);                             //T相电压
                             wRealData.putInt("i_SagTime",iYc[10]);                       //录波次数
                             wRealData.putInt("i_Capv",iYc[11]);                          //电容电压
-                            wRealData.putInt("i_CapAh",(((iYc[11]*100)-23200)/142));           //电容容量
+
+                            //电容容量
+                            int iCapAh = 0;
+                            if(iYc[11] > 232 ) iCapAh = ((iYc[11]*100)-23200)/142;
+                            wRealData.putInt("i_CapAh",iCapAh);
+
                             wRealData.putInt("i_NewSagSite",iYc[12]);                    //当前录波位置
                             wRealData.putInt("i_SagSum",iYc[13]);                        //录波总数
+
                             //遥信
                             wRealData.putBoolean("is_RechargeFlag",_isYx[7]);          //充电状态
                             wRealData.putBoolean("is_CompensateFlag",_isYx[6]);        //补偿状态
@@ -430,6 +442,7 @@ public class SerialPortHelper {
                             wRealData.putBoolean("is_OutRl",_isYx[2]);                 //输出短路
                             wRealData.putBoolean("is_AhLose",_isYx[1]);                //容量失效
                             wRealData.putBoolean("is_ComError",_isYx[0]);              //通讯异常
+
                             //遥控
                             wRealData.putBoolean("is_SystemMode",_isYk[0]);            //系统模式
                             wRealData.putBoolean("is_CompensateEnabled",_isYk[1]);     //补偿使能

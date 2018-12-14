@@ -25,6 +25,7 @@ import com.great.grt_vdc_t4200l.SerialPortHelp.SerialPortHelper;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -79,6 +80,7 @@ public class BaseCourse extends FragmentActivity {
      */
     private boolean _isCorrect = false;
     private int[] iCorrect = new int[2];
+    private String sCorrect = "";
 
     /** 通讯失败次数 */
     private int iCommError = 0;
@@ -354,7 +356,9 @@ public class BaseCourse extends FragmentActivity {
         if (sData.length == 3){
 
             //遥调、遥控
-            if (sData[2].equals("校准")||sData[2].equals("遥控")){
+            if (sData[2].equals("校准")||sData[2].equals("遥控")||sData[2].equals("对时")){
+
+                sCorrect = "";
 
                 //地址转换
                 switch (sData[0]){
@@ -388,8 +392,10 @@ public class BaseCourse extends FragmentActivity {
                     case "电容容量:":
                         iData[0] = 11;
                         break;
-                    case "系统时间:":
+                    case "秒:":
                         iData[0] = 14;
+                        sCorrect = sData[1];
+                        sData[1] = "1";
                         break;
                     case "系统模式:":
                         iData[0] = 18;
@@ -629,6 +635,7 @@ public class BaseCourse extends FragmentActivity {
             handler.postDelayed(this,500);
             if (downCom.getIsOpen()){
 
+
                 //通讯错误计次
                 boolean _isCommFlag = downCom.getisCommFlag();
                 if (!_isCommFlag){
@@ -674,6 +681,9 @@ public class BaseCourse extends FragmentActivity {
 //                Log.e(TAG, "run: " + rStateData.getBoolean("is_RecordFlag",false)+ "," +rStateData.getBoolean("is_ReadRecordFlag",false));
                 //需要读录波，且没有在读录波
                 if (rStateData.getBoolean("is_RecordFlag",false) && !rStateData.getBoolean("is_ReadRecordFlag",false) && !_isCorrect){
+
+                    bOutData = new byte[]{(byte)0x7E,0x00,0x00,0x00,0x00,0x00,0x00,(byte)0x0D};
+
                     iReadRecordError = 0;
                     wStateData.putBoolean("is_ReadRecordFlag",true);
                     bOutData[1] = (byte)0x10;
@@ -692,6 +702,8 @@ public class BaseCourse extends FragmentActivity {
                 }//不需要读录波，或已经在处理录波
                 else if ((!rStateData.getBoolean("is_RecordFlag",false) || rStateData.getBoolean("is_ReadRecordFlag",false))&&!_isCorrect){
 
+                    bOutData = new byte[]{(byte)0x7E,0x00,0x00,0x00,0x00,0x00,0x00,(byte)0x0D};
+
                     bOutData[1] = (byte)0x03;
                     bOutData[2] = (byte)0x00;
                     bOutData[3] = (byte)0x00;
@@ -703,28 +715,44 @@ public class BaseCourse extends FragmentActivity {
                 }//用户触发遥控、遥调
                 else if (_isCorrect){
 
-                    bOutData[1] = (byte)0x06;
-
                     //地址
                     if (iCorrect[0] == 14){
-                        //this in set system date code
-                        Log.e(TAG, "" );
+
+                        bOutData = new byte[]{(byte)0x7E,0x06,0x00,(byte)0x0E,0x00,0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00,(byte)0x0D};
+
+                        System.arraycopy(MyFunc.timeToBCD(sCorrect),0,bOutData,6,6);
+
+                        //CRC
+                        bOutData[12] = MyFunc.addCrc(bOutData);
+                        new ComThread().start();
+
                     }else {
+
+                        bOutData = new byte[]{(byte)0x7E,0x06,0x00,0x00,0x00,0x00,0x00,0x00,0x00,(byte)0x0D};
+
+                        //寄存器地址
                         bOutData[2] = MyFunc.InToByteArr(iCorrect[0])[2];
                         bOutData[3] = MyFunc.InToByteArr(iCorrect[0])[3];
 
+                        //寄存器长度
+                        bOutData[5] = 0x01;
+
                         //值
-                        bOutData[4] = MyFunc.InToByteArr(iCorrect[1])[2];
-                        bOutData[5] = MyFunc.InToByteArr(iCorrect[1])[3];
+                        bOutData[6] = MyFunc.InToByteArr(iCorrect[1])[2];
+                        bOutData[7] = MyFunc.InToByteArr(iCorrect[1])[3];
 
                         //CRC
-                        bOutData[6] = MyFunc.addCrc(bOutData);
+                        bOutData[8] = MyFunc.addCrc(bOutData);
+
+                        System.out.print(Arrays.toString(bOutData));
                         new ComThread().start();
 
                         //复位遥调标志
-                        _isCorrect = false;
                         iCorrect = new int[2];
                     }
+
+                    _isCorrect = false;
+
                 }
 
                 //防止遥测录波时通讯失败

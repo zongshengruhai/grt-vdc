@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,12 @@ import android.widget.TextView;
 import com.great.grt_vdc_t4200l.R;
 import com.great.grt_vdc_t4200l.SystemFunc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -32,11 +38,20 @@ public class settingItemAdapter extends BaseAdapter{
     private View mView;
     private Intent fragment4List = new Intent("drc.xxx.yyy.baseActivity");
 
+//    private List<Map<String,Object>> editTextData;
+//    public Map<String,String> editorValue = new HashMap<>();
+
+    private List<String> editorData = new ArrayList<>();
+
     // create
     public settingItemAdapter(LinkedList<settingItem> mData, Context mContext, View mView){
         this.mData = mData;
         this.mContext = mContext;
         this.mView = mView;
+    }
+
+    public void clearEditorData(){
+        editorData.clear();
     }
 
     @Override
@@ -85,36 +100,56 @@ public class settingItemAdapter extends BaseAdapter{
 
             //创建list时关联实时的数据
             SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
+
+            txt_Name.setText(mData.get(position).getmName());
+            txt_But.setText(mData.get(position).getmBtName());
+
+            //处理控件
+            txt_Name.setVisibility(View.VISIBLE);
+            txt_Value.setVisibility(View.VISIBLE);
+            txt_But.setVisibility(View.VISIBLE);
+            txt_Switch.setVisibility(View.GONE);
+
             switch (txt_Name.getText().toString()){
                 case "R相输入电压:":
-                    txt_Value.setText(rRealData.getInt("i_Rv", 0));
+//                    txt_Value.setText(rRealData.getInt("i_Rv", 0));
+                    txt_Value.setText(String.format(mContext.getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_Rv", 0)));
                     break;
                 case "S相输入电压:":
-                    txt_Value.setText(rRealData.getInt("i_Sv", 0));
+//                    txt_Value.setText(rRealData.getInt("i_Sv", 0));
+                    txt_Value.setText(String.format(mContext.getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_Sv", 0)));
                     break;
                 case "T相输入电压:":
-                    txt_Value.setText(rRealData.getInt("i_Tv", 0));
+//                    txt_Value.setText(rRealData.getInt("i_Tv", 0));
+                    txt_Value.setText(String.format(mContext.getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_Tv", 0)));
                     break;
                 case "U相输出电压:":
-                    txt_Value.setText(rRealData.getInt("i_Uv", 0));
+//                    txt_Value.setText(rRealData.getInt("i_Uv", 0));
+                    txt_Value.setText(String.format(mContext.getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_Uv", 0)));
                     break;
                 case "V相输出电压:":
-                    txt_Value.setText(rRealData.getInt("i_Vv", 0));
+//                    txt_Value.setText(rRealData.getInt("i_Vv", 0));
+                    txt_Value.setText(String.format(mContext.getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_Vv", 0)));
                     break;
                 case "W相输出电压:":
-                    txt_Value.setText(rRealData.getInt("i_Wv", 0));
+//                    txt_Value.setText(rRealData.getInt("i_Wv", 0));
+                    txt_Value.setText(String.format(mContext.getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_Wv", 0)));
                     break;
                 case "U相输出电流:":
-                    txt_Value.setText(rRealData.getInt("i_Ua", 0));
+//                    txt_Value.setText(rRealData.getInt("i_Ua", 0));
+                    txt_Value.setText(String.format(mContext.getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_Ua", 0)));
                     break;
                 case "V相输出电流:":
-                    txt_Value.setText(rRealData.getInt("i_Va", 0));
+//                    txt_Value.setText(rRealData.getInt("i_Va", 0));
+                    txt_Value.setText(String.format(mContext.getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_Va", 0)));
                     break;
                 case "W相输出电流:":
-                    txt_Value.setText(rRealData.getInt("i_Wa", 0));
+//                    txt_Value.setText(rRealData.getInt("i_Wa", 0));
+                    txt_Value.setText(String.format(mContext.getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_Wa", 0)));
                     break;
                 case "电容容量:":
-                    txt_Value.setText(rRealData.getInt("i_Capv", 0));
+//                    txt_Value.setText(rRealData.getInt("i_Capv", 0));
+                    txt_Value.setText(String.format(mContext.getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_Capv", 0)));
                     break;
             }
 
@@ -133,22 +168,13 @@ public class settingItemAdapter extends BaseAdapter{
                 }
             });
 
-            txt_Name.setText(mData.get(position).getmName());
-            txt_But.setText(mData.get(position).getmBtName());
-
-            //处理控件
-            txt_Name.setVisibility(View.VISIBLE);
-            txt_Value.setVisibility(View.VISIBLE);
-            txt_But.setVisibility(View.VISIBLE);
-            txt_Switch.setVisibility(View.GONE);
-
-            if (txt_Name.getText().toString().equals("系统时间:")){
-                txt_Value.setInputType(4);
-                txt_Value.setTextSize(20);
-                txt_Value.setInputType(InputType.TYPE_NULL);
-                txt_Value.setFilters(new InputFilter[]{new InputFilter.LengthFilter(19)});
-                txt_Value.setHint(SystemFunc.getNewTime());
-            }
+//            if (txt_Name.getText().toString().equals("系统时间:")){
+//                txt_Value.setInputType(4);
+//                txt_Value.setTextSize(20);
+//                txt_Value.setInputType(InputType.TYPE_NULL);
+//                txt_Value.setFilters(new InputFilter[]{new InputFilter.LengthFilter(19)});
+//                txt_Value.setHint(SystemFunc.getNewTime());
+//            }
 
 //        }else if (mData.get(position).getmBtName().equals("更改")) {
 //
@@ -188,11 +214,79 @@ public class settingItemAdapter extends BaseAdapter{
 //            });
 
 
-        }else {
+        }else if (mData.get(position).getmBtName().equals("对时")){
+
+            txt_Name.setText(mData.get(position).getmName());
+            txt_But.setText(mData.get(position).getmBtName());
+
+            //处理控件
+            txt_Name.setVisibility(View.VISIBLE);
+            txt_Value.setVisibility(View.VISIBLE);
+            if (mData.get(position).getmName().equals("秒:")){
+                txt_But.setVisibility(View.VISIBLE);
+            }else{
+                txt_But.setVisibility(View.GONE);
+            }
+            txt_Switch.setVisibility(View.GONE);
+
+            String timeTemp = SystemFunc.getNewTimeInt();
+            String[] timeTempArray = timeTemp.split("_");
+
+            switch (txt_Name.getText().toString()){
+                case "年:":
+                    txt_Value.setText(timeTempArray[0]);
+                    break;
+                case "月:":
+                    txt_Value.setText(timeTempArray[1]);
+                    break;
+                case "日:":
+                    txt_Value.setText(timeTempArray[2]);
+                    break;
+                case "时:":
+                    txt_Value.setText(timeTempArray[3]);
+                    break;
+                case "分:":
+                    txt_Value.setText(timeTempArray[4]);
+                    break;
+                case "秒:":
+                    txt_Value.setText(timeTempArray[5]);
+                    break;
+            }
+
+            if (editorData.size()  >= 6) clearEditorData();
+            editorData.add(txt_Value.getText().toString());
+
+            txt_But.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (editorData.size() == 6) {
+                        String[] data = new String[3];
+                        data[0] = txt_Name.getText().toString();
+                        data[1] = editorData.get(0) + "_" + editorData.get(1) + "_" + editorData.get(2) + "_" + editorData.get(3) + "_" + editorData.get(4) + "_" + editorData.get(5);
+                        data[2] = txt_But.getText().toString();
+                        fragment4List.putExtra("UserSet", data);
+                        mContext.sendBroadcast(fragment4List);
+                    }
+                    SystemFunc.Beep(mContext);
+                }
+            });
+
+        } else {
 
             //获取当前的设置状态
             SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
             SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
+
+            txt_Name.setText(mData.get(position).getmName());
+            txt_But.setText(mData.get(position).getmBtName());
+
+            //处理控件
+            txt_Name.setVisibility(View.VISIBLE);
+            txt_Value.setVisibility(View.GONE);
+            txt_But.setVisibility(View.GONE);
+            txt_Switch.setVisibility(View.VISIBLE);
+
             switch (mData.get(position).getmName()){
                 case "系统模式:":
 //                    boolean flag = rRealData.getBoolean("is_SystemMode",false);
@@ -265,15 +359,6 @@ public class settingItemAdapter extends BaseAdapter{
 
                 }
             });
-
-            txt_Name.setText(mData.get(position).getmName());
-            txt_But.setText(mData.get(position).getmBtName());
-
-            //处理控件
-            txt_Name.setVisibility(View.VISIBLE);
-            txt_Value.setVisibility(View.GONE);
-            txt_But.setVisibility(View.GONE);
-            txt_Switch.setVisibility(View.VISIBLE);
         }
 
         //设置List高度和宽度

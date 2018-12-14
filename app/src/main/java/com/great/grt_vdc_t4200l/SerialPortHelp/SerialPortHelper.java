@@ -13,6 +13,7 @@ import java.io.OutputStream;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android_serialport_api.SerialPort;
@@ -49,6 +50,9 @@ public class SerialPortHelper {
     private boolean[] _isYk = new boolean[2];
     private String sSystemTime;
     private boolean _isCommFlag = false;
+    private int iCommErrTime = 0;
+
+    private boolean _isTemp = false;
 
     //接收数据用------------------------------------------------------
     private int iReadLength = 0;
@@ -239,10 +243,13 @@ public class SerialPortHelper {
     //发送（byte）
     public void send(byte[] bOutArray){
         try {
-            if (bOutArray.length == 8){
+            if (bOutArray.length > 0 ){
                 switch (bOutArray[1]){
                     case 0x03:
                         iReadLength = 48;
+                        break;
+                    case 0x06:
+                        iReadLength = 0;
                         break;
                     case 0x10:
                         if (MyFunc.ByteArrToInt(bOutArray,4) == 1){
@@ -417,7 +424,6 @@ public class SerialPortHelper {
                             //频率
                             float fHz = (float)iYc[6]/10;
                             wRealData.putInt("i_Hz",iYc[6]);
-                            Log.e("readData: ","int:" + iYc[6] +",float:" + fHz );
                             wRealData.putFloat("f_Hz",fHz);
 
                             wRealData.putInt("i_Rv",iYc[7]);                             //R相电压
@@ -449,11 +455,15 @@ public class SerialPortHelper {
 
 
                             //系统时间
-//                            wRealData.putString("s_SystemTime",sSystemTime);                    //下位机系统时间
-//                            SystemFunc.setNewTime(sSystemTime);
-
+                            wRealData.putString("s_SystemTime",sSystemTime);                    //下位机系统时间
+                            if (!_isTemp) {
+                                SystemFunc.setNewTime(sSystemTime);
+                                _isTemp = true;
+                            }
                             //处理告警
                             alarmHand(_isYx);
+
+                            iCommErrTime = 0;
 
                         }else {
                             Log.e("串口信息","0x03回送帧出错，数据内容："+temp);
@@ -623,8 +633,10 @@ public class SerialPortHelper {
 
         }
 
+        if (!_isCommFlag && iCommErrTime < 50) iCommErrTime++;
+
         //03功能码通讯是失败时复位一些实时数据
-        if(buffer[1] == 0x03 && !_isCommFlag){
+        if(buffer[1] == 0x03 && iCommErrTime > 5 && _isYx[0]){
             deleteErrRealData();
         }
 
@@ -739,6 +751,7 @@ public class SerialPortHelper {
         wRealData.putInt("i_Va",iYc[4]);                             //V相电流
         wRealData.putInt("i_Wa",iYc[5]);                             //W相电流
         wRealData.putInt("i_Hz",iYc[6]);                             //频率
+        wRealData.putFloat("f_Hz",(float) 0.0);
         wRealData.putInt("i_Rv",iYc[7]);                             //R相电压
         wRealData.putInt("i_Sv",iYc[8]);                             //S相电压
         wRealData.putInt("i_Tv",iYc[9]);                             //T相电压

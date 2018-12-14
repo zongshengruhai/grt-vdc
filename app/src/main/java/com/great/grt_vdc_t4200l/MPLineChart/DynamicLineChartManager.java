@@ -1,5 +1,7 @@
 package com.great.grt_vdc_t4200l.MPLineChart;
 
+import android.util.Log;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -55,6 +57,11 @@ public class DynamicLineChartManager {
         //图表设置
         lineChart.setDrawGridBackground(false);                                                     //背景网格
         lineChart.setDrawBorders(true);                                                             //背景边界
+        lineChart.setDragEnabled(false);                                                            //拖拽
+        lineChart.setTouchEnabled(false);                                                           //触摸
+        lineChart.setScaleEnabled(false);                                                           //缩放
+        lineChart.setPinchZoom(false);                                                              //多点缩放
+        lineChart.getDescription().setEnabled(false);                                               //隐藏描述
 
         //图例设置
         Legend legend = lineChart.getLegend();
@@ -68,7 +75,7 @@ public class DynamicLineChartManager {
         //X轴设置
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);                                              //X轴位置：顶部、底部
         xAxis.setGranularity(1f);                                                                   //X轴间隔
-        xAxis.setLabelCount(10);                                                                    //X轴条目
+        xAxis.setLabelCount(6);                                                                    //X轴条目
         //设置X轴条目名称
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
@@ -80,6 +87,9 @@ public class DynamicLineChartManager {
         //Y轴设置
         leftAxis.setAxisMinimum(0f);                                                                //最小值
         rightAxis.setAxisMinimum(0f);
+        rightAxis.setEnabled(false);
+
+//        setYAxis(500,0,5);
 
     }
 
@@ -109,17 +119,24 @@ public class DynamicLineChartManager {
         for (int i = 0; i < names.size(); i++) {
 
             lineDataSet = new LineDataSet(null, names.get(i));                               //线条名称
+
             lineDataSet.setLineWidth(2f);                                                           //线条宽度
             lineDataSet.setCircleRadius(1.5f);                                                      //曲线点半径
+
             lineDataSet.setColor(colors.get(i));                                                    //线条颜色
             lineDataSet.setCircleColor(colors.get(i));                                              //曲线颜色
-            lineDataSet.setHighLightColor(colors.get(i));
+            lineDataSet.setHighLightColor(colors.get(i));                                           //点击时横竖坐标线的颜色
+
             lineDataSet.setDrawFilled(false);                                                       //曲线填充
+
             lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+
             lineDataSet.setValueTextSize(16f);                                                      //曲线标注文字大小
             lineDataSet.setDrawValues(false);                                                        //线上的值
+
             lineDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);                                //设置曲线模式 弯曲程度
             //lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+
             lineDataSets.add(lineDataSet);
 
         }
@@ -139,7 +156,7 @@ public class DynamicLineChartManager {
         lineChart.setData(lineData);
 
         //避免集合数据过多，及时清空（做这样的处理，并不知道有没有用，但还是这样做了）
-        if (timeList.size() > 11) {
+        if (timeList.size() > 60) {
             timeList.clear();
         }
 
@@ -164,20 +181,27 @@ public class DynamicLineChartManager {
             lineChart.setData(lineData);
         }
 
-        if (timeList.size() > 11) {
+        if (timeList.size() > 60) {
             timeList.clear();
         }
 
         timeList.add(df.format(System.currentTimeMillis()));
         for (int i = 0; i < numbers.size(); i++) {
+
             Entry entry = new Entry(lineDataSet.getEntryCount(), numbers.get(i));
             lineData.addEntry(entry, i);
+
             lineData.notifyDataChanged();
             lineChart.notifyDataSetChanged();
-            lineChart.setVisibleXRangeMaximum(10);
-            //lineChart.setVisibleXRangeMaximum(150);                                                   //X轴最大显示条目数
-            lineChart.moveViewToX(lineData.getEntryCount() - 5);
+
+            lineChart.setVisibleXRangeMaximum(60);
+
+            lineChart.moveViewToX(lineData.getEntryCount());
         }
+    }
+
+    public void changeEntry(int[] a){
+
     }
 
     //设置Y轴值

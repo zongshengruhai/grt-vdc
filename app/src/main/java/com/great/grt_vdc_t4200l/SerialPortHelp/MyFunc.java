@@ -2,6 +2,8 @@ package com.great.grt_vdc_t4200l.SerialPortHelp;
 
 import android.util.Log;
 
+import java.util.Arrays;
+
 /**
  *数据类型转换工具
  */
@@ -158,6 +160,15 @@ public class MyFunc {
         }
     }
 
+    static private int BytesToUnix(byte[]  bytes){
+        int a[] = new int[5];
+        a[0] = (bytes[5] - 1) * 365 + bytes[5] / 4 - bytes[5] / 100 + bytes[5] / 400;
+        a[1] = 367 * (bytes[4]-2) / 12 - 30 + 59;
+        a[2] = bytes[3] - 1;
+        a[3] = a[0] + a[1] + a[2] - 719162;
+        return  ((a[3] * 24 + (bytes[2]-8)) * 60 + bytes[1]) * 60 + bytes[0];
+    }
+
     /**
      * BCD转Int
      */
@@ -180,6 +191,71 @@ public class MyFunc {
     }
 
     /**
+     * 时间转BCD
+     * @param s 需要转换的时间 格式 YYYY_MM_DD_HH_mm_ss
+     * @return BCD数组 bytes[]{YY,MM,DD,HH,mm,ss}
+     */
+    static public byte[] timeToBCD(String s){
+        byte[] bytes = new byte[6];
+
+        String[] strings = s.split("_");
+
+        byte[] temp;
+
+        temp = StringToBCD(strings[0]);
+        bytes[0] = temp[1];
+
+        for (int i = 1; i < 6 ; i++) {
+            temp = StringToBCD(strings[i]);
+            bytes[i] = temp[0];
+        }
+
+        return bytes;
+    }
+
+    /**
+     * 字符串转BCD
+     * @param asc 输入字符串
+     * @return bcd数组
+     */
+    static private byte[] StringToBCD(String asc) {
+        int len = asc.length();
+        int mod = len % 2;
+        if (mod != 0) {
+            asc = "0" + asc;
+            len = asc.length();
+        }
+        byte abt[];
+        if (len >= 2) {
+            len = len / 2;
+        }
+        byte bbt[] = new byte[len];
+        abt = asc.getBytes();
+        int j, k;
+        for (int p = 0; p < asc.length() / 2; p++) {
+            if ((abt[2 * p] >= '0') && (abt[2 * p] <= '9')) {
+                j = abt[2 * p] - '0';
+            } else if ((abt[2 * p] >= 'a') && (abt[2 * p] <= 'z')) {
+                j = abt[2 * p] - 'a' + 0x0a;
+            } else {
+                j = abt[2 * p] - 'A' + 0x0a;
+            }
+            if ((abt[2 * p + 1] >= '0') && (abt[2 * p + 1] <= '9')) {
+                k = abt[2 * p + 1] - '0';
+            } else if ((abt[2 * p + 1] >= 'a') && (abt[2 * p + 1] <= 'z')) {
+                k = abt[2 * p + 1] - 'a' + 0x0a;
+            } else {
+                k = abt[2 * p + 1] - 'A' + 0x0a;
+            }
+            int a = (j << 4) + k;
+            byte b = (byte) a;
+            bbt[p] = b;
+        }
+        return bbt;
+    }
+
+
+    /**
      * byte数组粘包
      */
     static public byte[] addByteArr(byte[] bytes1,byte[] bytes2){
@@ -188,4 +264,6 @@ public class MyFunc {
         System.arraycopy(bytes2,0,bytes3,bytes1.length,bytes2.length);
         return bytes3;
     }
+
+
 }

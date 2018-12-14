@@ -20,6 +20,10 @@
     <color name="ListLine">#9cffffff</color>
     <color name="ListHideLine">#00000000</color>
     <color name="TextInHint">#646464</color>
+
+    <color name="U_colors">#FFc23531</color>
+    <color name="V_colors">#FF61a0a8</color>
+    <color name="W_colors">#FF2f4554</color>
     
 
 </resources>

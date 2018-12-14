@@ -11,107 +11,202 @@
     >
 
     <LinearLayout
-        android:id="@+id/newRow"
         android:orientation="vertical"
-        android:layout_width="664dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
         android:background="@drawable/txt_rectborder">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tl"
+        <!--<android.support.design.widget.TabLayout-->
+            <!--android:id="@+id/tl"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="60dp"-->
+            <!--app:tabTextAppearance="@style/TabLayoutTextStyles"-->
+            <!--app:tabGravity="fill"-->
+            <!--app:tabIndicatorColor="@color/colorAccent"-->
+            <!--app:tabIndicatorHeight="5dp"-->
+            <!--android:layout_margin="5dp"-->
+            <!--app:tabMode="fixed"/>-->
+
+        <LinearLayout
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            app:tabTextAppearance="@style/TabLayoutTextStyles"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="@color/colorAccent"
-            app:tabIndicatorHeight="5dp"
-            android:layout_margin="5dp"
-            app:tabMode="fixed"/>
-
-        <RelativeLayout
-            android:layout_margin="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/fragment1Chart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@+id/ly" />
-
+            android:layout_height="0dp">
 
             <LinearLayout
-                android:id="@+id/ly"
-                android:layout_alignParentBottom="true"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_margin="2dp">
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/dataA"
-                    android:text="@string/U"
-                    android:textSize="28sp"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"/>
+                    android:text="@string/fragment1InV"
+                    android:textSize="27sp"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/dataB"
-                    android:text="@string/V"
-                    android:textSize="28sp"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"/>
-
-                <TextView
-                    android:id="@+id/dataC"
-                    android:text="@string/W"
-                    android:textSize="28sp"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"/>
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/in_v_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
 
-        </RelativeLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
 
-    </LinearLayout>
+                <TextView
+                    android:text="@string/fragment1CapV"
+                    android:textSize="27sp"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:layout_toEndOf="@+id/newRow"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/txt_rectborder"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+                <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/cap_v_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        <TextView
-            android:text="@string/fragment1RealData"
-            android:layout_marginTop="5dp"
-            android:textSize="27sp"
-            android:layout_gravity="center"
-            android:textColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            </LinearLayout>
 
-        <ListView
-            android:id="@+id/fragment1RealData"
-            android:layout_marginTop="4dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="4dp"
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="0dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:text="@string/fragment1OutV"
+                    android:textSize="27sp"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/out_v_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:text="@string/fragment1OutI"
+                    android:textSize="27sp"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/out_i_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <!--<RelativeLayout-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+            <!--<com.github.mikephil.charting.charts.LineChart-->
+                <!--android:id="@+id/fragment1Chart"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                 <!--/>-->
+            <!---->
+            <!--<LinearLayout-->
+                <!--android:id="@+id/ly"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="60dp"-->
+                <!--android:layout_margin="2dp">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/dataA"-->
+                    <!--android:text="@string/U"-->
+                    <!--android:textSize="28sp"-->
+                    <!--android:layout_margin="10dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/black"/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/dataB"-->
+                    <!--android:text="@string/V"-->
+                    <!--android:textSize="28sp"-->
+                    <!--android:layout_margin="10dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/black"/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/dataC"-->
+                    <!--android:text="@string/W"-->
+                    <!--android:textSize="28sp"-->
+                    <!--android:layout_margin="10dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/black"/>-->
+
+            <!--</LinearLayout>-->
+
+        <!--</RelativeLayout>-->
 
     </LinearLayout>
+
+    <!--<LinearLayout-->
+        <!--android:layout_toEndOf="@+id/newRow"-->
+        <!--android:layout_marginEnd="5dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginBottom="5dp"-->
+        <!--android:background="@drawable/txt_rectborder"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<TextView-->
+            <!--android:text="@string/fragment1RealData"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:textSize="27sp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+
+        <!--<ListView-->
+            <!--android:id="@+id/fragment1RealData"-->
+            <!--android:layout_marginTop="4dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginBottom="4dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+
+    <!--</LinearLayout>-->
+
 
     <!--<RelativeLayout-->
         <!--android:id="@+id/oldRow"-->

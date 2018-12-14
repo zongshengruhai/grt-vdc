@@ -50,8 +50,12 @@
     <string name="fragment1RealAlarm">实时告警</string>
     <string name="fragment1RealFlag">实时遥信</string>
     <string name="fragment1RealData">实 时 数 据</string>
+    <string name="fragment1InV">输入电压</string>
+    <string name="fragment1CapV">电容电压</string>
+    <string name="fragment1OutV">输出电压</string>
+    <string name="fragment1OutI">输出电流</string>
     <!-- fragment2 -->
-    <string name="fragment2RecordTime">当前为第 %1$d 条暂降补偿记录</string>
+    <string name="fragment2RecordTime">当前为第 %1$d 条 %2$s 记录</string>
     <string name="fragment2RecordContent">发生于 %1$S，跌落到 %2$d V，跌落时长 %3$d ms %4$s</string>
     <string name="fragment2SearchHint">请输入关键字</string>
     <string name="fragment2SearchText">查询</string>
@@ -84,8 +88,9 @@
     <string name="fragmentEdHint">000</string>
     <!-- fragment5 -->
     <string name="fragment5_v">%1$d V</string>
+    <string name="fragment5_a">%1$d A</string>
     <string name="fragment5_Time">%1$d </string>
-    <string name="fragment5_Hz">%1$d Hz</string>
+    <string name="fragment5_Hz">%1$s Hz</string>
     <string name="fragment5CapI">%1$d %%</string>
     <string name="fragment5map">状态动画</string>
     <string name="fragment5Yx_1">输入异常</string>
@@ -96,6 +101,7 @@
     <string name="fragment5AlarmTime">故障次数</string>
     <string name="fragment5RecordTime">录波次数</string>
     <string name="fragment5RealHz">频率</string>
+    <string name="fragment5Loge">GRT-VDC-T4200</string>
     <!--<string name="fragment5Dash">输入电压</string>-->
     <!--<string-array name="meter">-->
         <!--<item>0V</item>-->

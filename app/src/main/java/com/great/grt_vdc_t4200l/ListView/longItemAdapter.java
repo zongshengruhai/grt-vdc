@@ -1,6 +1,7 @@
 package com.great.grt_vdc_t4200l.ListView;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,6 +163,58 @@ public class longItemAdapter extends BaseAdapter {
                 mHolder.mTxt_3.setVisibility(View.GONE);
                 mHolder.mTxt_4.setVisibility(View.GONE);
 
+                break;
+            case "fragment5":
+                //设置字体大小
+                mHolder.mTxt_1.setTextSize(21);
+                mHolder.mTxt_2.setTextSize(21);
+                mHolder.mTxt_3.setTextSize(21);
+                mHolder.mTxt_4.setTextSize(21);
+
+                //设置权重
+                mHolder.mTxt_1.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,0f));
+                mHolder.mTxt_2.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,0f));
+                mHolder.mTxt_3.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,3f));
+                mHolder.mTxt_4.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,3f));
+
+                //对齐方式
+                mHolder.mTxt_1.setGravity(Gravity.CENTER);
+                mHolder.mTxt_2.setGravity(Gravity.CENTER);
+                mHolder.mTxt_3.setGravity(Gravity.CENTER);
+                mHolder.mTxt_4.setGravity(Gravity.CENTER);
+
+                //处理内容
+                mHolder.mTxt_1.setVisibility(View.GONE);
+                mHolder.mTxt_2.setVisibility(View.GONE);
+                mHolder.mTxt_3.setVisibility(View.VISIBLE);
+                mHolder.mTxt_4.setVisibility(View.VISIBLE);
+                break;
+            case "fragment5_alarm":
+                //设置字体大小
+                mHolder.mTxt_1.setTextSize(21);
+                mHolder.mTxt_2.setTextSize(21);
+                mHolder.mTxt_3.setTextSize(21);
+                mHolder.mTxt_4.setTextSize(21);
+
+                //设置权重
+                mHolder.mTxt_1.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,2f));
+                mHolder.mTxt_2.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,2f));
+                mHolder.mTxt_3.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,2f));
+                mHolder.mTxt_4.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,1f));
+
+                if (!mHolder.mTxt_4.getText().toString().equals("当前暂无异常告警")) mHolder.mTxt_4.setTextColor(Color.RED);
+
+                //对齐方式
+                mHolder.mTxt_1.setGravity(Gravity.CENTER);
+                mHolder.mTxt_2.setGravity(Gravity.CENTER);
+                mHolder.mTxt_3.setGravity(Gravity.CENTER);
+                mHolder.mTxt_4.setGravity(Gravity.CENTER);
+
+                //处理内容
+                mHolder.mTxt_1.setVisibility(View.GONE);
+                mHolder.mTxt_2.setVisibility(View.GONE);
+                mHolder.mTxt_3.setVisibility(View.GONE);
+                mHolder.mTxt_4.setVisibility(View.VISIBLE);
                 break;
         }
 

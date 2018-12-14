@@ -97,7 +97,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         //告警信息TV初始化
         fragment2TempRow[0] = view.findViewById(R.id.fragment2TVtime);
         fragment2TempRow[1] = view.findViewById(R.id.fragment2TVcontent);
-        fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),0));
+        fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),0,""));
         fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),"0.0.0_00:00:00",0,0,""));
 
         //List内容
@@ -301,7 +301,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
             pickFileName = pickName;
             if (_isLoadFlag){
                 _isLoadFlag = false;
-                fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),0));
+                fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),0,""));
                 fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent),"0.0.0_00:00:00",0,0,""));
                 fragment2ChartManager[0].clearLineChart();
                 fragment2ChartManager[1].clearLineChart();
@@ -530,7 +530,19 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                         //填充表头
                         String[] fillContent;
                         fillContent = (pickFileName.replace(".xls", "")).split("_");
-                        fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime), Integer.parseInt(fillContent[0])));
+                        String eventType = "";
+                        switch (fillContent[1]){
+                            case "1":
+                                eventType = "电压暂降";
+                                break;
+                            case "2":
+                                eventType = "输出过流";
+                                break;
+                            case "3":
+                                eventType = "输出短路";
+                                break;
+                        }
+                        fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime), Integer.parseInt(fillContent[0]),eventType));
                         fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent), (fillContent[4] + " " + fillContent[5]).replace("：",":"), (Integer.parseInt(fillContent[2])), (Integer.parseInt(fillContent[3])), ""));
                         //移动到表头
                         fragment2LineChart[0].moveViewToX(0);

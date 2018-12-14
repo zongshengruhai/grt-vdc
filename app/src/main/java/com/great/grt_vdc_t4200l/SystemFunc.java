@@ -173,6 +173,16 @@ public class SystemFunc {
     }
 
     /**
+     * getNewTimeString 获取当前系统时间
+     * @return String:"YYYY_MM_DD_HH_mm_ss"
+     */
+    static public String getNewTimeInt(){
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.YEAR)+"_"+(calendar.get(Calendar.MONTH)+1)+"_"+calendar.get(Calendar.DAY_OF_MONTH)+"_"+calendar.get(Calendar.HOUR_OF_DAY)+"_"+calendar.get(Calendar.MINUTE)+"_"+calendar.get(Calendar.SECOND);
+
+    }
+
+    /**
      * setNewTime 设置当前时间
      * @param sTime String:"20180906.095000"
      */

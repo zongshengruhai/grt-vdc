@@ -166,8 +166,8 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
         pickListData.add(new longItem("","输出校准","",""));
         pickListData.add(new longItem("","电流校准","",""));
         pickListData.add(new longItem("","电容校准","",""));
-//        pickListData.add(new shortItem("","系统时间","",""));
         pickListData.add(new longItem("","遥控设置","",""));
+        pickListData.add(new longItem("","系统时间","",""));
         pickListData.add(new longItem("","系统设置","",""));
 
         pickListAdapter = new longItemAdapter((LinkedList<longItem>)pickListData,fragment4_Context,"fragment4");
@@ -208,16 +208,21 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
                 fragment4SetHint.setText("电容校准");
                 pickContentData.add(new settingItem("电容容量:","校准"));
                 break;
-//            case 3:
-//                fragment4SetHint.setText("系统时间");
-//                pickContentData.add(new settingItem("系统时间:","校准"));
-//                break;
             case 4:
                 fragment4SetHint.setText("遥控设置");
                 pickContentData.add(new settingItem("系统模式:","遥控"));
                 pickContentData.add(new settingItem("补偿使能:","遥控"));
                 break;
             case 5:
+                fragment4SetHint.setText("系统时间");
+                pickContentData.add(new settingItem("年:","对时"));
+                pickContentData.add(new settingItem("月:","对时"));
+                pickContentData.add(new settingItem("日:","对时"));
+                pickContentData.add(new settingItem("时:","对时"));
+                pickContentData.add(new settingItem("分:","对时"));
+                pickContentData.add(new settingItem("秒:","对时"));
+                break;
+            case 6:
                 fragment4SetHint.setText("系统设置");
                 pickContentData.add(new settingItem("告警提示:","开关"));
                 if (USER_TYPE == 1){
@@ -236,6 +241,7 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
 
         settingItemAdapter pickContentAdapter;
         pickContentAdapter = new settingItemAdapter((LinkedList<settingItem>)pickContentData,fragment4_Context,fragment4_View);
+        pickContentAdapter.clearEditorData();
         pickContent.setAdapter(pickContentAdapter);
 //        pickContent.setOnItemClickListener(this);
     }

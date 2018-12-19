@@ -46,13 +46,10 @@ public class SerialPortHelper {
 
     //数据地址--------------------------------------------------------
     private int[] iYc = new int[14];
-    private boolean[] _isYx = new boolean[8];
+    private boolean[] _isYx = new boolean[12];
     private boolean[] _isYk = new boolean[2];
-    private String sSystemTime;
     private boolean _isCommFlag = false;
     private int iCommErrTime = 0;
-
-    private boolean _isTemp = false;
 
     //接收数据用------------------------------------------------------
     private int iReadLength = 0;
@@ -167,10 +164,6 @@ public class SerialPortHelper {
     //获取遥控
     public boolean[] getisTelecontrol(){
         return _isYk;
-    }
-    //获取系统时间
-    public String getSystemTime() {
-        return sSystemTime;
     }
 
     //获取发送数据
@@ -401,7 +394,24 @@ public class SerialPortHelper {
                             }
 
                             //遥信
-                            _isYx = MyFunc.ByteToBoolArr(buffer[41]);
+//                            _isYx = MyFunc.ByteToBoolArr(buffer[40]);
+                            for (int i = 0; i < _isYx.length; i++) {
+                                _isYx[i] = false;
+                            }
+
+                            byte bTemp = buffer[41];
+                            for (int i = 0; i < 8; i++) {
+                                _isYx[i] = (bTemp & 0x01) == 1;
+                                bTemp =  (byte)(bTemp >> 1 );
+                            }
+
+                            bTemp = buffer[40];
+                            for (int i = 0; i < 4; i++) {
+                                _isYx[i+8] = (bTemp & 0x01) == 1;
+                                bTemp =  (byte)(bTemp >> 1 );
+                            }
+//                            System.out.println(Arrays.toString(_isYx));
+
 
                             //遥控
                             _isYk[0] = MyFunc.ByteToBool(buffer[43],0);
@@ -409,8 +419,15 @@ public class SerialPortHelper {
 
                             //时间
                             byte[] bTime = new byte[6];
+                            String sSystemTime;
                             System.arraycopy(buffer,34,bTime,0,6);
                             sSystemTime = MyFunc.BCDArrToTime(bTime,"SystemTime");
+
+                            //遥测时间与本机时间相差超过十分钟重设本机时间
+                            int UnixTime = MyFunc.BytesToUnix(bTime);
+                            if ((UnixTime - (System.currentTimeMillis() / 1000)) > 600 || ((System.currentTimeMillis() / 1000) - UnixTime) > 600 ){
+                                SystemFunc.setNewTime(sSystemTime);
+                            }
 
                             //将数据写入Shared Preferences
                             //遥测
@@ -422,9 +439,8 @@ public class SerialPortHelper {
                             wRealData.putInt("i_Wa",iYc[5]);                             //W相电流
 
                             //频率
-                            float fHz = (float)iYc[6]/10;
+//                            float fHz = (float)iYc[6]/10;
                             wRealData.putInt("i_Hz",iYc[6]);
-                            wRealData.putFloat("f_Hz",fHz);
 
                             wRealData.putInt("i_Rv",iYc[7]);                             //R相电压
                             wRealData.putInt("i_Sv",iYc[8]);                             //S相电压
@@ -433,36 +449,45 @@ public class SerialPortHelper {
                             wRealData.putInt("i_Capv",iYc[11]);                          //电容电压
 
                             //电容容量
-                            int iCapAh = 0;
-                            if(iYc[11] > 232 ) iCapAh = ((iYc[11]*100)-23200)/142;
-                            wRealData.putInt("i_CapAh",iCapAh);
+//                            int iCapAh = 0;
+//                            if(iYc[11] > 232 ) iCapAh = ((iYc[11]*100)-23200)/142;
 
                             wRealData.putInt("i_NewSagSite",iYc[12]);                    //当前录波位置
                             wRealData.putInt("i_SagSum",iYc[13]);                        //录波总数
 
                             //遥信
-                            wRealData.putBoolean("is_RechargeFlag",_isYx[7]);          //充电状态
-                            wRealData.putBoolean("is_CompensateFlag",_isYx[6]);        //补偿状态
-                            wRealData.putBoolean("is_InAlarm",_isYx[4]);               //输入异常
-                            wRealData.putBoolean("is_OutOC",_isYx[3]);                 //输出过流
-                            wRealData.putBoolean("is_OutRl",_isYx[2]);                 //输出短路
-                            wRealData.putBoolean("is_AhLose",_isYx[1]);                //容量失效
-                            wRealData.putBoolean("is_ComError",_isYx[0]);              //通讯异常
+//                            wRealData.putBoolean("is_RechargeFlag",_isYx[7]);          //充电状态
+//                            wRealData.putBoolean("is_CompensateFlag",_isYx[6]);        //补偿状态
+//                            wRealData.putBoolean("is_InAlarm",_isYx[4]);               //输入异常
+//                            wRealData.putBoolean("is_OutOC",_isYx[3]);                 //输出过流
+//                            wRealData.putBoolean("is_OutRl",_isYx[2]);                 //输出短路
+//                            wRealData.putBoolean("is_AhLose",_isYx[1]);                //容量失效
+//                            wRealData.putBoolean("is_ComError",_isYx[0]);              //通讯异常
+
+                            wRealData.putBoolean("is_RechargeFlag",_isYx[0]);          //充电状态
+                            wRealData.putBoolean("is_CompensateFlag",_isYx[1]);        //补偿状态
+
+                            wRealData.putBoolean("is_InAlarm",_isYx[3]);               //输入异常
+                            wRealData.putBoolean("is_OutOC",_isYx[4]);                 //输出过流
+                            wRealData.putBoolean("is_OutRl",_isYx[5]);                 //输出短路
+                            wRealData.putBoolean("is_AhLose",_isYx[6]);                //容量失效
+                            wRealData.putBoolean("is_ComError",_isYx[7]);              //通讯异常
+
+                            wRealData.putBoolean("is_OutAlarm",_isYx[8]);              //输出异常
+                            wRealData.putBoolean("is_CapEV",_isYx[9]);                 //电容过压
+                            wRealData.putBoolean("is_PsAlarm",_isYx[10]);              //相序告警
+                            wRealData.putBoolean("is_DriveError",_isYx[11]);           //驱动故障
 
                             //遥控
                             wRealData.putBoolean("is_SystemMode",_isYk[0]);            //系统模式
                             wRealData.putBoolean("is_CompensateEnabled",_isYk[1]);     //补偿使能
 
-
                             //系统时间
                             wRealData.putString("s_SystemTime",sSystemTime);                    //下位机系统时间
-                            if (!_isTemp) {
-                                SystemFunc.setNewTime(sSystemTime);
-                                _isTemp = true;
-                            }
+
+
                             //处理告警
                             alarmHand(_isYx);
-
                             iCommErrTime = 0;
 
                         }else {
@@ -493,10 +518,12 @@ public class SerialPortHelper {
                             int eventType = MyFunc.ByteArrToInt(buffer,6);                      //事件类型
                             int eventRow = MyFunc.ByteArrToInt(buffer,8);                       //事件内容
                             int eventTime = MyFunc.ByteArrToInt(buffer,10);                     //事件持续时长
+
                             //事件开始时间
                             byte[] bTime = new byte[6];
                             System.arraycopy(buffer,12,bTime,0,6);
-                            String eventStartTime  = MyFunc.BCDArrToTime(bTime,"EventTime");
+                            String eventStartTime  = SystemFunc.getNewTime("YYYY.MM.DD_HH：mm：ss");
+                            if (bTime[0] > 0) eventStartTime  =  MyFunc.BCDArrToTime(bTime,"EventTime");
 
                             //录波记录编号
                             int recordNum = rAlarmData.getInt("i_RecordTime",0) + 1;
@@ -668,7 +695,7 @@ public class SerialPortHelper {
 //        List<Object> alarmRow;
 
         //循环处理所有的遥信信号（比较耗时）
-        for (int i = 0; i < 5; i++) {
+        for (int i = 3; i < 12; i++) {
 
             if (_isYxError[i] && !rAlarmData.getBoolean("_isYxError_"+i,false)){
 
@@ -677,23 +704,35 @@ public class SerialPortHelper {
 
                 alarmRow.add(rAlarmData.getInt("i_AlarmTime",0)+1);
                 switch (i){
-                    case 4:
+                    case 3:
                         alarmRow.add("输入异常");
                         break;
-                    case 3:
+                    case 4:
                         alarmRow.add("输出过流");
                         break;
-                    case 2:
+                    case 5:
                         alarmRow.add("输出短路");
                         break;
-                    case 1:
+                    case 6:
                         alarmRow.add("容量失效");
                         break;
-                    case 0:
+                    case 7:
                         alarmRow.add("通讯异常");
                         break;
+                    case 8:
+                        alarmRow.add("输出异常");
+                        break;
+                    case 9:
+                        alarmRow.add("电容过压");
+                        break;
+                    case 10:
+                        alarmRow.add("相序告警");
+                        break;
+                    case 11:
+                        alarmRow.add("驱动故障");
+                        break;
                 }
-                alarmRow.add(SystemFunc.getNewTime());
+                alarmRow.add(SystemFunc.getNewTime("YYYY.MM.DD HH:mm:ss"));
                 alarmRow.add("N/A");
                 alarmContent.add(alarmRow);
 
@@ -706,7 +745,7 @@ public class SerialPortHelper {
 
             }else if (!_isYxError[i] && rAlarmData.getBoolean("_isYxError_"+i,false)){
 
-                if (SystemFunc.alterExcelData(faultName,rAlarmData.getString("i_YxError_"+i+"_Num",""),SystemFunc.getNewTime())){
+                if (SystemFunc.alterExcelData(faultName,rAlarmData.getString("i_YxError_"+i+"_Num",""),SystemFunc.getNewTime("YYYY.MM.DD HH:mm:ss"))){
                     wAlarmData.putBoolean("_isYxError_"+i,false);
                     wAlarmData.putString("i_YxError_"+i+"_Num","");
                     wAlarmData.commit();

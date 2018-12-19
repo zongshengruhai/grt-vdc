@@ -76,6 +76,7 @@ public class SystemFunc {
      * 获取root权限
      */
     static public boolean getRoot(String pkgCodePath){
+        Log.e(TAG, "getRoot: this app new get root" );
         Process process = null;
         DataOutputStream os = null;
         try {
@@ -158,29 +159,63 @@ public class SystemFunc {
      * getNewTime 获取当前系统时间
      * @return String:"yyyy.MM.dd HH:mm:ss"
      */
-    static public String getNewTime(){
+    static public String getNewTime(String Type){
         Calendar calendar = Calendar.getInstance();
-        return calendar.get(Calendar.YEAR)+"."+(calendar.get(Calendar.MONTH)+1)+"."+calendar.get(Calendar.DAY_OF_MONTH)+" "+calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
+        String year,month,day,hour,min,sec;
+        int[] ints = new int[]{calendar.get(Calendar.YEAR),(calendar.get(Calendar.MONTH)+1),calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),calendar.get(Calendar.SECOND)};
+        year = ints[0] + "";
+        if (ints[1] >= 10) { month = "" + ints[1]; } else { month = "0" + ints[1]; }
+        if (ints[2] >= 10) { day = "" + ints[2]; } else { day = "0" + ints[2]; }
+        if (ints[3] >= 10) { hour = "" + ints[3]; } else { hour = "0" + ints[3]; }
+        if (ints[4] >= 10) { min = "" + ints[4]; } else { min = "0" + ints[4]; }
+        if (ints[5] >= 10) { sec = "" + ints[5]; } else { sec = "0" + ints[5]; }
+
+
+
+        switch (Type){
+            case "YYYY.MM.DD HH:mm:ss":
+                return year +"."+month+"."+ day +" "+ hour +":"+ min +":"+ sec;
+//                return calendar.get(Calendar.YEAR)+"."+(calendar.get(Calendar.MONTH)+1)+"."+calendar.get(Calendar.DAY_OF_MONTH)
+//                        +" "+ calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
+            case "YYYY 年 MM 月 DD 日 HH:mm:ss":
+                return year +" 年 "+month+" 月 "+ day +" 日 "+ hour +":"+ min +":"+ sec;
+//                return calendar.get(Calendar.YEAR)+" 年 "+(calendar.get(Calendar.MONTH)+1)+" 月 "+calendar.get(Calendar.DAY_OF_MONTH)
+//                        +" 日 " +calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
+            case "YYYY_MM_DD_HH_mm_ss":
+                return year +"_"+month+"_"+ day +"_"+ hour +"_"+ min +"_"+ sec;
+//                return calendar.get(Calendar.YEAR)+"_"+(calendar.get(Calendar.MONTH)+1)+"_"+calendar.get(Calendar.DAY_OF_MONTH)
+//                        +"_"+calendar.get(Calendar.HOUR_OF_DAY)+"_"+calendar.get(Calendar.MINUTE)+"_"+calendar.get(Calendar.SECOND);
+            case "YYYY.MM.DD_HH：mm：ss":
+                return year +"."+month+"."+ day +"_"+ hour +"："+ min +"："+ sec;
+//                return  calendar.get(Calendar.YEAR) +"."+ (calendar.get(Calendar.MONTH)+1) +"."+ calendar.get(Calendar.DAY_OF_MONTH)
+//                        + "_" + calendar.get(Calendar.HOUR_OF_DAY)+"："+calendar.get(Calendar.MINUTE)+"："+calendar.get(Calendar.SECOND);
+            default:
+                return year +"."+month+"."+ day +" "+ hour +":"+ min +":"+ sec;
+//                return calendar.get(Calendar.YEAR)+"."+(calendar.get(Calendar.MONTH)+1)+"."+calendar.get(Calendar.DAY_OF_MONTH)
+//                        +" "+ calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
+        }
+//        return calendar.get(Calendar.YEAR)+"."+(calendar.get(Calendar.MONTH)+1)+"."+calendar.get(Calendar.DAY_OF_MONTH)+" "+calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
     }
 
-    /**
-     * getNewTimeString 获取当前系统时间
-     * @return String:"YYYY 年 MM 月 DD 日 HH:mm:ss"
-     */
-    static public String getNewTimeString(){
-        Calendar calendar = Calendar.getInstance();
-        return calendar.get(Calendar.YEAR)+" 年 "+(calendar.get(Calendar.MONTH)+1)+" 月 "+calendar.get(Calendar.DAY_OF_MONTH)+" 日 "+calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
-    }
-
-    /**
-     * getNewTimeString 获取当前系统时间
-     * @return String:"YYYY_MM_DD_HH_mm_ss"
-     */
-    static public String getNewTimeInt(){
-        Calendar calendar = Calendar.getInstance();
-        return calendar.get(Calendar.YEAR)+"_"+(calendar.get(Calendar.MONTH)+1)+"_"+calendar.get(Calendar.DAY_OF_MONTH)+"_"+calendar.get(Calendar.HOUR_OF_DAY)+"_"+calendar.get(Calendar.MINUTE)+"_"+calendar.get(Calendar.SECOND);
-
-    }
+//    /**
+//     * getNewTimeString 获取当前系统时间
+//     * @return String:"YYYY 年 MM 月 DD 日 HH:mm:ss"
+//     */
+//    static public String getNewTimeString(){
+//        Calendar calendar = Calendar.getInstance();
+//        return calendar.get(Calendar.YEAR)+" 年 "+(calendar.get(Calendar.MONTH)+1)+" 月 "+calendar.get(Calendar.DAY_OF_MONTH)+" 日 "+calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
+//    }
+//
+//    /**
+//     * getNewTimeString 获取当前系统时间
+//     * @return String:"YYYY_MM_DD_HH_mm_ss"
+//     */
+//    static public String getNewTimeInt(){
+//        Calendar calendar = Calendar.getInstance();
+//        return calendar.get(Calendar.YEAR)+"_"+(calendar.get(Calendar.MONTH)+1)+"_"+calendar.get(Calendar.DAY_OF_MONTH)+"_"+calendar.get(Calendar.HOUR_OF_DAY)+"_"+calendar.get(Calendar.MINUTE)+"_"+calendar.get(Calendar.SECOND);
+//
+//    }
 
     /**
      * setNewTime 设置当前时间

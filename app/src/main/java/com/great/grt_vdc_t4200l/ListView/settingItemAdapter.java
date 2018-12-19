@@ -151,6 +151,22 @@ public class settingItemAdapter extends BaseAdapter{
 //                    txt_Value.setText(rRealData.getInt("i_Capv", 0));
                     txt_Value.setText(String.format(mContext.getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_Capv", 0)));
                     break;
+                case "启动补偿:":
+                    txt_But.setText("启动");
+                    txt_Value.setVisibility(View.GONE);
+                    txt_Value.setText("0");
+                    break;
+                case "停止补偿:":
+                    txt_But.setText("停止");
+                    txt_Value.setVisibility(View.GONE);
+                    txt_Value.setText("0");
+                    break;
+                case"hide":
+                    txt_Name.setVisibility(View.GONE);
+                    txt_Value.setVisibility(View.GONE);
+                    txt_But.setVisibility(View.GONE);
+                    txt_Switch.setVisibility(View.GONE);
+                    break;
             }
 
             txt_But.setOnClickListener(new View.OnClickListener() {
@@ -229,7 +245,7 @@ public class settingItemAdapter extends BaseAdapter{
             }
             txt_Switch.setVisibility(View.GONE);
 
-            String timeTemp = SystemFunc.getNewTimeInt();
+            String timeTemp = SystemFunc.getNewTime("YYYY_MM_DD_HH_mm_ss");
             String[] timeTempArray = timeTemp.split("_");
 
             switch (txt_Name.getText().toString()){

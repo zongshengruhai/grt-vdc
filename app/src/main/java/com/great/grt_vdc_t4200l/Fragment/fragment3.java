@@ -38,7 +38,7 @@ public class fragment3 extends Fragment{
     private List<longItem> fragment3_Data  = new LinkedList<>();
 //    private longItemAdapter fragment3_RecordAdapter;
     //更新List依据
-    private boolean[] _isOldYx = new boolean[5];
+    private boolean[] _isOldYx = new boolean[12];
     //防止并发
 //    private boolean findFlag = false;
 
@@ -173,13 +173,17 @@ public class fragment3 extends Fragment{
             //周期更新
 //            if(rStateData.getInt("layPage",0) == 3){
 
-                boolean[] _isNewYX = new boolean[5];
-                for (int i = 0; i < 5 ; i++) {
+                boolean[] _isNewYX = new boolean[12];
+                for (int i = 3; i < 12 ; i++) {
                     _isNewYX[i] = rAlarmData.getBoolean("_isYxError_"+i,false);
                 }
 
                 //判断Alarm内的Bool值，若发生变化便执行更新
-                if (_isOldYx[0] != _isNewYX[0] || _isOldYx[1] != _isNewYX[1] || _isOldYx[2] != _isNewYX[2] || _isOldYx[3] != _isNewYX[3] || _isOldYx[4] != _isNewYX[4] ){
+                if (       _isOldYx[3] != _isNewYX[3]
+                        || _isOldYx[4] != _isNewYX[4] || _isOldYx[5] != _isNewYX[5]
+                        || _isOldYx[6] != _isNewYX[6] || _isOldYx[7] != _isNewYX[7]
+                        || _isOldYx[8] != _isNewYX[8] || _isOldYx[9] != _isNewYX[9]
+                        || _isOldYx[10] != _isNewYX[10] || _isOldYx[11] != _isNewYX[11]){
                     findEventTime();
                     _isOldYx = _isNewYX;
                 }

@@ -130,6 +130,7 @@ public class BaseCourse extends FragmentActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        Log.e(TAG, "onResume: base tir" );
         loadSOP();
     }
 
@@ -282,6 +283,10 @@ public class BaseCourse extends FragmentActivity {
                         SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
                         wStateData.putBoolean("is_SystemBeep",true);
                         wStateData.putBoolean("is_SystemDebug",false);
+                        wStateData.putInt("i_OldSagSite",0);
+                        wStateData.putInt("i_RecordAddress_2",0);
+
+
                         if (wStateData.commit()){
                             wStateData.commit();
                         }
@@ -356,7 +361,7 @@ public class BaseCourse extends FragmentActivity {
         if (sData.length == 3){
 
             //遥调、遥控
-            if (sData[2].equals("校准")||sData[2].equals("遥控")||sData[2].equals("对时")){
+            if (sData[2].equals("校准")||sData[2].equals("遥控")||sData[2].equals("对时")||sData[2].equals("启动")||sData[2].equals("停止")){
 
                 sCorrect = "";
 
@@ -410,6 +415,14 @@ public class BaseCourse extends FragmentActivity {
                     iData[1] =  Integer.parseInt(sData[1]);
                 }else {
                     iData[1] = 0;
+                }
+
+                if (sData[0].equals("启动补偿:")){
+                    iData[0] = 17;
+                    iData[1] = 0x4000;
+                }else if (sData[0].equals("停止补偿:")){
+                    iData[0] = 17;
+                    iData[1] = 0x8000;
                 }
 
                 System.arraycopy(iData,0,iCorrect,0,2);

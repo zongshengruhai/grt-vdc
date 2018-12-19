@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class fragment5 extends Fragment {
     private ImageView fragment5Map;
     private TextView[] fragment5Tv = new TextView[14];
     private boolean _isType =false;
-    private boolean[] _isYxOld = new boolean[6];
+    private boolean[] _isYxOld = new boolean[9];
 
     private ListView fragment5_Alarm_List;
 
@@ -72,7 +73,6 @@ public class fragment5 extends Fragment {
         fragment5_Alarm_List = view.findViewById(R.id.fragment5_alarm_list);
 
 
-
         return view;
     }
     //重载
@@ -106,24 +106,27 @@ public class fragment5 extends Fragment {
                     SharedPreferences rRealData = getActivity().getSharedPreferences("RealData", 0);
                     SharedPreferences rAlarmData = getActivity().getSharedPreferences("AlarmData", 0);
 
-                    boolean[] _isYx = new boolean[8];
-                    _isYx[0] = rRealData.getBoolean("is_RechargeFlag",false);           //充电状态
-                    _isYx[1] = rRealData.getBoolean("is_CompensateFlag",false);         //补偿状态
+                    boolean[] _isGifYx = new boolean[3];
+                    _isGifYx[0] = rRealData.getBoolean("is_RechargeFlag",false);           //充电状态
+                    _isGifYx[1] = rRealData.getBoolean("is_CompensateFlag",false);         //补偿状态
+                    _isGifYx[2] = rRealData.getBoolean("is_SystemMode",false);             //系统模式
 
                     //假装GIF
-                    if (_isYx[0] && !_isYx[1]) {
+                    if (_isGifYx[0] && !_isGifYx[1] && _isGifYx[2]) {
                         if (_isType) {
                             fragment5Map.setImageDrawable(getResources().getDrawable(R.mipmap.state_3));
                         }else {
                             fragment5Map.setImageDrawable(getResources().getDrawable(R.mipmap.state_4));
                         }
 
-                    }else if (!_isYx[0] && _isYx[1]) {
+                    }else if (!_isGifYx[0] && _isGifYx[1] && _isGifYx[2]) {
                         if (_isType) {
                             fragment5Map.setImageDrawable(getResources().getDrawable(R.mipmap.state_5));
                         }else {
                             fragment5Map.setImageDrawable(getResources().getDrawable(R.mipmap.state_6));
                         }
+                    }else if (!_isGifYx[2]) {
+                        fragment5Map.setImageDrawable(getResources().getDrawable(R.mipmap.state_1_1));
                     }else {
                         if (_isType) {
                             fragment5Map.setImageDrawable(getResources().getDrawable(R.mipmap.state_1));
@@ -132,10 +135,13 @@ public class fragment5 extends Fragment {
                         }
                     }
                     _isType = !_isType;
-                    fragment5Tv[13].setText(String.format(getResources().getString(R.string.fragment5CapI), rRealData.getInt("i_CapAh", 0)));
+
+                    int iCapAh = 0;
+                    if(rRealData.getInt("i_Capv", 0) > 232 ) iCapAh = ((rRealData.getInt("i_Capv", 0)*100)-23200)/142;
+                    fragment5Tv[13].setText(String.format(getResources().getString(R.string.fragment5CapI),iCapAh));
 
                     //遥信
-                    fragment5Tv[0].setText(SystemFunc.getNewTimeString());
+                    fragment5Tv[0].setText(SystemFunc.getNewTime("YYYY 年 MM 月 DD 日 HH:mm:ss"));
 
                     fragment5Tv[1].setText(String.format(getResources().getString(R.string.fragment5_v),rRealData.getInt("i_Uv", 0)));
                     fragment5Tv[2].setText(String.format(getResources().getString(R.string.fragment5_v),rRealData.getInt("i_Vv", 0)));
@@ -149,55 +155,59 @@ public class fragment5 extends Fragment {
                     fragment5Tv[8].setText(String.format(getResources().getString(R.string.fragment5_v),rRealData.getInt("i_Sv", 0)));
                     fragment5Tv[9].setText(String.format(getResources().getString(R.string.fragment5_v),rRealData.getInt("i_Tv", 0)));
 
-                    fragment5Tv[10].setText(String.format(getResources().getString(R.string.fragment5_v),rAlarmData.getInt("i_Capv", 0)));
-                    fragment5Tv[11].setText(String.format(getResources().getString(R.string.fragment5_Time),rRealData.getInt("i_RecordTime", 0)));
-                    fragment5Tv[12].setText(String.format(getResources().getString(R.string.fragment5_Hz),(rRealData.getFloat("f_Hz",0))+""));
+                    fragment5Tv[10].setText(String.format(getResources().getString(R.string.fragment5_v),rRealData.getInt("i_Capv", 0)));
+                    fragment5Tv[11].setText(String.format(getResources().getString(R.string.fragment5_Time),rAlarmData.getInt("i_RecordTime", 0)));
+
+                    float fHz = (float)(rRealData.getInt("i_Hz",0)/10);
+                    fragment5Tv[12].setText(String.format(getResources().getString(R.string.fragment5_Hz),fHz +""));
 
                     //遥信
+                    boolean[] _isYx = new boolean[12];
+
                     _isYx[2] = rRealData.getBoolean("is_InAlarm",false);                //输入异常
                     _isYx[3] = rRealData.getBoolean("is_OutOC",false);                  //输出过流
                     _isYx[4] = rRealData.getBoolean("is_OutRl",false);                  //输出短路
                     _isYx[5] = rRealData.getBoolean("is_AhLose",false);                 //容量失效
                     _isYx[6] = rRealData.getBoolean("is_ComError",false);               //通讯异常
+                    _isYx[7] = rRealData.getBoolean("is_OutAlarm",false);               //输出异常
+                    _isYx[8] = rRealData.getBoolean("is_CapEV",false);                  //电容过压
+                    _isYx[9] = rRealData.getBoolean("is_PsAlarm",false);                //相序告警
+                    _isYx[10] = rRealData.getBoolean("is_DriveError",false);            //驱动故障
 
-//                    _isYx[2] = true;
-//                    _isYx[3] = true;
-//                    _isYx[4] = true;
-//                    _isYx[5] = true;
-//                    _isYx[6] = true;
+                    if (_isYxOld[0] != _isYx[2]
+                            || _isYxOld[1] != _isYx[3] || _isYxOld[2] != _isYx[4]
+                            || _isYxOld[3] != _isYx[5] || _isYxOld[4] != _isYx[6]
+                            || _isYxOld[5] != _isYx[7] || _isYxOld[6] != _isYx[8]
+                            || _isYxOld[7] != _isYx[9] || _isYxOld[8] != _isYx[10]){
 
-                    if (_isYxOld[0] != _isYx[2] || _isYxOld[1] != _isYx[3] || _isYxOld[2] != _isYx[4] || _isYxOld[3] != _isYx[5] || _isYxOld[4] != _isYx[6]){
                         List<longItem> fragment5_Data = new LinkedList<>();
 
-                        System.arraycopy(_isYx,2,_isYxOld,0,5);
+                        System.arraycopy(_isYx,2,_isYxOld,0,9);
 
                         if (_isYx[2]) fragment5_Data.add(new longItem("     ","     ","     ","输入异常"));
-
                         if (_isYx[3])fragment5_Data.add(new longItem("     ","     ","     ","输出过流"));
-
                         if (_isYx[4])fragment5_Data.add(new longItem("     ","     ","     ","输出短路"));
-
                         if (_isYx[5])fragment5_Data.add(new longItem("     ","     ","     ","容量失效"));
-
                         if (_isYx[6])fragment5_Data.add(new longItem("     ","     ","     ","通讯异常"));
+                        if (_isYx[7])fragment5_Data.add(new longItem("     ","     ","     ","输出异常"));
+                        if (_isYx[8])fragment5_Data.add(new longItem("     ","     ","     ","电容过压"));
+                        if (_isYx[9])fragment5_Data.add(new longItem("     ","     ","     ","相序告警"));
+                        if (_isYx[10])fragment5_Data.add(new longItem("     ","     ","     ","驱动故障"));
 
-                        if (!_isYx[2] && !_isYx[3] && !_isYx[4] && !_isYx[5] && !_isYx[6])fragment5_Data.add(new longItem("     ","     ","     ","当前暂无异常告警"));
-
+                        if (!_isYx[2] && !_isYx[3] && !_isYx[4] && !_isYx[5] && !_isYx[6] && !_isYx[7] && !_isYx[8] && !_isYx[9] && !_isYx[10]){
+                            fragment5_Data.add(new longItem("     ","     ","     ","当前暂无异常告警"));
+                        }
 
                         longItemAdapter fragment1_RecordAdapter = new longItemAdapter((LinkedList<longItem>) fragment5_Data,fragment5_Context,"fragment5_alarm");
                         fragment5_Alarm_List.setAdapter(fragment1_RecordAdapter);
 
-                    }else if (!_isYx[2] && !_isYx[3] && !_isYx[4] && !_isYx[5] && !_isYx[6]){
+                    }else if (!_isYx[2] && !_isYx[3] && !_isYx[4] && !_isYx[5] && !_isYx[6] && !_isYx[7] && !_isYx[8] && !_isYx[9] && !_isYx[10]){
                         List<longItem> fragment5_Data = new LinkedList<>();
                         fragment5_Data.add(new longItem("     ","     ","     ","当前暂无异常告警"));
                         longItemAdapter fragment1_RecordAdapter = new longItemAdapter((LinkedList<longItem>) fragment5_Data,fragment5_Context,"fragment5_alarm");
                         fragment5_Alarm_List.setAdapter(fragment1_RecordAdapter);
                     }
-
-
                 }
-
-
         }
     };
 }

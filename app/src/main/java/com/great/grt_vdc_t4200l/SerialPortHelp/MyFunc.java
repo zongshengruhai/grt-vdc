@@ -160,13 +160,20 @@ public class MyFunc {
         }
     }
 
-    static private int BytesToUnix(byte[]  bytes){
-        int a[] = new int[5];
-        a[0] = (bytes[5] - 1) * 365 + bytes[5] / 4 - bytes[5] / 100 + bytes[5] / 400;
-        a[1] = 367 * (bytes[4]-2) / 12 - 30 + 59;
-        a[2] = bytes[3] - 1;
-        a[3] = a[0] + a[1] + a[2] - 719162;
-        return  ((a[3] * 24 + (bytes[2]-8)) * 60 + bytes[1]) * 60 + bytes[0];
+    static public int BytesToUnix(byte[]  bytes){
+        int[] a = new int[6];
+        for (int i = 0; i < bytes.length ; i++) {
+            a[i] = BCDToInt(bytes[i]);
+        }
+        a[0] += 2000;
+
+        int b[] = new int[4];
+        b[0] = (a[0] - 1) * 365 + a[0] / 4 - a[0] / 100 + a[0] / 400;
+        b[1] = 367 * (a[1]-2) / 12 - 30 + 59;
+        b[2] = a[2] - 1;
+        b[3] = b[0] + b[1] + b[2] - 719162;
+        return  ((b[3] * 24 + (a[3]-8)) * 60 + a[4]) * 60 + a[5];
+
     }
 
     /**

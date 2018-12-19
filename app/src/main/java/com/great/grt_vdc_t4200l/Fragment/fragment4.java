@@ -212,6 +212,9 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
                 fragment4SetHint.setText("遥控设置");
                 pickContentData.add(new settingItem("系统模式:","遥控"));
                 pickContentData.add(new settingItem("补偿使能:","遥控"));
+                pickContentData.add(new settingItem("hide","校准"));
+                pickContentData.add(new settingItem("启动补偿:","校准"));
+//                pickContentData.add(new settingItem("停止补偿:","校准"));
                 break;
             case 5:
                 fragment4SetHint.setText("系统时间");

@@ -79,7 +79,7 @@ public class fragment1 extends Fragment{
 //        colour.add(0xFF61A0A8);
 //        colour.add(0xFF2F4554);
         dynamicLineChartManager[0] = new  DynamicLineChartManager(fragment1Lc[0],names,colour);
-        dynamicLineChartManager[0].setYAxis(300,0,6);
+        dynamicLineChartManager[0].setYAxis(450,0,6);
 
         names.clear();
         colour.clear();
@@ -101,11 +101,10 @@ public class fragment1 extends Fragment{
 //        colour.add(0xFF61A0A8);
 //        colour.add(0xFF2F4554);
         dynamicLineChartManager[2] = new  DynamicLineChartManager(fragment1Lc[2],names,colour);
-        dynamicLineChartManager[2].setYAxis(300,0,6);
+        dynamicLineChartManager[2].setYAxis(450,0,6);
 
         dynamicLineChartManager[3] = new  DynamicLineChartManager(fragment1Lc[3],names,colour);
         dynamicLineChartManager[3].setYAxis(600,0,6);
-
     }
 
     /**
@@ -149,10 +148,11 @@ public class fragment1 extends Fragment{
 //            System.out.print("冒泡数组:");
 //            System.out.println(Arrays.toString(dataArray[i]));
 //            System.out.print("\r\n");
-
 //            System.out.print("\"差异数 ：" + tempData + "\r\n ");
 
             data[i] = tempData;
+//            System.out.println("差异数组："+Arrays.toString(data));
+
         }
 
     }
@@ -165,17 +165,20 @@ public class fragment1 extends Fragment{
         //输入电压
         for (int i = 0; i < 3 ; i++) {
             list.add(data[i]);
+            Log.e("addChartEntry: ","输入电压"+data[i] );
         }
         dynamicLineChartManager[0].addEntry(list);
         list.clear();
 
         //电容
         list.add(data[3]);
+        Log.e("addChartEntry: ","电容"+data[3] );
         dynamicLineChartManager[1].addEntry(list);
 
         //输出电压
         for (int i = 4; i < 7 ; i++) {
             list.add(data[i]);
+            Log.e("addChartEntry: ","输出电压"+data[i] );
         }
         dynamicLineChartManager[2].addEntry(list);
         list.clear();
@@ -183,6 +186,7 @@ public class fragment1 extends Fragment{
         //输出电流
         for (int i = 7; i < 10 ; i++) {
             list.add(data[i]);
+            Log.e("addChartEntry: ","输出电流"+data[i] );
         }
         dynamicLineChartManager[3].addEntry(list);
         list.clear();
@@ -199,32 +203,47 @@ public class fragment1 extends Fragment{
         public void run() {
             fragment1Handler.postDelayed(this,500);
 
-            //填充数据
-            SharedPreferences rRealData = getActivity().getSharedPreferences("RealData", 0);
+            SharedPreferences rStateData = getActivity().getSharedPreferences("StateData", 0);
+//            Log.e("run: ",rStateData.getBoolean("is_CommFlag",false)+"" );
+            if (rStateData.getBoolean("is_CommFlag",false)) {
 
-            dataArray[0][dataTime] = rRealData.getInt("i_Rv", 0);
-            dataArray[1][dataTime] = rRealData.getInt("i_Sv", 0);
-            dataArray[2][dataTime] = rRealData.getInt("i_Tv", 0);
+                //填充数据
+                SharedPreferences rRealData = getActivity().getSharedPreferences("RealData", 0);
 
-            dataArray[3][dataTime] = rRealData.getInt("i_Capv", 0);
+                dataArray[0][dataTime] = rRealData.getInt("i_Rv", 0);
+                dataArray[1][dataTime] = rRealData.getInt("i_Sv", 0);
+                dataArray[2][dataTime] = rRealData.getInt("i_Tv", 0);
 
-            dataArray[4][dataTime] = rRealData.getInt("i_Uv", 0);
-            dataArray[5][dataTime] = rRealData.getInt("i_Vv", 0);
-            dataArray[6][dataTime] = rRealData.getInt("i_Wv", 0);
+                dataArray[3][dataTime] = rRealData.getInt("i_Capv", 0);
 
-            dataArray[7][dataTime] = rRealData.getInt("i_Ua", 0);
-            dataArray[8][dataTime] = rRealData.getInt("i_Va", 0);
-            dataArray[9][dataTime] = rRealData.getInt("i_Wa", 0);
+                dataArray[4][dataTime] = rRealData.getInt("i_Uv", 0);
+                dataArray[5][dataTime] = rRealData.getInt("i_Vv", 0);
+                dataArray[6][dataTime] = rRealData.getInt("i_Wv", 0);
 
-            //存储数据计次
-            dataTime ++;
+                dataArray[7][dataTime] = rRealData.getInt("i_Ua", 0);
+                dataArray[8][dataTime] = rRealData.getInt("i_Va", 0);
+                dataArray[9][dataTime] = rRealData.getInt("i_Wa", 0);
 
-            if (dataTime >= 120){
-                dataTime = 0;
-                countDataArray();
-                addChartEntry();
+                //存储数据计次
+                dataTime++;
+
+                if (dataTime >= 120) {
+//                    System.out.println("Rv:" + Arrays.toString(dataArray[0]) +"\r\n");
+//                    System.out.println("Sv:" + Arrays.toString(dataArray[1]) +"\r\n");
+//                    System.out.println("Tv:" + Arrays.toString(dataArray[2]) +"\r\n");
+//                    System.out.println("Capv:" + Arrays.toString(dataArray[3]) +"\r\n");
+//                    System.out.println("Uv:" + Arrays.toString(dataArray[4]) +"\r\n");
+//                    System.out.println("Vv:" + Arrays.toString(dataArray[5]) +"\r\n");
+//                    System.out.println("Wv:" + Arrays.toString(dataArray[6]) +"\r\n");
+//                    System.out.println("Ua:" + Arrays.toString(dataArray[7]) +"\r\n");
+//                    System.out.println("Va:" + Arrays.toString(dataArray[8]) +"\r\n");
+//                    System.out.println("Wa:" + Arrays.toString(dataArray[9]) +"\r\n");
+                    dataTime = 0;
+                    countDataArray();
+                    addChartEntry();
+                }
+
             }
-
 
 
 //

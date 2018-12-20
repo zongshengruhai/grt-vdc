@@ -33,6 +33,28 @@
             android:textColor="@color/black"
             android:textSize="26sp" />
 
+        <TextView
+            android:id="@+id/SystemMode"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/CompensateMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textColor="@color/black"
+            android:textSize="26sp"
+            android:text="@string/SystemMode"/>
+
+        <TextView
+            android:id="@+id/CompensateMode"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textColor="@color/black"
+            android:textSize="26sp"
+            android:text="@string/CompensateMode"/>
+
         <!--<TextView-->
             <!--android:id="@+id/loge"-->
             <!--android:layout_alignParentStart="true"-->

@@ -535,12 +535,12 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                             case "1":
                                 eventType = "电压暂降";
                                 break;
-                            case "2":
-                                eventType = "输出过流";
-                                break;
-                            case "3":
-                                eventType = "输出短路";
-                                break;
+//                            case "2":
+//                                eventType = "输出过流";
+//                                break;
+//                            case "3":
+//                                eventType = "输出短路";
+//                                break;
                         }
                         fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime), Integer.parseInt(fillContent[0]),eventType));
                         fragment2TempRow[1].setText(String.format(getResources().getString(R.string.fragment2RecordContent), (fillContent[4] + " " + fillContent[5]).replace("：",":"), (Integer.parseInt(fillContent[2])), (Integer.parseInt(fillContent[3])), ""));

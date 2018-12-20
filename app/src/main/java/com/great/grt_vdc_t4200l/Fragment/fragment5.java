@@ -30,7 +30,7 @@ public class fragment5 extends Fragment {
     private Context fragment5_Context;
 
     private ImageView fragment5Map;
-    private TextView[] fragment5Tv = new TextView[14];
+    private TextView[] fragment5Tv = new TextView[16];
     private boolean _isType =false;
     private boolean[] _isYxOld = new boolean[9];
 
@@ -66,6 +66,9 @@ public class fragment5 extends Fragment {
         fragment5Tv[12] = view.findViewById(R.id.fragment5_hz);
 
         fragment5Tv[13] = view.findViewById(R.id.fragment5_cap);
+
+        fragment5Tv[14] = view.findViewById(R.id.SystemMode);
+        fragment5Tv[15] = view.findViewById(R.id.CompensateMode);
 
         //系统流向
         fragment5Map = view.findViewById(R.id.fragment5_map);
@@ -106,10 +109,24 @@ public class fragment5 extends Fragment {
                     SharedPreferences rRealData = getActivity().getSharedPreferences("RealData", 0);
                     SharedPreferences rAlarmData = getActivity().getSharedPreferences("AlarmData", 0);
 
-                    boolean[] _isGifYx = new boolean[3];
+                    boolean[] _isGifYx = new boolean[4];
                     _isGifYx[0] = rRealData.getBoolean("is_RechargeFlag",false);           //充电状态
                     _isGifYx[1] = rRealData.getBoolean("is_CompensateFlag",false);         //补偿状态
                     _isGifYx[2] = rRealData.getBoolean("is_SystemMode",false);             //系统模式
+                    _isGifYx[3] = rRealData.getBoolean("is_CompensateEnabled",false);      //补偿使能
+
+                    if (_isGifYx[2]){
+                        fragment5Tv[14].setText(String.format(getResources().getString(R.string.SystemMode),"自动"));
+                    }else {
+                        fragment5Tv[14].setText(String.format(getResources().getString(R.string.SystemMode),"手动"));
+                    }
+
+                    if (_isGifYx[3]){
+                        fragment5Tv[15].setText(String.format(getResources().getString(R.string.CompensateMode),"使能"));
+                    }else {
+                        fragment5Tv[15].setText(String.format(getResources().getString(R.string.CompensateMode),"禁止"));
+                    }
+
 
                     //假装GIF
                     if (_isGifYx[0] && !_isGifYx[1] && _isGifYx[2]) {

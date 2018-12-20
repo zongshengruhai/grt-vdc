@@ -79,7 +79,7 @@ public class fragment1 extends Fragment{
 //        colour.add(0xFF61A0A8);
 //        colour.add(0xFF2F4554);
         dynamicLineChartManager[0] = new  DynamicLineChartManager(fragment1Lc[0],names,colour);
-        dynamicLineChartManager[0].setYAxis(450,0,6);
+        dynamicLineChartManager[0].setYAxis(300,0,6);
 
         names.clear();
         colour.clear();
@@ -101,7 +101,7 @@ public class fragment1 extends Fragment{
 //        colour.add(0xFF61A0A8);
 //        colour.add(0xFF2F4554);
         dynamicLineChartManager[2] = new  DynamicLineChartManager(fragment1Lc[2],names,colour);
-        dynamicLineChartManager[2].setYAxis(450,0,6);
+        dynamicLineChartManager[2].setYAxis(300,0,6);
 
         dynamicLineChartManager[3] = new  DynamicLineChartManager(fragment1Lc[3],names,colour);
         dynamicLineChartManager[3].setYAxis(600,0,6);
@@ -165,20 +165,18 @@ public class fragment1 extends Fragment{
         //输入电压
         for (int i = 0; i < 3 ; i++) {
             list.add(data[i]);
-            Log.e("addChartEntry: ","输入电压"+data[i] );
         }
         dynamicLineChartManager[0].addEntry(list);
         list.clear();
 
         //电容
         list.add(data[3]);
-        Log.e("addChartEntry: ","电容"+data[3] );
         dynamicLineChartManager[1].addEntry(list);
+        list.clear();
 
         //输出电压
         for (int i = 4; i < 7 ; i++) {
             list.add(data[i]);
-            Log.e("addChartEntry: ","输出电压"+data[i] );
         }
         dynamicLineChartManager[2].addEntry(list);
         list.clear();
@@ -186,7 +184,6 @@ public class fragment1 extends Fragment{
         //输出电流
         for (int i = 7; i < 10 ; i++) {
             list.add(data[i]);
-            Log.e("addChartEntry: ","输出电流"+data[i] );
         }
         dynamicLineChartManager[3].addEntry(list);
         list.clear();
@@ -204,7 +201,7 @@ public class fragment1 extends Fragment{
             fragment1Handler.postDelayed(this,500);
 
             SharedPreferences rStateData = getActivity().getSharedPreferences("StateData", 0);
-//            Log.e("run: ",rStateData.getBoolean("is_CommFlag",false)+"" );
+
             if (rStateData.getBoolean("is_CommFlag",false)) {
 
                 //填充数据

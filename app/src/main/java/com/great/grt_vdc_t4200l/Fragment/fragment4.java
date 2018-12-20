@@ -139,15 +139,17 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
     {
         USER_TYPE = 0;
 //        SystemFunc.changeKeyboardView(fragment4_Context,fragment4_View,"hide");
-        fragment4RowLay[0].setVisibility(View.VISIBLE);
-        fragment4RowLay[1].setVisibility(View.GONE);
-//        fragment4RowLay[0].setVisibility(View.GONE);
-//        fragment4RowLay[1].setVisibility(View.VISIBLE);
+//        fragment4RowLay[0].setVisibility(View.VISIBLE);
+//        fragment4RowLay[1].setVisibility(View.GONE);
+        fragment4RowLay[0].setVisibility(View.GONE);
+        fragment4RowLay[1].setVisibility(View.VISIBLE);
     }
 
     private void showFragment4RL(int userType)// show set view
     {
         if (userType > 0){
+//            fragment4RowLay[0].setVisibility(View.GONE);
+//            fragment4RowLay[1].setVisibility(View.VISIBLE);
             fragment4RowLay[0].setVisibility(View.GONE);
             fragment4RowLay[1].setVisibility(View.VISIBLE);
             ChangeSetLay(0);
@@ -228,13 +230,13 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
             case 6:
                 fragment4SetHint.setText("系统设置");
                 pickContentData.add(new settingItem("告警提示:","开关"));
-                if (USER_TYPE == 1){
+//                if (USER_TYPE == 1){
                     pickContentData.add(new settingItem("调试模式:","开关"));
 //                    pickContentData.add(new settingItem("Loge输出:","开关"));
                     pickContentData.add(new settingItem("初始化系统:","开关"));
                     pickContentData.add(new settingItem("退出程序:","开关"));
 //                    pickContentData.add(new settingItem("用户密码:","更改"));
-                }
+//                }
 //                else if (USER_TYPE == 2){
 //                    pickContentData.add(new settingItem("用户密码:","更改"));
 //                }

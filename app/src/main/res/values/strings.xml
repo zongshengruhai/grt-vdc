@@ -102,6 +102,8 @@
     <string name="fragment5RecordTime">录波次数</string>
     <string name="fragment5RealHz">频率</string>
     <string name="fragment5Loge">GRT-VDC-T4200</string>
+    <string name="SystemMode">系统模式：%1$s </string>
+    <string name="CompensateMode">补偿模式：%1$s </string>
     <!--<string name="fragment5Dash">输入电压</string>-->
     <!--<string-array name="meter">-->
         <!--<item>0V</item>-->

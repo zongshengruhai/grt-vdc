@@ -130,7 +130,6 @@ public class BaseCourse extends FragmentActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        Log.e(TAG, "onResume: base tir" );
         loadSOP();
     }
 
@@ -648,6 +647,8 @@ public class BaseCourse extends FragmentActivity {
             handler.postDelayed(this,500);
             if (downCom.getIsOpen()){
 
+                //无操作计时
+                if (!_isActionFlag && iNotAction < 9999) iNotAction ++;
 
                 //通讯错误计次
                 boolean _isCommFlag = downCom.getisCommFlag();
@@ -658,9 +659,6 @@ public class BaseCourse extends FragmentActivity {
                     SystemFunc.Beep(mContext,false);
                     iCommError = 0;
                 }
-
-                //无操作计时
-                if (!_isActionFlag && iNotAction < 9999) iNotAction ++;
 
                 //通知用户
                 if (iCommError > 40 && iCommError < 59 && ((60-iCommError)%2) == 0 ){
@@ -683,6 +681,19 @@ public class BaseCourse extends FragmentActivity {
                 SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
                 SharedPreferences rAlarmData = mContext.getSharedPreferences("AlarmData",0);
 
+//                int iNewSagSite = rRealData.getInt("i_NewSagSite",0);                          //当前录波数量
+//                int iOldSagSite = rRealData.getInt("i_OldSagSite",0);                          //之前录波数量
+//                boolean isRecordFlag = rStateData.getBoolean("is_RecordFlag",false);           //需要录波标志
+//                boolean isReadRecordFlag = rStateData.getBoolean("is_ReadRecordFlag",false);   //在读录波标志
+//
+//                if ((iNewSagSite != iOldSagSite) && !isRecordFlag) isRecordFlag = true;
+//
+//                if ((isRecordFlag && !isReadRecordFlag) && !_isCorrect){
+//
+//                }
+
+//                Log.e(TAG, "run: " + iNewSagSite + "," + iOldSagSite );
+
                 //判断是否需要读取录波
                 if ((rRealData.getInt("i_NewSagSite",0) != rStateData.getInt("i_OldSagSite",0)) && !rStateData.getBoolean("is_RecordFlag",false)){
                     wStateData.putBoolean("is_RecordFlag",true);       //开始录波标志
@@ -691,7 +702,6 @@ public class BaseCourse extends FragmentActivity {
                     }
                 }
 
-//                Log.e(TAG, "run: " + rStateData.getBoolean("is_RecordFlag",false)+ "," +rStateData.getBoolean("is_ReadRecordFlag",false));
                 //需要读录波，且没有在读录波
                 if (rStateData.getBoolean("is_RecordFlag",false) && !rStateData.getBoolean("is_ReadRecordFlag",false) && !_isCorrect){
 
@@ -825,6 +835,7 @@ public class BaseCourse extends FragmentActivity {
         public void run(){
 //            sendPortData(downCom,"bArr");
             sendPortData(downCom);
+
         }
     }
 

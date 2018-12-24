@@ -2,6 +2,8 @@ package com.great.grt_vdc_t4200l.Fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -11,7 +13,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Bundle;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.github.mikephil.charting.charts.LineChart;
@@ -28,16 +34,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import android.graphics.Color;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -65,11 +64,11 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     private Context fragment2_Context;
     private ListView fragment2_ListView;
     private List<longItem> fragment2_Data  = new LinkedList<>();
-//    private shortItemAdapter fragment2_RecordAdapter;
+    //    private shortItemAdapter fragment2_RecordAdapter;
     //正则筛选----------------------------------------------------
     private EditText Search_EditText;
     private ImageView Search_Delete;
-//    private TextView Search_Inquire;
+    //    private TextView Search_Inquire;
     //进度条----------------------------------------------------
     private NumberProgressBar fragment2_Loading;            //进度条实例
     private int iProgress;                                         //进度
@@ -298,7 +297,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
         String pickName = pickTextUrl.getText().toString();
 
         if (pickName.contains(".xls")){
-            pickFileName = pickName;
+            if (pickFileName == null)pickFileName = pickName;
             if (_isLoadFlag){
                 _isLoadFlag = false;
                 fragment2TempRow[0].setText(String.format(getResources().getString(R.string.fragment2RecordTime),0,""));
@@ -632,4 +631,3 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     }
 
 }
-

@@ -104,6 +104,8 @@ public class BaseCourse extends FragmentActivity {
     MyThread mThread;
     private boolean ThreadRun = false ;
 
+    SerialControl upCom;
+
     /** 创建层，初始化一些数据*/
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

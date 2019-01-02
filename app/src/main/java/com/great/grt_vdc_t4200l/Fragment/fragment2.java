@@ -85,7 +85,7 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
     //加载文件内容----------------------------------------------------
     private String pickFileName = null;                            //文件路径
     private int fileTime = 0;                                      //文件数量，当变化时才进行刷新
-//    private boolean ListFlushFlag = false;                         //防止并行
+    //    private boolean ListFlushFlag = false;                         //防止并行
     private Context mContext;
 
     /**

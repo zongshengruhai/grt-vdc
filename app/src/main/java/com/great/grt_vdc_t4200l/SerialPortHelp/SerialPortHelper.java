@@ -10,10 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import android_serialport_api.SerialPort;
@@ -329,6 +327,43 @@ public class SerialPortHelper {
                     System.arraycopy(bBuffer,0,buffer3,0,bBuffer.length);           //再将原来已经缓存好的数据copy
                     bBuffer =  new byte[buffer3.length+buffer2.length];
                     bBuffer = MyFunc.addByteArr(buffer3,buffer2);                                     //最后将新的数据添加到原来数据的末尾
+//                    if (bBuffer.length >= 6){
+//
+//                        if (bBuffer[0] == 0x7E) {
+//
+//                            if (bBuffer.length == 6 && iReadLength == 1000) {
+//                                switch (bBuffer[1]) {
+//                                    case 0x03:
+//                                        iReadLength = 28;
+//                                        break;
+//                                    case 0x10:
+//                                        if (MyFunc.ByteArrToInt(bBuffer,4) == 1){
+//                                            iReadLength = 26;
+//                                        }else {
+//                                            iReadLength = 558;
+//                                        }
+//                                        break;
+//                                    default:
+//                                        bBuffer = new byte[0];
+//                                        iReadLength = 1000;
+//                                        break;
+//                                }
+//                            }
+//
+//                            if ((bBuffer.length == iReadLength)&& _isOpen){
+//                                if (mContext != null){
+//                                    Log.e("串口消息", "接收数据：" + MyFunc.ByteArrToHex(bBuffer));
+//                                    readData(bBuffer.length,bBuffer);
+//                                    bBuffer = new byte[0];
+//                                    iReadLength = 1000;
+//                                }
+//                            }
+//
+//                        }else{
+//                            bBuffer = new byte[0];
+//                            iReadLength = 1000;
+//                        }
+//                    }
 
                     //当粘合后的数据长度等于上次下发报文中所要求时，进入接收数据处理流程
                     if ((bBuffer.length == iReadLength)&& _isOpen){
@@ -455,6 +490,12 @@ public class SerialPortHelper {
                             wRealData.putInt("i_NewSagSite",iYc[12]);                    //当前录波位置
                             wRealData.putInt("i_SagSum",iYc[13]);                        //录波总数
 
+                            if (rStateData.getBoolean("is_SystemInit",false)){
+                                wStateData.putInt("i_OldSagSite",iYc[12]);
+                                wAlarmData.putInt("i_RecordTime",0);
+                                wStateData.putBoolean("is_SystemInit",false);
+                            }
+
                             //遥信
 //                            wRealData.putBoolean("is_RechargeFlag",_isYx[7]);          //充电状态
 //                            wRealData.putBoolean("is_CompensateFlag",_isYx[6]);        //补偿状态
@@ -487,7 +528,7 @@ public class SerialPortHelper {
 
 
                             //处理告警
-                            alarmHand(_isYx);
+                            if ((System.currentTimeMillis()/1000) > 946684800 )alarmHand(_isYx);
                             iCommErrTime = 0;
 
                         }else {
@@ -623,7 +664,7 @@ public class SerialPortHelper {
 
                                             //上位机录波地址往前移动
                                             int oldSagSite = rStateData.getInt("i_OldSagSite",0);
-                                            if (oldSagSite == 3){ oldSagSite = 0; }else{ oldSagSite = oldSagSite + 1; }
+                                            if (oldSagSite == 4){ oldSagSite = 1; }else{ oldSagSite = oldSagSite + 1; }
                                             wStateData.putInt("i_OldSagSite",oldSagSite);
 
                                             //录波记录数+1
@@ -654,6 +695,11 @@ public class SerialPortHelper {
                 _isCommFlag = false; //通讯失败标志
             }
 
+            //03功能码通讯是失败时复位一些实时数据
+            if(buffer[1] == 0x03 && iCommErrTime > 5 && _isYx[0]){
+                deleteErrRealData();
+            }
+
         }else {
             Log.e("串口信息","数据帧错误，数据内容："+temp);
             _isCommFlag = false; //通讯失败标志
@@ -661,13 +707,6 @@ public class SerialPortHelper {
         }
 
         if (!_isCommFlag && iCommErrTime < 50) iCommErrTime++;
-
-        //03功能码通讯是失败时复位一些实时数据
-        if(buffer[1] == 0x03 && iCommErrTime > 5 && _isYx[0]){
-            deleteErrRealData();
-        }
-
-        //写入通讯标志
         wStateData.putBoolean("is_CommFlag",_isCommFlag);
 
         //统一提交Shared Preferences
@@ -800,7 +839,5 @@ public class SerialPortHelper {
         //统一提交Shared Preferences
         if (!wRealData.commit()) wRealData.commit();
 
-
     }
-
 }

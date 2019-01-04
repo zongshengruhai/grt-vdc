@@ -4,11 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -84,6 +84,7 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
 
         return view;
     }
+
     @Override
     public void onResume(){
         super.onResume();
@@ -93,6 +94,7 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
             getActivity().registerReceiver(fragment4ActivityBroad,fragment4IntentFilter);
         }
     }
+
     @Override
     public void onPause(){
         super.onPause();
@@ -106,8 +108,7 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
     /**
      * login event
      */
-    private void LoginClick()// login click event
-    {
+    private void LoginClick() {
         String passwordIn = fragment4Password.getText().toString();
 //        SharedPreferences rStateData = fragment4_Context.getSharedPreferences("StateData", 0);
 
@@ -135,32 +136,27 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
 
     }
 
-    private void hideFragment4Rl()// hide set view
-    {
+    private void hideFragment4Rl(){
         USER_TYPE = 0;
 //        SystemFunc.changeKeyboardView(fragment4_Context,fragment4_View,"hide");
-//        fragment4RowLay[0].setVisibility(View.VISIBLE);
-//        fragment4RowLay[1].setVisibility(View.GONE);
-        fragment4RowLay[0].setVisibility(View.GONE);
-        fragment4RowLay[1].setVisibility(View.VISIBLE);
+        fragment4RowLay[0].setVisibility(View.VISIBLE);
+        fragment4RowLay[1].setVisibility(View.GONE);
+//        fragment4RowLay[0].setVisibility(View.GONE);
+//        fragment4RowLay[1].setVisibility(View.VISIBLE);
     }
 
-    private void showFragment4RL(int userType)// show set view
-    {
+    private void showFragment4RL(int userType){
         if (userType > 0){
-//            fragment4RowLay[0].setVisibility(View.GONE);
-//            fragment4RowLay[1].setVisibility(View.VISIBLE);
             fragment4RowLay[0].setVisibility(View.GONE);
             fragment4RowLay[1].setVisibility(View.VISIBLE);
+//            fragment4RowLay[0].setVisibility(View.GONE);
+//            fragment4RowLay[1].setVisibility(View.VISIBLE);
             ChangeSetLay(0);
         }
     }
 
-    /**
-     * list event
-     */
-    private void initPickList() // init right list
-    {
+    /** list event */
+    private void initPickList() {
         List<longItem> pickListData = new LinkedList<>();
         longItemAdapter pickListAdapter;
 
@@ -179,13 +175,11 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent,View view,int position,long id) // select list event
-    {
+    public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
         ChangeSetLay(position);
     }
 
-    private void ChangeSetLay(int id) // change set list
-    {
+    private void ChangeSetLay(int id){
         pickContentData.clear();
 
         switch (id){
@@ -230,13 +224,15 @@ public class fragment4 extends Fragment implements AdapterView.OnItemClickListen
             case 6:
                 fragment4SetHint.setText("系统设置");
                 pickContentData.add(new settingItem("告警提示:","开关"));
-//                if (USER_TYPE == 1){
+                if (USER_TYPE == 1){
                     pickContentData.add(new settingItem("调试模式:","开关"));
 //                    pickContentData.add(new settingItem("Loge输出:","开关"));
+                    pickContentData.add(new settingItem("初始化故障:","开关"));
+                    pickContentData.add(new settingItem("初始化录波:","开关"));
                     pickContentData.add(new settingItem("初始化系统:","开关"));
                     pickContentData.add(new settingItem("退出程序:","开关"));
 //                    pickContentData.add(new settingItem("用户密码:","更改"));
-//                }
+                }
 //                else if (USER_TYPE == 2){
 //                    pickContentData.add(new settingItem("用户密码:","更改"));
 //                }

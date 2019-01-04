@@ -21,7 +21,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * 串口管理类
  */
-public class SerialPortHelper {
+public class UpSerialPortHelper {
 
     //关联------------------------------------------------------------
     private Context mContext;
@@ -61,20 +61,20 @@ public class SerialPortHelper {
      * 串口的几种实例化方法
      */
     //指定串口、指定波特率（int）的实例化
-    public SerialPortHelper(String sPortName , int iBaudRate){
+    public UpSerialPortHelper(String sPortName , int iBaudRate){
         this.sPortName = sPortName;
         this.iBaudRate = iBaudRate;
     }
     //默认实例化
-    public SerialPortHelper(){
+    public UpSerialPortHelper(){
         this("/dev/ttyS2",38400);
     }
     // 指定串口实例化
-    public SerialPortHelper(String sPortName){
+    public UpSerialPortHelper(String sPortName){
         this(sPortName,38400);
     }
     //指定串口、指定波特率（String）的实例化
-    public SerialPortHelper(String sPortName,String sBaudRate){
+    public UpSerialPortHelper(String sPortName,String sBaudRate){
         this(sPortName,Integer.parseInt(sBaudRate));
     }
 
@@ -214,7 +214,7 @@ public class SerialPortHelper {
 
         //串口关闭标志
         _isOpen = false;
-   }
+    }
     //开始发送
     public void startSend() {
         if (mSendThread != null) {
@@ -258,7 +258,7 @@ public class SerialPortHelper {
         }catch (IOException e){
             e.printStackTrace();
         }
-   }
+    }
     //发送（hex）
     public void sendHex(String sHex){
         byte[] bOutArray = MyFunc.HexToByteArr(sHex);
@@ -490,6 +490,12 @@ public class SerialPortHelper {
                             wRealData.putInt("i_NewSagSite",iYc[12]);                    //当前录波位置
                             wRealData.putInt("i_SagSum",iYc[13]);                        //录波总数
 
+                            if (rStateData.getBoolean("is_SystemInit",false)){
+                                wStateData.putInt("i_OldSagSite",iYc[12]);
+                                wAlarmData.putInt("i_RecordTime",0);
+                                wStateData.putBoolean("is_SystemInit",false);
+                            }
+
                             //遥信
 //                            wRealData.putBoolean("is_RechargeFlag",_isYx[7]);          //充电状态
 //                            wRealData.putBoolean("is_CompensateFlag",_isYx[6]);        //补偿状态
@@ -538,12 +544,12 @@ public class SerialPortHelper {
                             List<List<Object>> excel = new ArrayList<>();
                             List<Object> excelHead = new ArrayList<>();
 //                            excel.clear();
-                            excelHead.add("U相输出电压");
-                            excelHead.add("V相输出电压");
-                            excelHead.add("W相输出电压");
                             excelHead.add("R相输入电压");
                             excelHead.add("S相输入电压");
                             excelHead.add("T相输入电压");
+                            excelHead.add("U相输出电压");
+                            excelHead.add("V相输出电压");
+                            excelHead.add("W相输出电压");
                             excelHead.add("U相输出电流");
                             excelHead.add("V相输出电流");
                             excelHead.add("W相输出电流");

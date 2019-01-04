@@ -1,42 +1,24 @@
 package com.great.grt_vdc_t4200l;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Vibrator;
-import android.provider.Settings;
-import android.service.notification.StatusBarNotification;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -104,66 +86,18 @@ public class SystemFunc {
         return true;
     }
 
-//    /**
-//     * 分射机制设置状态栏是否可下拉
-//     */
-//    static public void setStatusBar(Context mContext,int flag){
-//
-////        try {
-////            Object service = mContext.getSystemService("STATUSBAR");
-////            if (service != null){
-////                Method method = service.getClass().getMethod("DISABLE");
-////                method.invoke(service);
-////            }
-////        }catch (Exception e){
-////            e.printStackTrace();
-////        }
-////
-//
-//        Method methodDisable = null;
-//        Object statusBarManagerService = null;
-//
-//        try {
-//
-//            Class classStatusBarManager = Class.forName("android.app.StatusBarManager");
-//            Context appContext = mContext.getApplicationContext();
-//            if (appContext != null){
-//                statusBarManagerService = appContext.getSystemService("statusbar");
-//                methodDisable = classStatusBarManager.getMethod("disable",int.class);
-//            }
-//        }catch (ClassNotFoundException e){
-//            Log.e(TAG, "get StatusBarManager error ：" + e );
-//            e.printStackTrace();
-//        }catch (NoSuchMethodException e){
-//            e.printStackTrace();
-//        }
-//
-//        Log.e(TAG, "setStatusBar: " + statusBarManagerService );
-//        Log.e(TAG, "setStatusBar: " + methodDisable );
-//
-//        try {
-//            methodDisable.invoke(statusBarManagerService,flag);
-//        }catch (IllegalAccessException e){
-//            e.printStackTrace();
-//        }catch (InvocationTargetException e){
-//            e.printStackTrace();
-//        }
-//
-//        Log.e(TAG, "setStatusBar: fine" );
-//
-//    }
-
-
     //系统操作类方法--------------------------------------------------------------------------------------------------------
     /**
      * getNewTime 获取当前系统时间
-     * @return String:"yyyy.MM.dd HH:mm:ss"
      */
     static public String getNewTime(String Type){
         Calendar calendar = Calendar.getInstance();
+
         String year,month,day,hour,min,sec;
+
         int[] ints = new int[]{calendar.get(Calendar.YEAR),(calendar.get(Calendar.MONTH)+1),calendar.get(Calendar.DAY_OF_MONTH),
                 calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),calendar.get(Calendar.SECOND)};
+
         year = ints[0] + "";
         if (ints[1] >= 10) { month = "" + ints[1]; } else { month = "0" + ints[1]; }
         if (ints[2] >= 10) { day = "" + ints[2]; } else { day = "0" + ints[2]; }
@@ -197,25 +131,6 @@ public class SystemFunc {
         }
 //        return calendar.get(Calendar.YEAR)+"."+(calendar.get(Calendar.MONTH)+1)+"."+calendar.get(Calendar.DAY_OF_MONTH)+" "+calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
     }
-
-//    /**
-//     * getNewTimeString 获取当前系统时间
-//     * @return String:"YYYY 年 MM 月 DD 日 HH:mm:ss"
-//     */
-//    static public String getNewTimeString(){
-//        Calendar calendar = Calendar.getInstance();
-//        return calendar.get(Calendar.YEAR)+" 年 "+(calendar.get(Calendar.MONTH)+1)+" 月 "+calendar.get(Calendar.DAY_OF_MONTH)+" 日 "+calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
-//    }
-//
-//    /**
-//     * getNewTimeString 获取当前系统时间
-//     * @return String:"YYYY_MM_DD_HH_mm_ss"
-//     */
-//    static public String getNewTimeInt(){
-//        Calendar calendar = Calendar.getInstance();
-//        return calendar.get(Calendar.YEAR)+"_"+(calendar.get(Calendar.MONTH)+1)+"_"+calendar.get(Calendar.DAY_OF_MONTH)+"_"+calendar.get(Calendar.HOUR_OF_DAY)+"_"+calendar.get(Calendar.MINUTE)+"_"+calendar.get(Calendar.SECOND);
-//
-//    }
 
     /**
      * setNewTime 设置当前时间
@@ -266,43 +181,20 @@ public class SystemFunc {
      * @param mContext context
      */
     static public void Beep(Context mContext){
-        Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-        if (vibrator != null){
-            SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
-            if (rStateData.getBoolean("is_SystemBeep",false)){
-                vibrator.vibrate(new long[]{0,50},1);
-                try {
-                    Thread.sleep(50);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-                vibrator.cancel();
-            }
-        }
+//        Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+//        if (vibrator != null){
+//            SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
+//            if (rStateData.getBoolean("is_SystemBeep",false)){
+//                vibrator.vibrate(new long[]{0,50},1);
+//                try {
+//                    Thread.sleep(50);
+//                }catch (InterruptedException e){
+//                    e.printStackTrace();
+//                }
+//                vibrator.cancel();
+//            }
+//        }
     }
-
-//    /**
-//     * changeKeyboardView改变键盘
-//     * @param context in context
-//     * @param view in view
-//     * @param type change view state type
-//     * 启用 交由base层处理
-//     */
-//    static public void changeKeyboardView(Context context, View view,String type){
-//        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-//        if (type.equals("hide"))// hide
-//        {
-//            if (imm != null && view != null){
-//                imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//            }
-//        }
-//        else if (type.equals("show"))// show
-//        {
-//            if (imm != null && view != null){
-//                imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-//            }
-//        }
-//    }
 
     //文件操作类方法--------------------------------------------------------------------------------------------------------
     /**

@@ -1,12 +1,8 @@
 package com.great.grt_vdc_t4200l.ListView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +18,8 @@ import com.great.grt_vdc_t4200l.R;
 import com.great.grt_vdc_t4200l.SystemFunc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class settingItemAdapter extends BaseAdapter{
 
@@ -368,7 +359,10 @@ public class settingItemAdapter extends BaseAdapter{
                     //ui
                     SystemFunc.Beep(mContext);
 
-                    if ( data[0].equals("初始化系统:") || data[0].equals("退出程序:")){
+                    if ( data[0].equals("初始化系统:")
+                            || data[0].equals("退出程序:")
+                            || data[0].equals("初始化故障:")
+                            || data[0].equals("初始化录波:")){
                         txt_Value.setText("0");
                         txt_Switch.setChecked(false);
                     }

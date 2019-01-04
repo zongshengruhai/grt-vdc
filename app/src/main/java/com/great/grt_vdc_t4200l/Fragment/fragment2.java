@@ -280,7 +280,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
 
                             if (SearchMatcher.find()) {
                                 temp[0] = regroupFiles[0];
-                                temp[1] = regroupFiles[4] + " " + regroupFiles[5].substring(0, regroupFiles[5].length() - 3).trim().replace("：", ":");
+//                                temp[1] = regroupFiles[4] + " " + regroupFiles[5].substring(0, regroupFiles[5].length() - 3).trim().replace("：", ":");
+                                temp[1] = regroupFiles[4] + " " + regroupFiles[5].trim().replace("：", ":");
 
                             } else {
                                 SearchNull++;
@@ -763,6 +764,12 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                 }
                 value.add(val);
             }
+
+            //位置变化
+            for (int i = 0; i < 3 ; i++) {
+                Collections.swap(value,i,i+3);
+            }
+
             _isLoadFlag = true;
         }
 

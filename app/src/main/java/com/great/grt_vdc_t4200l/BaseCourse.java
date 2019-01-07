@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -89,6 +88,7 @@ public class BaseCourse extends FragmentActivity {
 
     /** 遥测故障录波数据失败次数 */
     private int iReadRecordError = 0;
+    private int iReadRecordError_2 = 0;
 
     /** 系统存储数据相关的路径申明 */
     static private String systemPath;
@@ -104,6 +104,10 @@ public class BaseCourse extends FragmentActivity {
     /** Test */
     DownThread downThread;
     private boolean ThreadRun = false ;
+
+    /** beep */
+    BeepThread beepThread;
+    private boolean is_BeepFlag = false;
 
     UpSerialControl upCom;
 
@@ -136,6 +140,7 @@ public class BaseCourse extends FragmentActivity {
 //        sharedPrefsPath = this.getFilesDir().toString().trim().replace("/files","/shared_prefs/");
 
         downThread = new DownThread();
+        beepThread = new BeepThread();
 
 //        ArrayList<ArrayList<String>> arrayLists = new ArrayList<>();
 //        for (int i = 0; i < 5 ; i++) {
@@ -272,6 +277,7 @@ public class BaseCourse extends FragmentActivity {
             if (!ThreadRun) {
                 ThreadRun = true;
                 new Thread(downThread).start();
+                new Thread(beepThread).start();
             }
         }
 
@@ -598,9 +604,8 @@ public class BaseCourse extends FragmentActivity {
         SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
         SharedPreferences.Editor wAlarmData = mContext.getSharedPreferences("AlarmData",MODE_PRIVATE).edit();
         SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
-        SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
+//        SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
 
-        Log.e(TAG, "DeleteRecord: " +rStateData.getInt("i_OldSagSite",0) + "," + rRealData.getInt("i_NewSagSite",0) );
         wStateData.putInt("i_OldSagSite",rRealData.getInt("i_NewSagSite",0));
         wStateData.putInt("i_RecordAddress_2",0);
         wStateData.putBoolean("is_RecordFlag",false);
@@ -788,7 +793,7 @@ public class BaseCourse extends FragmentActivity {
                     if (iCommError < 99){iCommError ++;}
                     downCom.deleteErrRealData();
                 }else {
-                    SystemFunc.Beep(mContext,false);
+//                    SystemFunc.Beep(getApplicationContext(),false);
                     iCommError = 0;
                 }
 
@@ -820,9 +825,11 @@ public class BaseCourse extends FragmentActivity {
                 }
 
                 if (_isNewYX[3] || _isNewYX[4] || _isNewYX[5] || _isNewYX[6] || _isNewYX[7] || _isNewYX[8] || _isNewYX[9] || _isNewYX[10] || _isNewYX[11] || (iCommError >= 40 && iCommError < 59)){
-                    SystemFunc.Beep(getApplicationContext(),true);
+//                    SystemFunc.Beep(getApplicationContext(),true);
+                    is_BeepFlag = true;
                 }else {
-                    SystemFunc.Beep(getApplicationContext(),false);
+//                    SystemFunc.Beep(getApplicationContext(),false);
+                    is_BeepFlag = false;
                 }
 
 //                //判断是否需要读取录波
@@ -946,7 +953,7 @@ public class BaseCourse extends FragmentActivity {
                 SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
                 SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
 //                SharedPreferences rAlarmData = mContext.getSharedPreferences("AlarmData",0);
-                Log.e(TAG, "DeleteRecord: " +rStateData.getInt("i_OldSagSite",0) + "," + rRealData.getInt("i_NewSagSite",0) );
+//                Log.e(TAG, "DeleteRecord: " +rStateData.getInt("i_OldSagSite",0) + "," + rRealData.getInt("i_NewSagSite",0) );
 
                 //判断是否需要读取录波
                 if ((rRealData.getInt("i_NewSagSite",0) != rStateData.getInt("i_OldSagSite",0))
@@ -981,10 +988,24 @@ public class BaseCourse extends FragmentActivity {
                         new ComThread().start();
 //                        sendPortData(downCom);
 
+                        iReadRecordError_2 ++;
+                        if (iReadRecordError_2 > 5 ){
+                            iReadRecordError_2 = 0;
+                            if (SystemFunc.checkFileExist(rStateData.getString("s_RecordFileName",""))){
+                                SystemFunc.deleteFile(rStateData.getString("s_RecordFileName",""));
+                            }
+                            wStateData.putInt("i_RecordAddress_1",0);           //复位当前录波地址1
+                            wStateData.putInt("i_RecordAddress_2",0);           //复位当前录波地址2
+                            wStateData.putBoolean("is_RecordFlag",false);       //复位开始录波标志
+                            wStateData.putBoolean("is_ReadRecordFlag",false);   //复位开始录波在读标志
+                            wStateData.putString("s_RecordFileName","");        //复位当前录波文件名
+                        }
+
 
                     }//不需要读录波，或已经在处理录波
                     else if ((!rStateData.getBoolean("is_RecordFlag", false) || rStateData.getBoolean("is_ReadRecordFlag", false)) && !_isCorrect) {
 
+                        iReadRecordError_2 = 0;
                         bOutData = new byte[]{(byte) 0x7E, 0x03, 0x00, 0x00, 0x00, 0x14, 0x00, (byte) 0x0D};
                         bOutData[6] = MyFunc.addCrc(bOutData);
                         new ComThread().start();
@@ -992,6 +1013,8 @@ public class BaseCourse extends FragmentActivity {
 
                     }//用户触发遥控、遥调
                     else if (_isCorrect) {
+
+                        iReadRecordError_2 = 0;
 
                         //地址
                         if (iCorrect[0] == 14) {
@@ -1054,6 +1077,23 @@ public class BaseCourse extends FragmentActivity {
             }
 
         }//end run
+    }
+
+    class BeepThread implements Runnable{
+        @Override
+        public void run(){
+            while (ThreadRun) {
+                while (is_BeepFlag) {
+//                    Log.e(TAG, "beep " );
+                    SystemFunc.Beep(getApplicationContext(),500);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
 }

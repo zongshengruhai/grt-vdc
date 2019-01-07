@@ -176,6 +176,22 @@ public class SystemFunc {
         }
     }
 
+    static public void Beep(Context mContext,int time){
+        Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator != null){
+            SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
+            if (rStateData.getBoolean("is_SystemBeep",false)){
+                vibrator.vibrate(new long[]{0,time},1);
+                try {
+                    Thread.sleep(time);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                vibrator.cancel();
+            }
+        }
+    }
+
     /**
      * Beep 单次数振铃
      * @param mContext context

@@ -1,9 +1,5 @@
 package com.great.grt_vdc_t4200l.SerialPortHelp;
 
-import android.util.Log;
-
-import java.util.Arrays;
-
 /**
  *数据类型转换工具
  */
@@ -170,7 +166,8 @@ public class MyFunc {
         int b[] = new int[4];
         b[0] = (a[0] - 1) * 365 + a[0] / 4 - a[0] / 100 + a[0] / 400;
         b[1] = 367 * (a[1]-2) / 12 - 30 + 59;
-        b[2] = a[2] - 1;
+//        b[2] = a[2] - 1;
+        b[2] = a[2];
         b[3] = b[0] + b[1] + b[2] - 719162;
         return  ((b[3] * 24 + (a[3]-8)) * 60 + a[4]) * 60 + a[5];
 

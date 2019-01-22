@@ -43,6 +43,8 @@ import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 
+import static android.content.Context.MODE_PRIVATE;
+
 //import android.view.MotionEvent;
 //import com.github.mikephil.charting.listener.ChartTouchListener;
 //import com.github.mikephil.charting.listener.OnChartGestureListener;
@@ -350,8 +352,8 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
             fragment2LineChart[i].setDragEnabled(true);                                                             //拖动
             fragment2LineChart[i].setPinchZoom(true);
             fragment2LineChart[i].setDoubleTapToZoomEnabled(false);                                                 //双击缩放
-            fragment2LineChart[i].setScaleXEnabled(true);                                                           //X轴缩放
-//            fragment2LineChart[i].setScaleYEnabled(false);                                                          //Y轴缩放
+            fragment2LineChart[i].setScaleXEnabled(false);                                                           //X轴缩放
+            fragment2LineChart[i].setScaleYEnabled(false);                                                          //Y轴缩放
 
             //图例设置
             Legend legend = fragment2LineChart[i].getLegend();
@@ -579,8 +581,14 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
             SharedPreferences rStateData = getActivity().getSharedPreferences("StateData", 0);
             if (rStateData.getInt("layPage",0) == 2) {
 
-                SearchListData(Search_EditText.getText().toString(),"auto");
-
+                if (rStateData.getBoolean("changeList",false)){
+                    SearchListData(Search_EditText.getText().toString(), "jog");
+                    SharedPreferences.Editor wStateData = getActivity().getSharedPreferences("StateData",MODE_PRIVATE).edit();
+                    wStateData.putBoolean("changeList",false);
+                    if (wStateData.commit())wStateData.commit();
+                }else {
+                    SearchListData(Search_EditText.getText().toString(), "auto");
+                }
                 if (!_isLoadFlag) {
                     //隐藏图表，显示进度条
                     fragment2LineChart[0].setVisibility(View.GONE);
@@ -806,9 +814,9 @@ public class fragment2 extends Fragment implements AdapterView.OnItemClickListen
                         ChartName[2] = "Wv";
                         break;
                     case 6:
-                        ChartName[0] = "Ua";
-                        ChartName[1] = "Va";
-                        ChartName[2] = "Wa";
+                        ChartName[0] = "Ia";
+                        ChartName[1] = "Ib";
+                        ChartName[2] = "Ic";
                         break;
                 }
 

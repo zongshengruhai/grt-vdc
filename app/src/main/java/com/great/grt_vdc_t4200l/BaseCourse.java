@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -83,8 +84,8 @@ public class BaseCourse extends FragmentActivity {
     private int[] iCorrect = new int[2];
     private String sCorrect = "";
 
-    /** 通讯失败次数 */
-    private int iCommError = 0;
+//    /** 通讯失败次数 */
+//    private int iCommError = 0;
 
     /** 遥测故障录波数据失败次数 */
     private int iReadRecordError = 0;
@@ -309,6 +310,10 @@ public class BaseCourse extends FragmentActivity {
         //重启
         closeCom(downCom);
 //        if (!downCom.getIsOpen()){ Log.e(TAG,"SOP,串口关闭成功");}else{ Log.e(TAG,"SOP,串口关闭失败");}
+
+        SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
+        wStateData.putInt("i_CommError",0);
+        if (wStateData.commit())wStateData.commit();
 
         //重启
         Toast.makeText(this,"系统发生中止，即将重启",Toast.LENGTH_SHORT).show();
@@ -580,8 +585,8 @@ public class BaseCourse extends FragmentActivity {
     private void initSystem(){
         //pauseSOP();
 
-        DeleteFault();
-        DeleteRecord();
+        if (!DeleteFault())DeleteFault();
+        if (!DeleteRecord())DeleteRecord();
 
         if (SystemFunc.checkFileExist(systemPath))SystemFunc.deleteFile(systemPath);
         if (SystemFunc.checkFileExist(sharedPrefsPath))SystemFunc.deleteFile(sharedPrefsPath);
@@ -596,7 +601,7 @@ public class BaseCourse extends FragmentActivity {
     }
 
     /** 删除录波相关文件 */
-    private void DeleteRecord(){
+    private boolean DeleteRecord(){
         if (SystemFunc.checkFileExist(recordPath)) {
             SystemFunc.deleteFile(recordPath);
         }
@@ -618,12 +623,13 @@ public class BaseCourse extends FragmentActivity {
         }
 
         if (!SystemFunc.checkFileExist(recordPath)){SystemFunc.createFile(recordPath);}
-        Toast.makeText(mContext,"删除录波记录成功，即将重启",Toast.LENGTH_SHORT).show();
+        return true;
+//        Toast.makeText(mContext,"删除录波记录成功，即将重启",Toast.LENGTH_SHORT).show();
 //        SystemFunc.restart(mContext);
     }
 
     /** 删除故障相关文件 */
-    private void DeleteFault(){
+    private boolean DeleteFault(){
         SharedPreferences.Editor wAlarmData = mContext.getSharedPreferences("AlarmData",MODE_PRIVATE).edit();
 
         for (int i = 3; i < 12; i++) {
@@ -644,7 +650,8 @@ public class BaseCourse extends FragmentActivity {
             mList.add(mRow);
             SystemFunc.createExcel(faultName,mList);
         }
-        Toast.makeText(mContext,"删除故障记录成功，即将重启",Toast.LENGTH_SHORT).show();
+        return true;
+//        Toast.makeText(mContext,"删除故障记录成功，即将重启",Toast.LENGTH_SHORT).show();
 //        SystemFunc.restart(mContext);
     }
 
@@ -784,26 +791,35 @@ public class BaseCourse extends FragmentActivity {
             handler.postDelayed(this,500);
             if (downCom.getIsOpen()){
 
+                Log.e(TAG, "run: mian thread"  );
+
                 //无操作计时
                 if (!_isActionFlag && iNotAction < 9999) iNotAction ++;
+//                //通讯错误计次
+//                boolean _isCommFlag = downCom.getisCommFlag();
+//                if (!_isCommFlag){
+//                    if (iCommError < 99){iCommError ++;}
+//                    downCom.deleteErrRealData();
+//                }else {
+////                    SystemFunc.Beep(getApplicationContext(),false);
+//                    iCommError = 0;
+//                }
 
-                //通讯错误计次
-                boolean _isCommFlag = downCom.getisCommFlag();
-                if (!_isCommFlag){
-                    if (iCommError < 99){iCommError ++;}
-                    downCom.deleteErrRealData();
-                }else {
-//                    SystemFunc.Beep(getApplicationContext(),false);
-                    iCommError = 0;
+                //无通讯重启
+                SharedPreferences rStateData = mContext.getSharedPreferences("StateData",0);
+                SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
+
+                int iCommError = rStateData.getInt("i_CommError",0);
+                if (iCommError < 99) iCommError = iCommError + 1;
+                if (iCommError > 40 && iCommError < 59 && ((60-iCommError)%4) == 0 ){
+                    Toast.makeText(mContext,"通讯长时间无响应，若持续异常，系统将会在"+((60-iCommError)/4)+"后重启",Toast.LENGTH_SHORT).show();
                 }
-
-                //通知用户
-                if (iCommError > 40 && iCommError < 59 && ((60-iCommError)%2) == 0 ){
-                    Toast.makeText(mContext,"通讯长时间无响应，若持续异常，系统将会在"+((60-iCommError)/2)+"后重启",Toast.LENGTH_SHORT).show();
-                }
-
+                wStateData.putInt("i_CommError",iCommError);
+                if (wStateData.commit())wStateData.commit();
                 //30s无有效通讯，重启设备
                 if (iCommError > 60){
+                    wStateData.putInt("i_CommError",0);
+                    if (wStateData.commit())wStateData.commit();
                     SystemFunc.restart(mContext);
                 }
 
@@ -817,21 +833,12 @@ public class BaseCourse extends FragmentActivity {
 //                SharedPreferences rStateData = mContext.getSharedPreferences("StateData", 0);
 //                SharedPreferences rRealData = mContext.getSharedPreferences("RealData", 0);
                 SharedPreferences rAlarmData = mContext.getSharedPreferences("AlarmData",0);
-
                 //告警
                 boolean[] _isNewYX = new boolean[12];
                 for (int i = 3; i < 12 ; i++) {
                     _isNewYX[i] = rAlarmData.getBoolean("_isYxError_"+i,false);
                 }
-
-                if (_isNewYX[3] || _isNewYX[4] || _isNewYX[5] || _isNewYX[6] || _isNewYX[7] || _isNewYX[8] || _isNewYX[9] || _isNewYX[10] || _isNewYX[11] || (iCommError >= 40 && iCommError < 59)){
-//                    SystemFunc.Beep(getApplicationContext(),true);
-                    is_BeepFlag = true;
-                }else {
-//                    SystemFunc.Beep(getApplicationContext(),false);
-                    is_BeepFlag = false;
-                }
-
+                is_BeepFlag = (_isNewYX[3] || _isNewYX[4] || _isNewYX[5] || _isNewYX[6] || _isNewYX[7] || _isNewYX[8] || _isNewYX[9] || _isNewYX[10] || _isNewYX[11] || (iCommError >= 40));
 //                //判断是否需要读取录波
 //                if ((rRealData.getInt("i_NewSagSite",0) != rStateData.getInt("i_OldSagSite",0)) && !rStateData.getBoolean("is_RecordFlag",false)){
 //                    wStateData.putBoolean("is_RecordFlag",true);       //开始录波标志
@@ -936,6 +943,7 @@ public class BaseCourse extends FragmentActivity {
     class ComThread extends Thread{
         @Override
         public void run(){
+            Log.e(TAG, "run: com thread"  );
             if (downCom.getIsOpen()) sendPortData(downCom);
         }
     }
@@ -943,7 +951,9 @@ public class BaseCourse extends FragmentActivity {
     class DownThread implements Runnable{
         @Override
         public void run() {
-            while (ThreadRun) {
+            while (ThreadRun && downCom.getIsOpen()) {
+
+                Log.e(TAG, "run: down thread"  );
 
                 //写入
                 SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
@@ -985,11 +995,12 @@ public class BaseCourse extends FragmentActivity {
                         bOutData[5] = MyFunc.InToByteArr(recordAddress_2)[3];
                         //CRC
                         bOutData[6] = MyFunc.addCrc(bOutData);
-                        new ComThread().start();
-//                        sendPortData(downCom);
+//                        new ComThread().start();
+                        sendPortData(downCom);
 
                         iReadRecordError_2 ++;
-                        if (iReadRecordError_2 > 5 ){
+                        if (iReadRecordError_2 > 5){
+
                             iReadRecordError_2 = 0;
                             if (SystemFunc.checkFileExist(rStateData.getString("s_RecordFileName",""))){
                                 SystemFunc.deleteFile(rStateData.getString("s_RecordFileName",""));
@@ -1008,8 +1019,8 @@ public class BaseCourse extends FragmentActivity {
                         iReadRecordError_2 = 0;
                         bOutData = new byte[]{(byte) 0x7E, 0x03, 0x00, 0x00, 0x00, 0x14, 0x00, (byte) 0x0D};
                         bOutData[6] = MyFunc.addCrc(bOutData);
-                        new ComThread().start();
-//                        sendPortData(downCom);
+//                        new ComThread().start();
+                        sendPortData(downCom);
 
                     }//用户触发遥控、遥调
                     else if (_isCorrect) {
@@ -1025,8 +1036,8 @@ public class BaseCourse extends FragmentActivity {
 
                             //CRC
                             bOutData[12] = MyFunc.addCrc(bOutData);
-                            new ComThread().start();
-//                            sendPortData(downCom);
+//                            new ComThread().start();
+                            sendPortData(downCom);
 
                         } else {
 
@@ -1047,8 +1058,8 @@ public class BaseCourse extends FragmentActivity {
                             bOutData[8] = MyFunc.addCrc(bOutData);
 
                             System.out.print(Arrays.toString(bOutData));
-                            new ComThread().start();
-//                            sendPortData(downCom);
+//                            new ComThread().start();
+                            sendPortData(downCom);
 
                             //复位遥调标志
                             iCorrect = new int[2];
@@ -1075,22 +1086,28 @@ public class BaseCourse extends FragmentActivity {
                     e.printStackTrace();
                 }
             }
-
         }//end run
     }
 
+    //蜂鸣线程
     class BeepThread implements Runnable{
         @Override
         public void run(){
             while (ThreadRun) {
-                while (is_BeepFlag) {
+//                Log.e(TAG, "run: beep thread"  );
+//                while (is_BeepFlag) {
 //                    Log.e(TAG, "beep " );
-                    SystemFunc.Beep(getApplicationContext(),500);
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                if (is_BeepFlag) SystemFunc.Beep(getApplicationContext(),500);
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }

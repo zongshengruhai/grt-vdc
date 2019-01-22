@@ -370,6 +370,7 @@ public class SerialPortHelper {
                         if (mContext != null){
                             Log.e("串口消息", "接收数据：" + MyFunc.ByteArrToHex(bBuffer));
                             readData(bBuffer.length,bBuffer);
+//                            new rThread().start();
                         }else {
                             Log.e("串口消息","环境未来准备好");
                         }
@@ -389,11 +390,19 @@ public class SerialPortHelper {
         }
     }
 
+    class rThread extends Thread{
+        @Override
+        public void run(){
+            readData(bBuffer.length,bBuffer);
+        }
+    }
+
     /**
      * 接收处理
      */
     private void readData(int size,byte[] buffer){
         String temp = MyFunc.ByteArrToHex(buffer);
+
 
         //写入Shared Preferences
         SharedPreferences.Editor wStateData = mContext.getSharedPreferences("StateData",MODE_PRIVATE).edit();
@@ -460,9 +469,16 @@ public class SerialPortHelper {
 
                             //遥测时间与本机时间相差超过十分钟重设本机时间
                             int UnixTime = MyFunc.BytesToUnix(bTime);
-                            if ((UnixTime - (System.currentTimeMillis() / 1000)) > 600 || ((System.currentTimeMillis() / 1000) - UnixTime) > 600 ){
-                                SystemFunc.setNewTime(sSystemTime);
-                            }
+                            int newUnixTime = ((int)(System.currentTimeMillis() / 1000))-28800;
+//                            if ((UnixTime - newUnixTime) > 600 || (newUnixTime - UnixTime) > 600 ){
+//                                SystemFunc.setNewTime(sSystemTime);
+//                            }
+//                            Log.e("readData: ",newUnixTime+","+System.currentTimeMillis() );
+                            int UnixTimeNum = 0;
+                            if (newUnixTime>UnixTime) UnixTimeNum = newUnixTime - UnixTime;
+                            if (UnixTime > newUnixTime) UnixTimeNum = UnixTime - newUnixTime;
+                            if (UnixTimeNum > 600) SystemFunc.setNewTime(sSystemTime);
+//                            Log.e("readData: ","new:" + sSystemTime + ",Unix:"+UnixTime + ",new:" + newUnixTime +","+UnixTimeNum + "" );
 
                             //将数据写入Shared Preferences
                             //遥测
@@ -524,6 +540,7 @@ public class SerialPortHelper {
                             //处理告警
                             if ((System.currentTimeMillis()/1000) > 946684800 )alarmHand(_isYx);
                             iCommErrTime = 0;
+                            wStateData.putInt("i_CommError",0);
 
                         }else {
                             Log.e("串口信息","0x03回送帧出错，数据内容："+temp);
@@ -669,14 +686,16 @@ public class SerialPortHelper {
                                     //复位录波在读的标志
                                     wStateData.putBoolean("is_ReadRecordFlag",false);
 
+                                    wStateData.putBoolean("changeList",true);
+
                                 }
                             }else {
                                 Log.e("串口信息","没有找到对应的EXCEL文件");
                                 _isCommFlag = false; //通讯失败标志
                             }
-
+                            wStateData.putInt("i_CommError",0);
                         }else {
-                            Log.e("串口信息","0x10回送帧出错，数据内容："+temp);
+                            Log.e("串口信息","0x10回送帧出错，数据内容："+ temp);
                             _isCommFlag = false; //通讯失败标志
                         }
                         break;

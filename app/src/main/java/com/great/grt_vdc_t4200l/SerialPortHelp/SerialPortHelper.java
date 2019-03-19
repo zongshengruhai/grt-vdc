@@ -67,7 +67,7 @@ public class SerialPortHelper {
     }
     //默认实例化
     public SerialPortHelper(){
-        this("/dev/ttyS2",38400);
+        this("/dev/ttyS3",38400);
     }
     // 指定串口实例化
     public SerialPortHelper(String sPortName){
@@ -214,7 +214,7 @@ public class SerialPortHelper {
 
         //串口关闭标志
         _isOpen = false;
-   }
+    }
     //开始发送
     public void startSend() {
         if (mSendThread != null) {
@@ -258,7 +258,7 @@ public class SerialPortHelper {
         }catch (IOException e){
             e.printStackTrace();
         }
-   }
+    }
     //发送（hex）
     public void sendHex(String sHex){
         byte[] bOutArray = MyFunc.HexToByteArr(sHex);

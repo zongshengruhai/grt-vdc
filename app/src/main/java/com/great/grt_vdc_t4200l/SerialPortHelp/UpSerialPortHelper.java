@@ -173,6 +173,7 @@ public class UpSerialPortHelper {
         return _isCommFlag;
     }
 
+
     /**
      * 操作串口
      */
